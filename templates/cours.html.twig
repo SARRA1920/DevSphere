@@ -1,0 +1,17 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Nos Cours - DevSphere{% endblock %}
+
+{% block content %}
+    <section>
+        <h2>Nos Cours</h2>
+        <div>
+            {% for course in courses %}
+                <div>
+                    <h4>{{ cours.title }}</h4>
+                    <p>{{ cours.description }}</p>
+                </div>
+            {% endfor %}
+        </div>
+    </section>
+{% endblock %}
