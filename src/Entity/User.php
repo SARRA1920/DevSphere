@@ -6,9 +6,11 @@ use App\Repository\UserRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
+use Symfony\Component\Security\Core\User\UserInterface;
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
-class User
+class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
@@ -21,7 +23,7 @@ class User
     #[ORM\Column(length: 255)]
     private ?string $prenom = null;
 
-    #[ORM\Column(length: 255)]
+    #[ORM\Column(length: 255, unique: true)]
     private ?string $email = null;
 
     #[ORM\Column(length: 255)]
@@ -33,50 +35,50 @@ class User
     #[ORM\Column(length: 255)]
     private ?string $type = null;
 
+    #[ORM\Column(length: 255)]
+    private ?string $password = null;
+
+    #[ORM\Column(type: 'json')]
+    private array $roles = [];
+
     /**
      * @var Collection<int, Inscription>
      */
-    #[ORM\OneToMany(targetEntity: Inscription::class, mappedBy: 'idi')]
-    private Collection $inscription;
-
-    /**
-     * @var Collection<int, inscription>
-     */
-    #[ORM\OneToMany(targetEntity: inscription::class, mappedBy: 'user')]
+    #[ORM\OneToMany(targetEntity: Inscription::class, mappedBy: 'user')]
     private Collection $inscriptions;
 
     /**
-     * @var Collection<int, publication>
+     * @var Collection<int, Publication>
      */
-    #[ORM\OneToMany(targetEntity: publication::class, mappedBy: 'user')]
-    private Collection $publication;
+    #[ORM\OneToMany(targetEntity: Publication::class, mappedBy: 'user')]
+    private Collection $publications;
 
     /**
-     * @var Collection<int, reclamation>
+     * @var Collection<int, Reclamation>
      */
-    #[ORM\OneToMany(targetEntity: reclamation::class, mappedBy: 'user')]
-    private Collection $reclamation;
+    #[ORM\OneToMany(targetEntity: Reclamation::class, mappedBy: 'user')]
+    private Collection $reclamations;
 
     /**
-     * @var Collection<int, exercice>
+     * @var Collection<int, Exercice>
      */
-    #[ORM\OneToMany(targetEntity: exercice::class, mappedBy: 'user')]
-    private Collection $exercice;
+    #[ORM\OneToMany(targetEntity: Exercice::class, mappedBy: 'user')]
+    private Collection $exercices;
 
     /**
-     * @var Collection<int, participation>
+     * @var Collection<int, Participation>
      */
-    #[ORM\OneToMany(targetEntity: participation::class, mappedBy: 'user')]
-    private Collection $participation;
+    #[ORM\OneToMany(targetEntity: Participation::class, mappedBy: 'user')]
+    private Collection $participations;
 
     public function __construct()
     {
-        $this->inscription = new ArrayCollection();
         $this->inscriptions = new ArrayCollection();
-        $this->publication = new ArrayCollection();
-        $this->reclamation = new ArrayCollection();
-        $this->exercice = new ArrayCollection();
-        $this->participation = new ArrayCollection();
+        $this->publications = new ArrayCollection();
+        $this->reclamations = new ArrayCollection();
+        $this->exercices = new ArrayCollection();
+        $this->participations = new ArrayCollection();
+        $this->roles = ['ROLE_USER'];
     }
 
     public function getId(): ?int
@@ -92,7 +94,6 @@ class User
     public function setNom(string $nom): static
     {
         $this->nom = $nom;
-
         return $this;
     }
 
@@ -104,7 +105,6 @@ class User
     public function setPrenom(string $prenom): static
     {
         $this->prenom = $prenom;
-
         return $this;
     }
 
@@ -116,7 +116,6 @@ class User
     public function setEmail(string $email): static
     {
         $this->email = $email;
-
         return $this;
     }
 
@@ -128,7 +127,6 @@ class User
     public function setAdresse(string $adresse): static
     {
         $this->adresse = $adresse;
-
         return $this;
     }
 
@@ -140,7 +138,6 @@ class User
     public function setAge(int $age): static
     {
         $this->age = $age;
-
         return $this;
     }
 
@@ -152,23 +149,22 @@ class User
     public function setType(string $type): static
     {
         $this->type = $type;
-
         return $this;
     }
 
     /**
      * @return Collection<int, Inscription>
      */
-    public function getInscription(): Collection
+    public function getInscriptions(): Collection
     {
-        return $this->inscription;
+        return $this->inscriptions;
     }
 
     public function addInscription(Inscription $inscription): static
     {
-        if (!$this->inscription->contains($inscription)) {
-            $this->inscription->add($inscription);
-            $inscription->setIdi($this);
+        if (!$this->inscriptions->contains($inscription)) {
+            $this->inscriptions->add($inscription);
+            $inscription->setUser($this);
         }
 
         return $this;
@@ -176,10 +172,10 @@ class User
 
     public function removeInscription(Inscription $inscription): static
     {
-        if ($this->inscription->removeElement($inscription)) {
+        if ($this->inscriptions->removeElement($inscription)) {
             // set the owning side to null (unless already changed)
-            if ($inscription->getIdi() === $this) {
-                $inscription->setIdi(null);
+            if ($inscription->getUser() === $this) {
+                $inscription->setUser(null);
             }
         }
 
@@ -187,34 +183,26 @@ class User
     }
 
     /**
-     * @return Collection<int, inscription>
+     * @return Collection<int, Publication>
      */
-    public function getInscriptions(): Collection
+    public function getPublications(): Collection
     {
-        return $this->inscriptions;
+        return $this->publications;
     }
 
-    /**
-     * @return Collection<int, publication>
-     */
-    public function getPublication(): Collection
+    public function addPublication(Publication $publication): static
     {
-        return $this->publication;
-    }
-
-    public function addPublication(publication $publication): static
-    {
-        if (!$this->publication->contains($publication)) {
-            $this->publication->add($publication);
+        if (!$this->publications->contains($publication)) {
+            $this->publications->add($publication);
             $publication->setUser($this);
         }
 
         return $this;
     }
 
-    public function removePublication(publication $publication): static
+    public function removePublication(Publication $publication): static
     {
-        if ($this->publication->removeElement($publication)) {
+        if ($this->publications->removeElement($publication)) {
             // set the owning side to null (unless already changed)
             if ($publication->getUser() === $this) {
                 $publication->setUser(null);
@@ -225,26 +213,26 @@ class User
     }
 
     /**
-     * @return Collection<int, reclamation>
+     * @return Collection<int, Reclamation>
      */
-    public function getReclamation(): Collection
+    public function getReclamations(): Collection
     {
-        return $this->reclamation;
+        return $this->reclamations;
     }
 
-    public function addReclamation(reclamation $reclamation): static
+    public function addReclamation(Reclamation $reclamation): static
     {
-        if (!$this->reclamation->contains($reclamation)) {
-            $this->reclamation->add($reclamation);
+        if (!$this->reclamations->contains($reclamation)) {
+            $this->reclamations->add($reclamation);
             $reclamation->setUser($this);
         }
 
         return $this;
     }
 
-    public function removeReclamation(reclamation $reclamation): static
+    public function removeReclamation(Reclamation $reclamation): static
     {
-        if ($this->reclamation->removeElement($reclamation)) {
+        if ($this->reclamations->removeElement($reclamation)) {
             // set the owning side to null (unless already changed)
             if ($reclamation->getUser() === $this) {
                 $reclamation->setUser(null);
@@ -255,26 +243,26 @@ class User
     }
 
     /**
-     * @return Collection<int, exercice>
+     * @return Collection<int, Exercice>
      */
-    public function getExercice(): Collection
+    public function getExercices(): Collection
     {
-        return $this->exercice;
+        return $this->exercices;
     }
 
-    public function addExercice(exercice $exercice): static
+    public function addExercice(Exercice $exercice): static
     {
-        if (!$this->exercice->contains($exercice)) {
-            $this->exercice->add($exercice);
+        if (!$this->exercices->contains($exercice)) {
+            $this->exercices->add($exercice);
             $exercice->setUser($this);
         }
 
         return $this;
     }
 
-    public function removeExercice(exercice $exercice): static
+    public function removeExercice(Exercice $exercice): static
     {
-        if ($this->exercice->removeElement($exercice)) {
+        if ($this->exercices->removeElement($exercice)) {
             // set the owning side to null (unless already changed)
             if ($exercice->getUser() === $this) {
                 $exercice->setUser(null);
@@ -285,26 +273,26 @@ class User
     }
 
     /**
-     * @return Collection<int, participation>
+     * @return Collection<int, Participation>
      */
-    public function getParticipation(): Collection
+    public function getParticipations(): Collection
     {
-        return $this->participation;
+        return $this->participations;
     }
 
-    public function addParticipation(participation $participation): static
+    public function addParticipation(Participation $participation): static
     {
-        if (!$this->participation->contains($participation)) {
-            $this->participation->add($participation);
+        if (!$this->participations->contains($participation)) {
+            $this->participations->add($participation);
             $participation->setUser($this);
         }
 
         return $this;
     }
 
-    public function removeParticipation(participation $participation): static
+    public function removeParticipation(Participation $participation): static
     {
-        if ($this->participation->removeElement($participation)) {
+        if ($this->participations->removeElement($participation)) {
             // set the owning side to null (unless already changed)
             if ($participation->getUser() === $this) {
                 $participation->setUser(null);
@@ -312,5 +300,39 @@ class User
         }
 
         return $this;
+    }
+
+    public function getPassword(): string
+    {
+        return $this->password;
+    }
+
+    public function setPassword(string $password): static
+    {
+        $this->password = $password;
+        return $this;
+    }
+
+    public function getRoles(): array
+    {
+        $roles = $this->roles;
+        $roles[] = 'ROLE_USER';
+        return array_unique($roles);
+    }
+
+    public function setRoles(array $roles): static
+    {
+        $this->roles = $roles;
+        return $this;
+    }
+
+    public function eraseCredentials(): void
+    {
+        // If you store any temporary, sensitive data on the user, clear it here
+    }
+
+    public function getUserIdentifier(): string
+    {
+        return (string) $this->email;
     }
 }

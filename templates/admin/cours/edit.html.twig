@@ -1,0 +1,68 @@
+{% extends 'admin/base.html.twig' %}
+
+{% block title %}Edit Course - Admin{% endblock %}
+
+{% block content %}
+    <div class="container-fluid">
+        <div class="d-sm-flex align-items-center justify-content-between mb-4">
+            <h1 class="h3 mb-0 text-gray-800">Edit Course</h1>
+            <div>
+                <a href="{{ path('admin_cours_index') }}" class="btn btn-secondary">
+                    <i class="fas fa-arrow-left"></i> Back to List
+                </a>
+                <form method="post" action="{{ path('admin_cours_delete', {'id': cours.id}) }}" style="display: inline-block" onsubmit="return confirm('Are you sure you want to delete this course?');">
+                    <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ cours.id) }}">
+                    <button class="btn btn-danger">
+                        <i class="fas fa-trash"></i> Delete
+                    </button>
+                </form>
+            </div>
+        </div>
+
+        <div class="card shadow mb-4">
+            <div class="card-body">
+                {{ form_start(form, {'attr': {'class': 'needs-validation', 'novalidate': 'novalidate'}}) }}
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            {{ form_label(form.titre, 'Title', {'label_attr': {'class': 'form-label'}}) }}
+                            {{ form_widget(form.titre, {'attr': {'class': 'form-control'}}) }}
+                            {{ form_errors(form.titre) }}
+                        </div>
+
+                        <div class="col-md-6 mb-3">
+                            {{ form_label(form.categorieCours, 'Category', {'label_attr': {'class': 'form-label'}}) }}
+                            {{ form_widget(form.categorieCours, {'attr': {'class': 'form-select'}}) }}
+                            {{ form_errors(form.categorieCours) }}
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        {{ form_label(form.description, 'Description', {'label_attr': {'class': 'form-label'}}) }}
+                        {{ form_widget(form.description, {'attr': {'class': 'form-control', 'rows': '4'}}) }}
+                        {{ form_errors(form.description) }}
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            {{ form_label(form.duree, 'Duration', {'label_attr': {'class': 'form-label'}}) }}
+                            {{ form_widget(form.duree, {'attr': {'class': 'form-control'}}) }}
+                            {{ form_errors(form.duree) }}
+                        </div>
+
+                        <div class="col-md-6 mb-3">
+                            {{ form_label(form.niveau, 'Level', {'label_attr': {'class': 'form-label'}}) }}
+                            {{ form_widget(form.niveau, {'attr': {'class': 'form-select'}}) }}
+                            {{ form_errors(form.niveau) }}
+                        </div>
+                    </div>
+
+                    <div class="text-end">
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-save"></i> Save Changes
+                        </button>
+                    </div>
+                {{ form_end(form) }}
+            </div>
+        </div>
+    </div>
+{% endblock %}

@@ -3,7 +3,10 @@
 namespace App\Entity;
 
 use App\Repository\CoursRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: CoursRepository::class)]
 class Cours
@@ -14,22 +17,50 @@ class Cours
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
-    private ?string $Titre = null;
+    #[Assert\NotBlank(message: "Le titre du cours est obligatoire")]
+    #[Assert\Length(
+        min: 3,
+        max: 255,
+        minMessage: "Le titre doit contenir au moins {{ limit }} caractères",
+        maxMessage: "Le titre ne peut pas dépasser {{ limit }} caractères"
+    )]
+    private ?string $titre = null;
 
-    #[ORM\Column(length: 255)]
-    private ?string $Description = null;
+    #[ORM\Column(type: "text")]
+    #[Assert\NotBlank(message: "La description du cours est obligatoire")]
+    #[Assert\Length(
+        min: 10,
+        minMessage: "La description doit contenir au moins {{ limit }} caractères"
+    )]
+    private ?string $description = null;
 
-    #[ORM\Column(length: 255)]
-    private ?string $Niveau = null;
+    #[ORM\Column(length: 50)]
+    #[Assert\NotBlank(message: "La durée du cours est obligatoire")]
+    #[Assert\Regex(
+        pattern: "/^[0-9]+[hH]$/",
+        message: "La durée doit être au format '2h' ou '2H'"
+    )]
+    private ?string $duree = null;
 
-    #[ORM\Column(length: 255)]
-    private ?string $Durée = null;
+    #[ORM\Column(length: 50)]
+    #[Assert\NotBlank(message: "Le niveau du cours est obligatoire")]
+    #[Assert\Choice(
+        choices: ["Beginner", "Intermediate", "Advanced", "Expert"],
+        message: "Le niveau doit être 'Beginner', 'Intermediate', 'Advanced' ou 'Expert'"
+    )]
+    private ?string $niveau = null;
 
     #[ORM\ManyToOne(inversedBy: 'cours')]
-    private ?Inscription $inscription = null;
+    #[Assert\NotNull(message: "La catégorie du cours est obligatoire")]
+    private ?CategorieCours $categorieCours = null;
 
-    #[ORM\ManyToOne(inversedBy: 'cours')]
-    private ?Categoriecours $categoriecours = null;
+    #[ORM\OneToMany(mappedBy: 'cours', targetEntity: InscriptionCours::class, orphanRemoval: true)]
+    private Collection $inscriptions;
+
+    public function __construct()
+    {
+        $this->inscriptions = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -38,72 +69,85 @@ class Cours
 
     public function getTitre(): ?string
     {
-        return $this->Titre;
+        return $this->titre;
     }
 
-    public function setTitre(string $Titre): static
+    public function setTitre(string $titre): static
     {
-        $this->Titre = $Titre;
-
+        $this->titre = $titre;
         return $this;
     }
 
     public function getDescription(): ?string
     {
-        return $this->Description;
+        return $this->description;
     }
 
-    public function setDescription(string $Description): static
+    public function setDescription(string $description): static
     {
-        $this->Description = $Description;
+        $this->description = $description;
+        return $this;
+    }
 
+    public function getDuree(): ?string
+    {
+        return $this->duree;
+    }
+
+    public function setDuree(string $duree): static
+    {
+        $this->duree = $duree;
         return $this;
     }
 
     public function getNiveau(): ?string
     {
-        return $this->Niveau;
+        return $this->niveau;
     }
 
-    public function setNiveau(string $Niveau): static
+    public function setNiveau(string $niveau): static
     {
-        $this->Niveau = $Niveau;
+        $this->niveau = $niveau;
+        return $this;
+    }
+
+    public function getCategorieCours(): ?CategorieCours
+    {
+        return $this->categorieCours;
+    }
+
+    public function setCategorieCours(?CategorieCours $categorieCours): static
+    {
+        $this->categorieCours = $categorieCours;
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, InscriptionCours>
+     */
+    public function getInscriptions(): Collection
+    {
+        return $this->inscriptions;
+    }
+
+    public function addInscription(InscriptionCours $inscription): static
+    {
+        if (!$this->inscriptions->contains($inscription)) {
+            $this->inscriptions->add($inscription);
+            $inscription->setCours($this);
+        }
 
         return $this;
     }
 
-    public function getDurée(): ?string
+    public function removeInscription(InscriptionCours $inscription): static
     {
-        return $this->Durée;
-    }
-
-    public function setDurée(string $Durée): static
-    {
-        $this->Durée = $Durée;
-
-        return $this;
-    }
-
-    public function getInscription(): ?Inscription
-    {
-        return $this->inscription;
-    }
-
-    public function setInscription(?Inscription $inscription): static
-    {
-        $this->inscription = $inscription;
-
-        return $this;
-    }
-
-    public function getCategoriecours(): ?Categoriecours
-    {
-        return $this->categoriecours;
-    }
-
-    public function setCategoriecours(?Categoriecours $categoriecours): static
-    {
-        $this->categoriecours = $categoriecours;
+        if ($this->inscriptions->removeElement($inscription)) {
+            // set the owning side to null (unless already changed)
+            if ($inscription->getCours() === $this) {
+                $inscription->setCours(null);
+            }
+        }
 
         return $this;
     }

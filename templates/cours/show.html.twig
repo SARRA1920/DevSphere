@@ -1,0 +1,101 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Course Details - DevSphere{% endblock %}
+
+{% block content %}
+    <!-- Header Start -->
+    <div class="container-fluid bg-primary py-5 mb-5 page-header">
+        <div class="container py-5">
+            <div class="row justify-content-center">
+                <div class="col-lg-10 text-center">
+                    <h1 class="display-3 text-white animated slideInDown">Course Details</h1>
+                    <nav aria-label="breadcrumb">
+                        <ol class="breadcrumb justify-content-center">
+                            <li class="breadcrumb-item"><a class="text-white" href="{{ path('app_home') }}">Home</a></li>
+                            <li class="breadcrumb-item"><a class="text-white" href="{{ path('app_cours_index') }}">Courses</a></li>
+                            <li class="breadcrumb-item text-white active" aria-current="page">Details</li>
+                        </ol>
+                    </nav>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Header End -->
+
+    <!-- Course Detail Start -->
+    <div class="container-xxl py-5">
+        <div class="container">
+            <div class="row g-5">
+                <!-- Course Details -->
+                <div class="col-lg-8 wow fadeInUp" data-wow-delay="0.1s">
+                    <div class="course-item bg-light">
+                        <div class="position-relative overflow-hidden">
+                            <img class="img-fluid" src="{{ asset('img/course-1.jpg') }}" alt="Course Image">
+                        </div>
+                        <div class="p-4">
+                            <h3 class="mb-3">{{ cours.titre }}</h3>
+                            <div class="mb-3">
+                                <span class="badge bg-primary mb-2">{{ cours.categorieCours ? cours.categorieCours.nom : 'No Category' }}</span>
+                                <div class="mt-2">
+                                    <small class="fa fa-star text-primary"></small>
+                                    <small class="fa fa-star text-primary"></small>
+                                    <small class="fa fa-star text-primary"></small>
+                                    <small class="fa fa-star text-primary"></small>
+                                    <small class="fa fa-star text-primary"></small>
+                                </div>
+                            </div>
+                            <p class="mb-4">{{ cours.description }}</p>
+                            <div class="row g-4">
+                                <div class="col-6">
+                                    <div class="d-flex align-items-center mb-3">
+                                        <i class="fa fa-clock text-primary me-2"></i>
+                                        <small>{{ cours.duree }}</small>
+                                    </div>
+                                    <div class="d-flex align-items-center mb-3">
+                                        <i class="fa fa-signal text-primary me-2"></i>
+                                        <small>{{ cours.niveau }}</small>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Registration Form -->
+                <div class="col-lg-4 wow fadeInUp" data-wow-delay="0.3s">
+                    <div class="bg-light rounded p-4">
+                        <h4 class="mb-4 text-primary text-center">Register for this Course</h4>
+                        
+                        {% for label, messages in app.flashes %}
+                            {% for message in messages %}
+                                <div class="alert alert-{{ label == 'error' ? 'danger' : label }}">
+                                    {{ message }}
+                                </div>
+                            {% endfor %}
+                        {% endfor %}
+
+                        {{ form_start(inscriptionForm, {'attr': {'class': 'needs-validation', 'novalidate': 'novalidate'}}) }}
+                            <div class="mb-3">
+                                {{ form_label(inscriptionForm.nom, null, {'label_attr': {'class': 'form-label'}}) }}
+                                {{ form_widget(inscriptionForm.nom, {'attr': {'class': 'form-control' ~ (inscriptionForm.nom.vars.valid ? '' : ' is-invalid')}}) }}
+                                {{ form_errors(inscriptionForm.nom, {'attr': {'class': 'invalid-feedback'}}) }}
+                            </div>
+                            <div class="mb-3">
+                                {{ form_label(inscriptionForm.email, null, {'label_attr': {'class': 'form-label'}}) }}
+                                {{ form_widget(inscriptionForm.email, {'attr': {'class': 'form-control' ~ (inscriptionForm.email.vars.valid ? '' : ' is-invalid')}}) }}
+                                {{ form_errors(inscriptionForm.email, {'attr': {'class': 'invalid-feedback'}}) }}
+                            </div>
+                            <div class="mb-3">
+                                {{ form_label(inscriptionForm.telephone, null, {'label_attr': {'class': 'form-label'}}) }}
+                                {{ form_widget(inscriptionForm.telephone, {'attr': {'class': 'form-control' ~ (inscriptionForm.telephone.vars.valid ? '' : ' is-invalid')}}) }}
+                                {{ form_errors(inscriptionForm.telephone, {'attr': {'class': 'invalid-feedback'}}) }}
+                            </div>
+                            <button type="submit" class="btn btn-primary w-100">Register Now</button>
+                        {{ form_end(inscriptionForm) }}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Course Detail End -->
+{% endblock %}

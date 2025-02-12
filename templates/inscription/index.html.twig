@@ -1,0 +1,72 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Inscriptions - DevSphere{% endblock %}
+
+{% block content %}
+    <!-- Header Start -->
+    <div class="container-fluid bg-primary py-5 mb-5 page-header">
+        <div class="container py-5">
+            <div class="row justify-content-center">
+                <div class="col-lg-10 text-center">
+                    <h1 class="display-3 text-white animated slideInDown">Inscriptions</h1>
+                    <nav aria-label="breadcrumb">
+                        <ol class="breadcrumb justify-content-center">
+                            <li class="breadcrumb-item"><a class="text-white" href="{{ path('app_home') }}">Home</a></li>
+                            <li class="breadcrumb-item text-white active" aria-current="page">Inscriptions</li>
+                        </ol>
+                    </nav>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Header End -->
+
+    <!-- Inscriptions Start -->
+    <div class="container-xxl py-5">
+        <div class="container">
+            <div class="text-center wow fadeInUp" data-wow-delay="0.1s">
+                <h6 class="section-title bg-white text-center text-primary px-3">Inscriptions</h6>
+                <h1 class="mb-5">Course Inscriptions</h1>
+            </div>
+
+            <div class="text-end mb-4">
+                <a href="{{ path('app_inscription_new') }}" class="btn btn-primary">New Inscription</a>
+            </div>
+
+            <div class="row g-4">
+                <div class="col-lg-12 wow fadeInUp" data-wow-delay="0.1s">
+                    <div class="bg-light rounded p-4">
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th>Date d'inscription</th>
+                                    <th>Statut</th>
+                                    <th>Utilisateur</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            {% for inscription in inscriptions %}
+                                <tr>
+                                    <td>{{ inscription.dateInscription ? inscription.dateInscription|date('Y-m-d H:i:s') : '' }}</td>
+                                    <td>{{ inscription.statut }}</td>
+                                    <td>{{ inscription.user ? inscription.user.email : '' }}</td>
+                                    <td>
+                                        <a href="{{ path('app_inscription_show', {'id': inscription.id}) }}" class="btn btn-info btn-sm">Show</a>
+                                        <a href="{{ path('app_inscription_edit', {'id': inscription.id}) }}" class="btn btn-warning btn-sm">Edit</a>
+                                    </td>
+                                </tr>
+                            {% else %}
+                                <tr>
+                                    <td colspan="4" class="text-center">No inscriptions found</td>
+                                </tr>
+                            {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Inscriptions End -->
+{% endblock %}

@@ -1,0 +1,51 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}New Topic - DevSphere Forum{% endblock %}
+
+{% block content %}
+    <!-- Header Start -->
+    <div class="container-fluid bg-primary py-5 mb-5 page-header">
+        <div class="container py-5">
+            <div class="row justify-content-center">
+                <div class="col-lg-10 text-center">
+                    <h1 class="display-3 text-white animated slideInDown">Create New Topic</h1>
+                    <nav aria-label="breadcrumb">
+                        <ol class="breadcrumb justify-content-center">
+                            <li class="breadcrumb-item"><a class="text-white" href="{{ path('app_home') }}">Home</a></li>
+                            <li class="breadcrumb-item"><a class="text-white" href="{{ path('app_forum') }}">Forum</a></li>
+                            <li class="breadcrumb-item text-white active" aria-current="page">New Topic</li>
+                        </ol>
+                    </nav>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Header End -->
+
+    <!-- Form Start -->
+    <div class="container-xxl py-5">
+        <div class="container">
+            <div class="row g-4">
+                <div class="col-lg-8 mx-auto wow fadeInUp" data-wow-delay="0.1s">
+                    <div class="bg-light rounded p-5">
+                        <h4 class="mb-4">Create a New Topic</h4>
+                        {{ form_start(form, {'attr': {'class': 'form'}}) }}
+                            <div class="row g-3">
+                                <div class="col-12">
+                                    {{ form_row(form.titre) }}
+                                </div>
+                                <div class="col-12">
+                                    {{ form_row(form.category) }}
+                                </div>
+                                <div class="col-12">
+                                    <button class="btn btn-primary w-100 py-3" type="submit">Create Topic</button>
+                                </div>
+                            </div>
+                        {{ form_end(form) }}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Form End -->
+{% endblock %}

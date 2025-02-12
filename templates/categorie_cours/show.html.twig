@@ -1,0 +1,34 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Détails de la Catégorie{% endblock %}
+
+{% block body %}
+    <div class="container mt-4">
+        <h1>Détails de la Catégorie</h1>
+
+        <table class="table">
+            <tbody>
+                <tr>
+                    <th>Nom</th>
+                    <td>{{ categorie_cours.nom }}</td>
+                </tr>
+                <tr>
+                    <th>Description</th>
+                    <td>{{ categorie_cours.description }}</td>
+                </tr>
+                <tr>
+                    <th>Niveau</th>
+                    <td>{{ categorie_cours.niveau }}</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <a href="{{ path('app_categorie_cours_index') }}" class="btn btn-secondary">Retour à la liste</a>
+        <a href="{{ path('app_categorie_cours_edit', {'id': categorie_cours.id}) }}" class="btn btn-warning">Modifier</a>
+
+        <form method="post" action="{{ path('app_categorie_cours_delete', {'id': categorie_cours.id}) }}" onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer cette catégorie ?');" style="display: inline-block">
+            <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ categorie_cours.id) }}">
+            <button class="btn btn-danger">Supprimer</button>
+        </form>
+    </div>
+{% endblock %}

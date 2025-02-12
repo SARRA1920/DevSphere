@@ -1,0 +1,62 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}New Course - DevSphere{% endblock %}
+
+{% block content %}
+    <!-- Header Start -->
+    <div class="container-fluid bg-primary py-5 mb-5 page-header">
+        <div class="container py-5">
+            <div class="row justify-content-center">
+                <div class="col-lg-10 text-center">
+                    <h1 class="display-3 text-white animated slideInDown">New Course</h1>
+                    <nav aria-label="breadcrumb">
+                        <ol class="breadcrumb justify-content-center">
+                            <li class="breadcrumb-item"><a class="text-white" href="{{ path('app_home') }}">Home</a></li>
+                            <li class="breadcrumb-item"><a class="text-white" href="{{ path('app_cours_index') }}">Courses</a></li>
+                            <li class="breadcrumb-item text-white active" aria-current="page">New</li>
+                        </ol>
+                    </nav>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Header End -->
+
+    <!-- Form Start -->
+    <div class="container-xxl py-5">
+        <div class="container">
+            <div class="row g-4 justify-content-center">
+                <div class="col-lg-8 col-md-10 wow fadeInUp" data-wow-delay="0.1s">
+                    <div class="bg-light rounded p-5">
+                        <h2 class="mb-4 text-center">Create New Course</h2>
+
+                        {{ form_start(form, {'attr': {'class': 'form'}}) }}
+                        <div class="row g-3">
+                            <div class="col-12">
+                                {{ form_row(form.titre, {'attr': {'class': 'form-control'}}) }}
+                            </div>
+                            <div class="col-12">
+                                {{ form_row(form.description, {'attr': {'class': 'form-control'}}) }}
+                            </div>
+                            <div class="col-md-6">
+                                {{ form_row(form.niveau, {'attr': {'class': 'form-control'}}) }}
+                            </div>
+                            <div class="col-md-6">
+                                {{ form_row(form.duree, {'attr': {'class': 'form-control'}}) }}
+                            </div>
+                            <div class="col-12">
+                                {{ form_row(form.categorieCours, {'attr': {'class': 'form-control'}}) }}
+                            </div>
+                            <div class="col-12 text-center">
+                                <button class="btn btn-primary py-3 px-5" type="submit">Create Course</button>
+                                <a href="{{ path('app_cours_index') }}" class="btn btn-secondary py-3 px-5">Back to List</a>
+                            </div>
+                        </div>
+                        {{ form_end(form) }}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Form End -->
+{% endblock %}

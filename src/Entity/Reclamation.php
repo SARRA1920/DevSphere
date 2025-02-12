@@ -26,8 +26,8 @@ class Reclamation
     #[ORM\ManyToOne(inversedBy: 'reclamation')]
     private ?User $user = null;
 
-    #[ORM\OneToOne(cascade: ['persist', 'remove'])]
-    private ?reponse $reponse = null;
+    #[ORM\ManyToOne]
+    private ?Reponse $reponse = null;
 
     public function getId(): ?int
     {
@@ -82,12 +82,12 @@ class Reclamation
         return $this;
     }
 
-    public function getReponse(): ?reponse
+    public function getReponse(): ?Reponse
     {
         return $this->reponse;
     }
 
-    public function setReponse(?reponse $reponse): static
+    public function setReponse(?Reponse $reponse): static
     {
         $this->reponse = $reponse;
 
