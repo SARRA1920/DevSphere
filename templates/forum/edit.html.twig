@@ -1,0 +1,51 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Edit Topic - DevSphere Forum{% endblock %}
+
+{% block content %}
+    <!-- Header Start -->
+    <div class="container-fluid bg-primary py-5 mb-5 page-header">
+        <div class="container py-5">
+            <div class="row justify-content-center">
+                <div class="col-lg-10 text-center">
+                    <h1 class="display-3 text-white animated slideInDown">Edit Topic</h1>
+                    <nav aria-label="breadcrumb">
+                        <ol class="breadcrumb justify-content-center">
+                            <li class="breadcrumb-item"><a class="text-white" href="{{ path('app_home') }}">Home</a></li>
+                            <li class="breadcrumb-item"><a class="text-white" href="{{ path('app_forum') }}">Forum</a></li>
+                            <li class="breadcrumb-item text-white active" aria-current="page">Edit Topic</li>
+                        </ol>
+                    </nav>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Header End -->
+
+    <!-- Edit Form Start -->
+    <div class="container-xxl py-5">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-lg-8">
+                    <div class="bg-light rounded p-4 p-sm-5 wow fadeInUp" data-wow-delay="0.1s">
+                        {{ form_start(form) }}
+                            <div class="row g-3">
+                                <div class="col-12">
+                                    {{ form_row(form.titre) }}
+                                </div>
+                                <div class="col-12">
+                                    {{ form_row(form.category) }}
+                                </div>
+                                <div class="col-12">
+                                    <a href="{{ path('app_forum_show', {'id': publication.id}) }}" class="btn btn-secondary me-2">Cancel</a>
+                                    <button class="btn btn-primary" type="submit">Update Topic</button>
+                                </div>
+                            </div>
+                        {{ form_end(form) }}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Edit Form End -->
+{% endblock %}

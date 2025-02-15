@@ -1,0 +1,31 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Admin Dashboard{% endblock %}
+
+{% block content %}
+    <h1>Admin Dashboard</h1>
+    <a href="{{ path('app_exercice_new') }}" class="btn btn-primary">Add New Exercice</a>
+
+    <h2>Exercices List</h2>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Title</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for exercice in exercices %}
+                <tr>
+                    <td>{{ exercice.id }}</td>
+                    <td>{{ exercice.titre }}</td>
+                    <td>
+                        <a href="{{ path('app_exercice_edit', { 'id': exercice.id }) }}" class="btn btn-warning">Edit</a>
+                        <a href="{{ path('app_exercice_delete', { 'id': exercice.id }) }}" class="btn btn-danger">Delete</a>
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}

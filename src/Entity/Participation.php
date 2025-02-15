@@ -15,13 +15,13 @@ class Participation
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\ManyToOne(inversedBy: 'participation')]
+    #[ORM\ManyToOne(inversedBy: 'participations')]
     private ?User $user = null;
 
     /**
-     * @var Collection<int, events>
+     * @var Collection<int, Events>
      */
-    #[ORM\OneToMany(targetEntity: events::class, mappedBy: 'participation')]
+    #[ORM\OneToMany(targetEntity: Events::class, mappedBy: 'participation')]
     private Collection $events;
 
     public function __construct()
@@ -47,14 +47,14 @@ class Participation
     }
 
     /**
-     * @return Collection<int, events>
+     * @return Collection<int, Events>
      */
     public function getEvents(): Collection
     {
         return $this->events;
     }
 
-    public function addEvent(events $event): static
+    public function addEvent(Events $event): static
     {
         if (!$this->events->contains($event)) {
             $this->events->add($event);
@@ -64,7 +64,7 @@ class Participation
         return $this;
     }
 
-    public function removeEvent(events $event): static
+    public function removeEvent(Events $event): static
     {
         if ($this->events->removeElement($event)) {
             // set the owning side to null (unless already changed)

@@ -14,22 +14,22 @@ class Cours
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
-    private ?string $Titre = null;
+    private ?string $titre = null;
 
     #[ORM\Column(length: 255)]
-    private ?string $Description = null;
+    private ?string $description = null;
 
     #[ORM\Column(length: 255)]
-    private ?string $Niveau = null;
+    private ?string $niveau = null;
 
     #[ORM\Column(length: 255)]
-    private ?string $Durée = null;
+    private ?string $duree = null;
 
     #[ORM\ManyToOne(inversedBy: 'cours')]
     private ?Inscription $inscription = null;
 
     #[ORM\ManyToOne(inversedBy: 'cours')]
-    private ?Categoriecours $categoriecours = null;
+    private ?CategorieCours $categorieCours = null;
 
     public function getId(): ?int
     {
@@ -38,48 +38,48 @@ class Cours
 
     public function getTitre(): ?string
     {
-        return $this->Titre;
+        return $this->titre;
     }
 
-    public function setTitre(string $Titre): static
+    public function setTitre(string $titre): static
     {
-        $this->Titre = $Titre;
+        $this->titre = $titre;
 
         return $this;
     }
 
     public function getDescription(): ?string
     {
-        return $this->Description;
+        return $this->description;
     }
 
-    public function setDescription(string $Description): static
+    public function setDescription(string $description): static
     {
-        $this->Description = $Description;
+        $this->description = $description;
 
         return $this;
     }
 
     public function getNiveau(): ?string
     {
-        return $this->Niveau;
+        return $this->niveau;
     }
 
-    public function setNiveau(string $Niveau): static
+    public function setNiveau(string $niveau): static
     {
-        $this->Niveau = $Niveau;
+        $this->niveau = $niveau;
 
         return $this;
     }
 
-    public function getDurée(): ?string
+    public function getDuree(): ?string
     {
-        return $this->Durée;
+        return $this->duree;
     }
 
-    public function setDurée(string $Durée): static
+    public function setDuree(string $duree): static
     {
-        $this->Durée = $Durée;
+        $this->duree = $duree;
 
         return $this;
     }
@@ -96,14 +96,14 @@ class Cours
         return $this;
     }
 
-    public function getCategoriecours(): ?Categoriecours
+    public function getCategorieCours(): ?CategorieCours
     {
-        return $this->categoriecours;
+        return $this->categorieCours;
     }
 
-    public function setCategoriecours(?Categoriecours $categoriecours): static
+    public function setCategorieCours(?CategorieCours $categorieCours): static
     {
-        $this->categoriecours = $categoriecours;
+        $this->categorieCours = $categorieCours;
 
         return $this;
     }

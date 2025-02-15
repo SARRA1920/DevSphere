@@ -1,0 +1,101 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ publication.titre }} - DevSphere Forum{% endblock %}
+
+{% block content %}
+    <!-- Header Start -->
+    <div class="container-fluid bg-primary py-5 mb-5 page-header">
+        <div class="container py-5">
+            <div class="row justify-content-center">
+                <div class="col-lg-10 text-center">
+                    <h1 class="display-3 text-white animated slideInDown">{{ publication.titre }}</h1>
+                    <nav aria-label="breadcrumb">
+                        <ol class="breadcrumb justify-content-center">
+                            <li class="breadcrumb-item"><a class="text-white" href="{{ path('app_home') }}">Home</a></li>
+                            <li class="breadcrumb-item"><a class="text-white" href="{{ path('app_publication_index') }}">Publications</a></li>
+                            <li class="breadcrumb-item text-white active" aria-current="page">View Publication</li>
+                        </ol>
+                    </nav>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Header End -->
+
+    <!-- Publication Content Start -->
+    <div class="container-xxl py-5">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-8 mx-auto">
+                    <!-- Publication Header -->
+                    <div class="bg-light rounded p-4 mb-4">
+                        <div class="d-flex justify-content-between mb-4">
+                            <div>
+                                {% if publication.categoriePublication %}
+                                    <span class="badge bg-primary mb-2">{{ publication.categoriePublication.nom }}</span>
+                                {% endif %}
+                                <h2 class="mb-1">{{ publication.titre }}</h2>
+                                <div class="text-muted">
+                                    <small>
+                                        <i class="far fa-user me-2"></i>{{ publication.user ? publication.user.email : 'Anonymous' }}
+                                        <i class="far fa-calendar-alt ms-3 me-2"></i>{{ publication.date|date('d M Y') }}
+                                        <i class="far fa-comment ms-3 me-2"></i>{{ publication.commentaire|length }} comments
+                                    </small>
+                                </div>
+                            </div>
+                            {% if is_granted('ROLE_USER') and (publication.user == app.user or is_granted('ROLE_ADMIN')) %}
+                                <div class="dropdown">
+                                    <button class="btn btn-link" type="button" id="publicationActions" data-bs-toggle="dropdown" aria-expanded="false">
+                                        <i class="fas fa-ellipsis-v"></i>
+                                    </button>
+                                    <ul class="dropdown-menu" aria-labelledby="publicationActions">
+                                        <li><a class="dropdown-item" href="{{ path('app_publication_edit', {'id': publication.id}) }}">Edit</a></li>
+                                        <li>
+                                            <form action="{{ path('app_publication_delete', {'id': publication.id}) }}" method="post" onsubmit="return confirm('Are you sure you want to delete this publication?');">
+                                                <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ publication.id) }}">
+                                                <button class="dropdown-item text-danger">Delete</button>
+                                            </form>
+                                        </li>
+                                    </ul>
+                                </div>
+                            {% endif %}
+                        </div>
+                    </div>
+
+                    <!-- Comments Section -->
+                    <div class="bg-light rounded p-4 mb-4">
+                        <h4 class="mb-4">Comments ({{ publication.commentaire|length }})</h4>
+                        {% if publication.commentaire is empty %}
+                            <p class="text-muted">No comments yet. Be the first to comment!</p>
+                        {% else %}
+                            {% for comment in publication.commentaire %}
+                                <div class="border-bottom pb-3 mb-3">
+                                    <div class="d-flex mb-2">
+                                        <div class="ps-2">
+                                            <h6 class="fw-bold mb-1">{{ comment.user ? comment.user.email : 'Anonymous' }}</h6>
+                                            <small class="text-muted">{{ comment.date|date('d M Y H:i') }}</small>
+                                        </div>
+                                    </div>
+                                    <p class="mb-0">{{ comment.commentaire }}</p>
+                                </div>
+                            {% endfor %}
+                        {% endif %}
+                    </div>
+
+                    <!-- Actions -->
+                    <div class="text-center mb-4">
+                        <a href="{{ path('app_publication_index') }}" class="btn btn-secondary me-2">
+                            <i class="fas fa-arrow-left me-2"></i>Back to Publications
+                        </a>
+                        {% if is_granted('ROLE_USER') and (publication.user == app.user or is_granted('ROLE_ADMIN')) %}
+                            <a href="{{ path('app_publication_edit', {'id': publication.id}) }}" class="btn btn-primary">
+                                <i class="fas fa-edit me-2"></i>Edit Publication
+                            </a>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Publication Content End -->
+{% endblock %}

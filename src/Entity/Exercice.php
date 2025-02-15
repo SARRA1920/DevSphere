@@ -6,6 +6,7 @@ use App\Repository\ExerciceRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: ExerciceRepository::class)]
 class Exercice
@@ -16,23 +17,64 @@ class Exercice
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
+    #[Assert\NotBlank(message: 'Le titre est obligatoire')]
+    #[Assert\Length(
+        min: 3,
+        max: 255,
+        minMessage: 'Le titre doit faire au moins {{ limit }} caractères',
+        maxMessage: 'Le titre ne peut pas dépasser {{ limit }} caractères'
+    )]
     private ?string $titre = null;
 
     #[ORM\Column(length: 255)]
+    #[Assert\NotBlank(message: 'Le niveau de difficulté est obligatoire')]
+    #[Assert\Choice(
+        choices: ['facile', 'moyen', 'difficile'],
+        message: 'Choisissez un niveau de difficulté valide : facile, moyen ou difficile'
+    )]
     private ?string $niveau_difficulte = null;
 
-    #[ORM\ManyToOne(inversedBy: 'exercice')]
+    #[ORM\Column]
+    #[Assert\NotBlank(message: 'La note minimale est obligatoire')]
+    #[Assert\Range(
+        min: 0,
+        max: 20,
+        notInRangeMessage: 'La note minimale doit être comprise entre {{ min }} et {{ max }}'
+    )]
+    private ?float $note_minimale = null;
+
+    #[ORM\Column]
+    #[Assert\NotBlank(message: 'Le temps estimé est obligatoire')]
+    #[Assert\Positive(message: 'Le temps estimé doit être positif')]
+    #[Assert\LessThan(
+        value: 481,
+        message: 'Le temps estimé ne peut pas dépasser 8 heures (480 minutes)'
+    )]
+    private ?int $temps_estime = null;
+
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $fichier_pdf = null;
+
+    #[ORM\Column(length: 255)]
+    #[Assert\NotBlank(message: 'Le type est obligatoire')]
+    #[Assert\Choice(
+        choices: ['quiz', 'pratique', 'devoir'],
+        message: 'Choisissez un type valide : quiz, pratique ou devoir'
+    )]
+    private ?string $type = null;
+
+    #[ORM\ManyToOne(inversedBy: 'exercices')]
     private ?User $user = null;
 
     /**
-     * @var Collection<int, tentative>
+     * @var Collection<int, Tentative>
      */
-    #[ORM\OneToMany(targetEntity: tentative::class, mappedBy: 'exercice')]
-    private Collection $tentative;
+    #[ORM\OneToMany(targetEntity: Tentative::class, mappedBy: 'exercice')]
+    private Collection $tentatives;
 
     public function __construct()
     {
-        $this->tentative = new ArrayCollection();
+        $this->tentatives = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -64,6 +106,54 @@ class Exercice
         return $this;
     }
 
+    public function getNoteMinimale(): ?float
+    {
+        return $this->note_minimale;
+    }
+
+    public function setNoteMinimale(float $note_minimale): static
+    {
+        $this->note_minimale = $note_minimale;
+
+        return $this;
+    }
+
+    public function getTempsEstime(): ?int
+    {
+        return $this->temps_estime;
+    }
+
+    public function setTempsEstime(int $temps_estime): static
+    {
+        $this->temps_estime = $temps_estime;
+
+        return $this;
+    }
+
+    public function getFichierPdf(): ?string
+    {
+        return $this->fichier_pdf;
+    }
+
+    public function setFichierPdf(?string $fichier_pdf): static
+    {
+        $this->fichier_pdf = $fichier_pdf;
+
+        return $this;
+    }
+
+    public function getType(): ?string
+    {
+        return $this->type;
+    }
+
+    public function setType(string $type): static
+    {
+        $this->type = $type;
+
+        return $this;
+    }
+
     public function getUser(): ?User
     {
         return $this->user;
@@ -77,26 +167,26 @@ class Exercice
     }
 
     /**
-     * @return Collection<int, tentative>
+     * @return Collection<int, Tentative>
      */
-    public function getTentative(): Collection
+    public function getTentatives(): Collection
     {
-        return $this->tentative;
+        return $this->tentatives;
     }
 
-    public function addTentative(tentative $tentative): static
+    public function addTentative(Tentative $tentative): static
     {
-        if (!$this->tentative->contains($tentative)) {
-            $this->tentative->add($tentative);
+        if (!$this->tentatives->contains($tentative)) {
+            $this->tentatives->add($tentative);
             $tentative->setExercice($this);
         }
 
         return $this;
     }
 
-    public function removeTentative(tentative $tentative): static
+    public function removeTentative(Tentative $tentative): static
     {
-        if ($this->tentative->removeElement($tentative)) {
+        if ($this->tentatives->removeElement($tentative)) {
             // set the owning side to null (unless already changed)
             if ($tentative->getExercice() === $this) {
                 $tentative->setExercice(null);

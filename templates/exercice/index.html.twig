@@ -1,20 +1,45 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Hello ExerciceController!{% endblock %}
+{% block title %}Liste des exercices{% endblock %}
 
-{% block body %}
-<style>
-    .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
-    .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
-</style>
+{% block content %}
+    <div class="container mt-4">
+        <h1>Liste des exercices</h1>
 
-<div class="example-wrapper">
-    <h1>Hello {{ controller_name }}! ✅</h1>
+        <a href="{{ path('app_exercice_new') }}" class="btn btn-success mb-3">Créer un nouvel exercice</a>
 
-    This friendly message is coming from:
-    <ul>
-        <li>Your controller at <code>C:/Users/sarra/pi_symfony_DevSphere/src/Controller/ExerciceController.php</code></li>
-        <li>Your template at <code>C:/Users/sarra/pi_symfony_DevSphere/templates/exercice/index.html.twig</code></li>
-    </ul>
-</div>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Id</th>
+                    <th>Titre</th>
+                    <th>Niveau de difficulté</th>
+                    <th>Note minimale</th>
+                    <th>Temps estimé</th>
+                    <th>Type</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+            {% for exercice in exercices %}
+                <tr>
+                    <td>{{ exercice.id }}</td>
+                    <td>{{ exercice.titre }}</td>
+                    <td>{{ exercice.niveauDifficulte }}</td>
+                    <td>{{ exercice.noteMinimale }}</td>
+                    <td>{{ exercice.tempsEstime }} min</td>
+                    <td>{{ exercice.type }}</td>
+                    <td>
+                        <a href="{{ path('app_exercice_show', {'id': exercice.id}) }}" class="btn btn-info btn-sm">Voir</a>
+                        <a href="{{ path('app_exercice_edit', {'id': exercice.id}) }}" class="btn btn-primary btn-sm">Modifier</a>
+                    </td>
+                </tr>
+            {% else %}
+                <tr>
+                    <td colspan="7">Aucun exercice trouvé</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
 {% endblock %}

@@ -1,0 +1,128 @@
+{{ form_start(form, {'attr': {'novalidate': 'novalidate', 'class': 'needs-validation', 'id': 'exercice-form'}}) }}
+    <div class="row g-3">
+        <div class="col-12">
+            <div class="form-floating mb-3">
+                {{ form_widget(form.titre, {'attr': {'class': 'form-control' ~ (form.titre.vars.valid ? '' : ' is-invalid'), 'placeholder': 'Titre de l\'exercice'}}) }}
+                {{ form_label(form.titre) }}
+                <div class="invalid-feedback">
+                    {{ form_errors(form.titre) }}
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="form-floating mb-3">
+                {{ form_widget(form.niveau_difficulte, {'attr': {'class': 'form-control' ~ (form.niveau_difficulte.vars.valid ? '' : ' is-invalid'), 'placeholder': 'Niveau de difficulté'}}) }}
+                {{ form_label(form.niveau_difficulte) }}
+                <div class="invalid-feedback">
+                    {{ form_errors(form.niveau_difficulte) }}
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="form-floating mb-3">
+                {{ form_widget(form.type, {'attr': {'class': 'form-control' ~ (form.type.vars.valid ? '' : ' is-invalid'), 'placeholder': 'Type d\'exercice'}}) }}
+                {{ form_label(form.type) }}
+                <div class="invalid-feedback">
+                    {{ form_errors(form.type) }}
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="form-floating mb-3">
+                {{ form_widget(form.note_minimale, {
+                    'attr': {
+                        'class': 'form-control' ~ (form.note_minimale.vars.valid ? '' : ' is-invalid'),
+                        'placeholder': 'Note minimale',
+                        'min': '0',
+                        'max': '20',
+                        'step': '0.5',
+                        'inputmode': 'decimal',
+                        'pattern': '[0-9]*[.]?[0-9]+',
+                        'onkeypress': 'return (event.charCode >= 48 && event.charCode <= 57) || event.charCode === 46'
+                    }
+                }) }}
+                {{ form_label(form.note_minimale) }}
+                <div class="invalid-feedback">
+                    {{ form_errors(form.note_minimale) }}
+                </div>
+                <small class="form-text text-muted">Entrez un nombre entre 0 et 20</small>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="form-floating mb-3">
+                {{ form_widget(form.temps_estime, {
+                    'attr': {
+                        'class': 'form-control' ~ (form.temps_estime.vars.valid ? '' : ' is-invalid'),
+                        'placeholder': 'Temps estimé',
+                        'min': '1',
+                        'max': '480',
+                        'inputmode': 'numeric',
+                        'pattern': '[0-9]*',
+                        'onkeypress': 'return event.charCode >= 48 && event.charCode <= 57'
+                    }
+                }) }}
+                {{ form_label(form.temps_estime) }}
+                <div class="invalid-feedback">
+                    {{ form_errors(form.temps_estime) }}
+                </div>
+                <small class="form-text text-muted">Entrez un nombre entier entre 1 et 480</small>
+            </div>
+        </div>
+        <div class="col-12">
+            <div class="mb-3">
+                {{ form_label(form.fichier_pdf, null, {'label_attr': {'class': 'form-label'}}) }}
+                {{ form_widget(form.fichier_pdf, {'attr': {'class': 'form-control' ~ (form.fichier_pdf.vars.valid ? '' : ' is-invalid')}}) }}
+                <div class="invalid-feedback">
+                    {{ form_errors(form.fichier_pdf) }}
+                </div>
+                <small class="form-text text-muted">Format accepté : PDF. Taille maximale : 5MB</small>
+            </div>
+        </div>
+    </div>
+    <div class="col-12 text-center mt-4">
+        <button class="btn btn-primary py-3 px-5" type="submit">
+            <i class="fas fa-save me-2"></i>{{ button_label|default('Enregistrer') }}
+        </button>
+    </div>
+{{ form_end(form) }}
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Fonction pour valider les nombres décimaux (note minimale)
+    function validateDecimal(input) {
+        input.addEventListener('input', function(e) {
+            let value = this.value;
+            if(value !== '') {
+                let num = parseFloat(value);
+                if(isNaN(num) || num < 0 || num > 20) {
+                    this.setCustomValidity('Veuillez entrer un nombre entre 0 et 20');
+                } else {
+                    this.setCustomValidity('');
+                }
+            }
+        });
+    }
+
+    // Fonction pour valider les nombres entiers (temps estimé)
+    function validateInteger(input) {
+        input.addEventListener('input', function(e) {
+            let value = this.value;
+            if(value !== '') {
+                let num = parseInt(value);
+                if(isNaN(num) || num < 1 || num > 480) {
+                    this.setCustomValidity('Veuillez entrer un nombre entier entre 1 et 480');
+                } else {
+                    this.setCustomValidity('');
+                }
+            }
+        });
+    }
+
+    // Appliquer les validations
+    let noteInput = document.querySelector('[name$="[note_minimale]"]');
+    let tempsInput = document.querySelector('[name$="[temps_estime]"]');
+
+    if(noteInput) validateDecimal(noteInput);
+    if(tempsInput) validateInteger(tempsInput);
+});
+</script>

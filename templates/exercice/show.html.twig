@@ -1,0 +1,103 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Détails de l'exercice{% endblock %}
+
+{% block carousel %}{% endblock %}
+
+{% block content %}
+    <div class="container-fluid bg-primary py-5 mb-5 page-header">
+        <div class="container py-5">
+            <div class="row justify-content-center">
+                <div class="col-lg-10 text-center">
+                    <h1 class="display-3 text-white">Détails de l'exercice</h1>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container py-4">
+        <div class="row justify-content-center">
+            <div class="col-lg-8">
+                {% for label, messages in app.flashes %}
+                    {% for message in messages %}
+                        <div class="alert alert-{{ label }} alert-dismissible fade show" role="alert">
+                            {{ message }}
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>
+                    {% endfor %}
+                {% endfor %}
+
+                <div class="card shadow">
+                    <div class="card-body">
+                        <h4 class="card-title text-primary mb-4">{{ exercice.titre }}</h4>
+                        
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <p><strong>Niveau de difficulté :</strong> 
+                                    <span class="badge {% if exercice.niveauDifficulte == 'facile' %}bg-success{% elseif exercice.niveauDifficulte == 'moyen' %}bg-warning{% else %}bg-danger{% endif %}">
+                                        {{ exercice.niveauDifficulte|capitalize }}
+                                    </span>
+                                </p>
+                                <p><strong>Note minimale :</strong> {{ exercice.noteMinimale }}/20</p>
+                                <p><strong>Temps estimé :</strong> {{ exercice.tempsEstime }} minutes</p>
+                            </div>
+                            <div class="col-md-6">
+                                <p><strong>Type :</strong> 
+                                    <span class="badge bg-info">{{ exercice.type|capitalize }}</span>
+                                </p>
+                                {% if exercice.fichierPdf %}
+                                    <p><strong>Fichier PDF :</strong> 
+                                        <a href="{{ asset('uploads/exercices/' ~ exercice.fichierPdf) }}" class="btn btn-sm btn-outline-primary" target="_blank">
+                                            <i class="fas fa-file-pdf me-1"></i>Voir le PDF
+                                        </a>
+                                    </p>
+                                {% endif %}
+                            </div>
+                        </div>
+
+                        <h4 class="card-title text-primary mb-4">Détails de l'exercice</h4>
+                        <table class="table table-bordered">
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Titre</th>
+                                    <th>Niveau de difficulté</th>
+                                    <th>Note minimale</th>
+                                    <th>Temps estimé</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>{{ exercice.id }}</td>
+                                    <td>{{ exercice.titre }}</td>
+                                    <td>{{ exercice.niveauDifficulte }}</td>
+                                    <td>{{ exercice.noteMinimale }}</td>
+                                    <td>{{ exercice.tempsEstime }} min</td>
+                                </tr>
+                            </tbody>
+                        </table>
+
+                        {% if exercice.fichierPdf %}
+                            <a href="{{ asset('uploads/exercices/' ~ exercice.fichierPdf) }}" class="btn btn-primary">Télécharger le PDF</a>
+                        {% else %}
+                            <p>Aucun fichier PDF associé.</p>
+                        {% endif %}
+
+                        <div class="d-flex justify-content-between mt-4">
+                            <a href="{{ path('app_exercice_edit', {'id': exercice.id}) }}" class="btn btn-primary btn-sm">Modifier</a>
+                            <form method="post" action="{{ path('app_exercice_delete', {'id': exercice.id}) }}" style="display: inline-block" onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer cet exercice ?');">
+                                <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ exercice.id) }}">
+                                <button class="btn btn-danger">
+                                    <i class="fas fa-trash me-1"></i>Supprimer
+                                </button>
+                            </form>
+                            <a href="{{ path('app_exercice_list') }}" class="btn btn-secondary">
+                                <i class="fas fa-arrow-left me-1"></i>Retour à la liste
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

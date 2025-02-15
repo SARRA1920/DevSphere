@@ -17,23 +17,26 @@ class Commentaire
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
-    private ?string $commentaire = null;
+    private ?string $contenu = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
     private ?\DateTimeInterface $date = null;
 
-    #[ORM\ManyToOne(inversedBy: 'commentaire')]
+    #[ORM\ManyToOne(inversedBy: 'commentaires')]
     private ?Publication $publication = null;
 
+    #[ORM\ManyToOne(inversedBy: 'commentaires')]
+    private ?User $user = null;
+
     /**
-     * @var Collection<int, reaction>
+     * @var Collection<int, Reaction>
      */
-    #[ORM\OneToMany(targetEntity: reaction::class, mappedBy: 'commentaire')]
-    private Collection $reaction;
+    #[ORM\OneToMany(targetEntity: Reaction::class, mappedBy: 'commentaire')]
+    private Collection $reactions;
 
     public function __construct()
     {
-        $this->reaction = new ArrayCollection();
+        $this->reactions = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -41,14 +44,14 @@ class Commentaire
         return $this->id;
     }
 
-    public function getCommentaire(): ?string
+    public function getContenu(): ?string
     {
-        return $this->commentaire;
+        return $this->contenu;
     }
 
-    public function setCommentaire(string $commentaire): static
+    public function setContenu(string $contenu): static
     {
-        $this->commentaire = $commentaire;
+        $this->contenu = $contenu;
 
         return $this;
     }
@@ -77,27 +80,39 @@ class Commentaire
         return $this;
     }
 
-    /**
-     * @return Collection<int, reaction>
-     */
-    public function getReaction(): Collection
+    public function getUser(): ?User
     {
-        return $this->reaction;
+        return $this->user;
     }
 
-    public function addReaction(reaction $reaction): static
+    public function setUser(?User $user): static
     {
-        if (!$this->reaction->contains($reaction)) {
-            $this->reaction->add($reaction);
+        $this->user = $user;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Reaction>
+     */
+    public function getReactions(): Collection
+    {
+        return $this->reactions;
+    }
+
+    public function addReaction(Reaction $reaction): static
+    {
+        if (!$this->reactions->contains($reaction)) {
+            $this->reactions->add($reaction);
             $reaction->setCommentaire($this);
         }
 
         return $this;
     }
 
-    public function removeReaction(reaction $reaction): static
+    public function removeReaction(Reaction $reaction): static
     {
-        if ($this->reaction->removeElement($reaction)) {
+        if ($this->reactions->removeElement($reaction)) {
             // set the owning side to null (unless already changed)
             if ($reaction->getCommentaire() === $this) {
                 $reaction->setCommentaire(null);
