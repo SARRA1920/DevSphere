@@ -1,0 +1,14 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Edit Reclamation{% endblock %}
+
+{% block content %}
+    <h2>Edit Reclamation</h2>
+
+    {{ form_start(form) }}
+        {{ form_widget(form) }}
+        <button type="submit">Update</button> {# Change button text to "Update" #}
+    {{ form_end(form) }}
+
+    <a href="{{ path('reclamation_index') }}">Back to Reclamation List</a>
+{% endblock %}
