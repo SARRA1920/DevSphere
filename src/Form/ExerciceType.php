@@ -3,6 +3,8 @@
 namespace App\Form;
 
 use App\Entity\Exercice;
+use App\Entity\User;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
@@ -21,6 +23,20 @@ class ExerciceType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
+            ->add('user', EntityType::class, [
+                'class' => User::class,
+                'choice_label' => function(User $user) {
+                    return $user->getPrenom() . ' ' . $user->getNom() . ' (' . $user->getEmail() . ')';
+                },
+                'label' => 'Créé par',
+                'attr' => ['class' => 'form-select'],
+                'placeholder' => 'Sélectionnez un utilisateur',
+                'constraints' => [
+                    new NotBlank([
+                        'message' => 'Veuillez sélectionner un utilisateur',
+                    ]),
+                ],
+            ])
             ->add('titre', TextType::class, [
                 'label' => 'Titre',
                 'attr' => ['class' => 'form-control'],
@@ -91,6 +107,20 @@ class ExerciceType extends AbstractType
                     ])
                 ],
             ])
+            ->add('type', ChoiceType::class, [
+                'label' => 'Type d\'exercice',
+                'choices' => [
+                    'Quiz' => 'quiz',
+                    'Pratique' => 'pratique',
+                    'Devoir' => 'devoir'
+                ],
+                'attr' => ['class' => 'form-control'],
+                'constraints' => [
+                    new NotBlank([
+                        'message' => 'Veuillez choisir un type d\'exercice',
+                    ]),
+                ],
+            ])
             ->add('fichier_pdf', FileType::class, [
                 'label' => 'Fichier PDF',
                 'mapped' => false,
@@ -110,20 +140,6 @@ class ExerciceType extends AbstractType
                     'accept' => 'application/pdf'
                 ],
                 'help' => 'Format accepté : PDF. Taille maximale : 5MB'
-            ])
-            ->add('type', ChoiceType::class, [
-                'label' => 'Type',
-                'choices' => [
-                    'Quiz' => 'quiz',
-                    'Exercice pratique' => 'pratique',
-                    'Devoir' => 'devoir'
-                ],
-                'attr' => ['class' => 'form-control'],
-                'constraints' => [
-                    new NotBlank([
-                        'message' => 'Veuillez choisir un type d\'exercice',
-                    ]),
-                ],
             ])
         ;
     }

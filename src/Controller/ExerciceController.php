@@ -11,6 +11,8 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Psr\Log\LoggerInterface;
+use Symfony\Component\String\Slugger\SluggerInterface;
+use Symfony\Component\HttpFoundation\File\Exception\FileException;
 
 #[Route('/exercice')]
 final class ExerciceController extends AbstractController
@@ -31,22 +33,41 @@ final class ExerciceController extends AbstractController
     #[Route('/list', name: 'app_exercice_list', methods: ['GET'])]
     public function list(ExerciceRepository $exerciceRepository): Response
     {
-        return $this->render('exercice/index.html.twig', [
+        return $this->render('exercice/list.html.twig', [
             'exercices' => $exerciceRepository->findAll(),
         ]);
     }
 
     #[Route('/admin/exercice/new', name: 'app_exercice_new', methods: ['GET', 'POST'])]
-    public function new(Request $request, EntityManagerInterface $entityManager): Response
+    public function new(Request $request, EntityManagerInterface $entityManager, SluggerInterface $slugger): Response
     {
         $exercice = new Exercice();
         $form = $this->createForm(ExerciceType::class, $exercice);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            $pdfFile = $form->get('fichier_pdf')->getData();
+
+            if ($pdfFile) {
+                $originalFilename = pathinfo($pdfFile->getClientOriginalName(), PATHINFO_FILENAME);
+                $safeFilename = $slugger->slug($originalFilename);
+                $newFilename = $safeFilename.'-'.uniqid().'.'.$pdfFile->guessExtension();
+
+                try {
+                    $pdfFile->move(
+                        $this->getParameter('exercices_directory'),
+                        $newFilename
+                    );
+                    $exercice->setFichierPdf($newFilename);
+                } catch (FileException $e) {
+                    $this->addFlash('error', 'Une erreur est survenue lors du téléchargement du fichier');
+                }
+            }
+
             $entityManager->persist($exercice);
             $entityManager->flush();
 
+            $this->addFlash('success', 'L\'exercice a été créé avec succès');
             return $this->redirectToRoute('app_exercice_list');
         }
 
@@ -59,29 +80,55 @@ final class ExerciceController extends AbstractController
     #[Route('/{id}', name: 'app_exercice_show', methods: ['GET'])]
     public function show(Exercice $exercice): Response
     {
-        // Log the exercice ID
-        $this->logger->info('Showing exercice with ID: ' . $exercice->getId());
-        $this->logger->info('Showing exercice with ID: ' . $exercice->getId());
         return $this->render('exercice/show.html.twig', [
             'exercice' => $exercice,
         ]);
     }
 
     #[Route('/{id}/edit', name: 'app_exercice_edit', methods: ['GET', 'POST'])]
-    public function edit(Request $request, Exercice $exercice, EntityManagerInterface $entityManager): Response
+    public function edit(Request $request, Exercice $exercice, EntityManagerInterface $entityManager, SluggerInterface $slugger): Response
     {
         $form = $this->createForm(ExerciceType::class, $exercice);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            $pdfFile = $form->get('fichier_pdf')->getData();
+
+            if ($pdfFile) {
+                $originalFilename = pathinfo($pdfFile->getClientOriginalName(), PATHINFO_FILENAME);
+                $safeFilename = $slugger->slug($originalFilename);
+                $newFilename = $safeFilename.'-'.uniqid().'.'.$pdfFile->guessExtension();
+
+                try {
+                    $pdfFile->move(
+                        $this->getParameter('exercices_directory'),
+                        $newFilename
+                    );
+                    
+                    // Supprimer l'ancien fichier s'il existe
+                    $oldFilename = $exercice->getFichierPdf();
+                    if ($oldFilename) {
+                        $oldFilePath = $this->getParameter('exercices_directory').'/'.$oldFilename;
+                        if (file_exists($oldFilePath)) {
+                            unlink($oldFilePath);
+                        }
+                    }
+                    
+                    $exercice->setFichierPdf($newFilename);
+                } catch (FileException $e) {
+                    $this->addFlash('error', 'Une erreur est survenue lors du téléchargement du fichier');
+                }
+            }
+
             $entityManager->flush();
 
-            return $this->redirectToRoute('app_exercice_index', [], Response::HTTP_SEE_OTHER);
+            $this->addFlash('success', 'L\'exercice a été modifié avec succès');
+            return $this->redirectToRoute('app_exercice_list');
         }
 
         return $this->render('exercice/edit.html.twig', [
             'exercice' => $exercice,
-            'form' => $form,
+            'form' => $form->createView(),
         ]);
     }
 
@@ -89,11 +136,22 @@ final class ExerciceController extends AbstractController
     public function delete(Request $request, Exercice $exercice, EntityManagerInterface $entityManager): Response
     {
         if ($this->isCsrfTokenValid('delete'.$exercice->getId(), $request->request->get('_token'))) {
+            // Supprimer le fichier PDF associé s'il existe
+            $filename = $exercice->getFichierPdf();
+            if ($filename) {
+                $filePath = $this->getParameter('exercices_directory').'/'.$filename;
+                if (file_exists($filePath)) {
+                    unlink($filePath);
+                }
+            }
+
             $entityManager->remove($exercice);
             $entityManager->flush();
+            
+            $this->addFlash('success', 'L\'exercice a été supprimé avec succès');
         }
 
-        return $this->redirectToRoute('app_exercice_index', [], Response::HTTP_SEE_OTHER);
+        return $this->redirectToRoute('app_exercice_list');
     }
 
     #[Route('/admin/dashboard', name: 'app_admin_dashboard', methods: ['GET'])]

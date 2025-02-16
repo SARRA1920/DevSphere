@@ -32,7 +32,7 @@ class Exercice
         choices: ['facile', 'moyen', 'difficile'],
         message: 'Choisissez un niveau de difficulté valide : facile, moyen ou difficile'
     )]
-    private ?string $niveau_difficulte = null;
+    private ?string $niveauDifficulte = null;
 
     #[ORM\Column]
     #[Assert\NotBlank(message: 'La note minimale est obligatoire')]
@@ -41,7 +41,7 @@ class Exercice
         max: 20,
         notInRangeMessage: 'La note minimale doit être comprise entre {{ min }} et {{ max }}'
     )]
-    private ?float $note_minimale = null;
+    private ?float $noteMinimale = null;
 
     #[ORM\Column]
     #[Assert\NotBlank(message: 'Le temps estimé est obligatoire')]
@@ -50,10 +50,10 @@ class Exercice
         value: 481,
         message: 'Le temps estimé ne peut pas dépasser 8 heures (480 minutes)'
     )]
-    private ?int $temps_estime = null;
+    private ?int $tempsEstime = null;
 
     #[ORM\Column(length: 255, nullable: true)]
-    private ?string $fichier_pdf = null;
+    private ?string $fichierPdf = null;
 
     #[ORM\Column(length: 255)]
     #[Assert\NotBlank(message: 'Le type est obligatoire')]
@@ -90,55 +90,50 @@ class Exercice
     public function setTitre(string $titre): static
     {
         $this->titre = $titre;
-
         return $this;
     }
 
     public function getNiveauDifficulte(): ?string
     {
-        return $this->niveau_difficulte;
+        return $this->niveauDifficulte;
     }
 
-    public function setNiveauDifficulte(string $niveau_difficulte): static
+    public function setNiveauDifficulte(string $niveauDifficulte): static
     {
-        $this->niveau_difficulte = $niveau_difficulte;
-
+        $this->niveauDifficulte = $niveauDifficulte;
         return $this;
     }
 
     public function getNoteMinimale(): ?float
     {
-        return $this->note_minimale;
+        return $this->noteMinimale;
     }
 
-    public function setNoteMinimale(float $note_minimale): static
+    public function setNoteMinimale(float $noteMinimale): static
     {
-        $this->note_minimale = $note_minimale;
-
+        $this->noteMinimale = $noteMinimale;
         return $this;
     }
 
     public function getTempsEstime(): ?int
     {
-        return $this->temps_estime;
+        return $this->tempsEstime;
     }
 
-    public function setTempsEstime(int $temps_estime): static
+    public function setTempsEstime(int $tempsEstime): static
     {
-        $this->temps_estime = $temps_estime;
-
+        $this->tempsEstime = $tempsEstime;
         return $this;
     }
 
     public function getFichierPdf(): ?string
     {
-        return $this->fichier_pdf;
+        return $this->fichierPdf;
     }
 
-    public function setFichierPdf(?string $fichier_pdf): static
+    public function setFichierPdf(?string $fichierPdf): static
     {
-        $this->fichier_pdf = $fichier_pdf;
-
+        $this->fichierPdf = $fichierPdf;
         return $this;
     }
 
@@ -150,7 +145,6 @@ class Exercice
     public function setType(string $type): static
     {
         $this->type = $type;
-
         return $this;
     }
 
@@ -162,7 +156,6 @@ class Exercice
     public function setUser(?User $user): static
     {
         $this->user = $user;
-
         return $this;
     }
 

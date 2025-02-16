@@ -1,0 +1,139 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Liste des tentatives{% endblock %}
+
+{% block carousel %}{% endblock %}
+
+{% block content %}
+    <div class="container-fluid bg-primary py-5 mb-5 page-header">
+        <div class="container py-5">
+            <div class="row justify-content-center">
+                <div class="col-lg-10 text-center">
+                    <h1 class="display-3 text-white">Liste des tentatives</h1>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container py-4">
+        <div class="row justify-content-center">
+            <div class="col-lg-10">
+                {% for label, messages in app.flashes %}
+                    {% for message in messages %}
+                        <div class="alert alert-{{ label }} alert-dismissible fade show" role="alert">
+                            {{ message }}
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>
+                    {% endfor %}
+                {% endfor %}
+
+                <div class="card shadow-lg border-0 rounded-lg">
+                    <div class="card-header bg-gradient-primary-to-secondary p-4">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <h3 class="text-white m-0">Tentatives</h3>
+                            <a href="{{ path('app_tentative_new') }}" class="btn btn-light">
+                                <i class="fas fa-plus me-2"></i>Nouvelle tentative
+                            </a>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table table-hover">
+                                <thead>
+                                    <tr>
+                                        <th>ID</th>
+                                        <th>Exercice</th>
+                                        <th>Score</th>
+                                        <th>Statut</th>
+                                        <th>Date</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                {% for tentative in tentatives %}
+                                    <tr>
+                                        <td>{{ tentative.id }}</td>
+                                        <td>{{ tentative.exercice.titre }}</td>
+                                        <td>
+                                            <span class="badge {% if tentative.score >= tentative.exercice.noteMinimale %}bg-success{% else %}bg-danger{% endif %}">
+                                                {{ tentative.score }}/20
+                                            </span>
+                                        </td>
+                                        <td>
+                                            <span class="badge 
+                                                {% if tentative.statue == 'termine' %}
+                                                    bg-success
+                                                {% elseif tentative.statue == 'en_cours' %}
+                                                    bg-warning
+                                                {% else %}
+                                                    bg-danger
+                                                {% endif %}
+                                            ">
+                                                {{ tentative.statue|replace({'_': ' '})|capitalize }}
+                                            </span>
+                                        </td>
+                                        <td>{{ tentative.date|date('d/m/Y') }}</td>
+                                        <td>
+                                            <div class="btn-group" role="group">
+                                                <a href="{{ path('app_tentative_show', {'id': tentative.id}) }}" class="btn btn-sm btn-info">
+                                                    <i class="fas fa-eye"></i>
+                                                </a>
+                                                <a href="{{ path('app_tentative_edit', {'id': tentative.id}) }}" class="btn btn-sm btn-primary">
+                                                    <i class="fas fa-edit"></i>
+                                                </a>
+                                                <form method="post" action="{{ path('app_tentative_delete', {'id': tentative.id}) }}" style="display: inline-block" onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer cette tentative ?');">
+                                                    <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ tentative.id) }}">
+                                                    <button class="btn btn-sm btn-danger">
+                                                        <i class="fas fa-trash"></i>
+                                                    </button>
+                                                </form>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                {% else %}
+                                    <tr>
+                                        <td colspan="6" class="text-center">Aucune tentative trouvée</td>
+                                    </tr>
+                                {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <style>
+        .bg-gradient-primary-to-secondary {
+            background: linear-gradient(45deg, #0d6efd, #6610f2);
+        }
+        .btn-group .btn {
+            margin: 0 2px;
+        }
+        .table > :not(caption) > * > * {
+            padding: 1rem 0.75rem;
+        }
+        .badge {
+            padding: 0.5em 0.75em;
+        }
+        .page-header {
+            position: relative;
+            overflow: hidden;
+        }
+        .page-header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.2);
+            z-index: 1;
+        }
+        .page-header .container {
+            position: relative;
+            z-index: 2;
+        }
+    </style>
+{% endblock %}

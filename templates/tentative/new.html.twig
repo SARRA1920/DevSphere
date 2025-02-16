@@ -1,0 +1,83 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Nouvelle tentative{% endblock %}
+
+{% block carousel %}{% endblock %}
+
+{% block content %}
+    <div class="container-fluid bg-primary py-5 mb-5 page-header">
+        <div class="container py-5">
+            <div class="row justify-content-center">
+                <div class="col-lg-10 text-center">
+                    <h1 class="display-3 text-white">Nouvelle tentative</h1>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container py-4">
+        <div class="row justify-content-center">
+            <div class="col-lg-8">
+                <div class="card shadow-lg border-0 rounded-lg">
+                    <div class="card-header bg-gradient-primary-to-secondary p-4">
+                        <h3 class="text-white m-0">Créer une nouvelle tentative</h3>
+                    </div>
+                    <div class="card-body">
+                        {{ form_start(form, {'attr': {'class': 'needs-validation', 'novalidate': 'novalidate'}}) }}
+                            <div class="row mb-3">
+                                <div class="col-md-6">
+                                    {{ form_row(form.exercice) }}
+                                </div>
+                                <div class="col-md-6">
+                                    {{ form_row(form.score) }}
+                                </div>
+                            </div>
+
+                            <div class="row mb-3">
+                                <div class="col-md-6">
+                                    {{ form_row(form.statue) }}
+                                </div>
+                                <div class="col-md-6">
+                                    {{ form_row(form.date) }}
+                                </div>
+                            </div>
+
+                            <div class="d-flex justify-content-end mt-4 mb-0">
+                                <a href="{{ path('app_tentative_index') }}" class="btn btn-light me-2">Retour à la liste</a>
+                                <button class="btn btn-primary" type="submit">Créer</button>
+                            </div>
+                        {{ form_end(form) }}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <style>
+        .bg-gradient-primary-to-secondary {
+            background: linear-gradient(45deg, #0d6efd, #6610f2);
+        }
+        .page-header {
+            position: relative;
+            overflow: hidden;
+        }
+        .page-header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.2);
+            z-index: 1;
+        }
+        .page-header .container {
+            position: relative;
+            z-index: 2;
+        }
+        .form-control:focus, .form-select:focus {
+            border-color: #0d6efd;
+            box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25);
+        }
+    </style>
+{% endblock %}
