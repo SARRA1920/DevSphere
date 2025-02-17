@@ -1,0 +1,91 @@
+{% extends 'admin/base.html.twig' %}
+
+{% block title %}Nouvelle tentative{% endblock %}
+
+{% block content %}
+    <div class="container-fluid">
+        <h1 class="h3 mb-4 text-gray-800">Nouvelle tentative</h1>
+
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="card shadow mb-4">
+                    <div class="card-header py-3 d-flex justify-content-between align-items-center">
+                        <h6 class="m-0 font-weight-bold text-primary">Formulaire d'ajout</h6>
+                        <a href="{{ path('admin_tentative_index') }}" class="btn btn-secondary btn-sm">
+                            <i class="fas fa-arrow-left"></i> Retour à la liste
+                        </a>
+                    </div>
+                    <div class="card-body">
+                        {{ form_start(form, {'attr': {'class': 'needs-validation', 'novalidate': 'novalidate'}}) }}
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group mb-3">
+                                        {{ form_label(form.exercice) }}
+                                        {{ form_widget(form.exercice, {'attr': {'class': 'form-control'}}) }}
+                                        <div class="invalid-feedback">
+                                            {{ form_errors(form.exercice) }}
+                                        </div>
+                                    </div>
+                                </div>
+                            
+
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group mb-3">
+                                        {{ form_label(form.score) }}
+                                        {{ form_widget(form.score, {'attr': {'class': 'form-control'}}) }}
+                                        <div class="invalid-feedback">
+                                            {{ form_errors(form.score) }}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="mt-4">
+                                <button type="submit" class="btn btn-success">
+                                    <i class="fas fa-plus-circle"></i> Créer la tentative
+                                </button>
+                            </div>
+                        {{ form_end(form) }}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script>
+        // Validation du formulaire
+        (function() {
+            'use strict';
+            window.addEventListener('load', function() {
+                var forms = document.getElementsByClassName('needs-validation');
+                var validation = Array.prototype.filter.call(forms, function(form) {
+                    form.addEventListener('submit', function(event) {
+                        if (form.checkValidity() === false) {
+                            event.preventDefault();
+                            event.stopPropagation();
+                        }
+                        form.classList.add('was-validated');
+                    }, false);
+                });
+            }, false);
+        })();
+
+        // Select2 pour les listes déroulantes
+        $(document).ready(function() {
+            $('select').select2({
+                theme: 'bootstrap4',
+                width: '100%'
+            });
+        });
+    </script>
+{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+    <link href="https://cdn.jsdelivr.net/npm/@ttskch/select2-bootstrap4-theme@x.x.x/dist/select2-bootstrap4.min.css" rel="stylesheet" />
+{% endblock %}

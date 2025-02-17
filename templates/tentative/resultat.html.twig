@@ -1,0 +1,75 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Résultat de votre tentative{% endblock %}
+
+{% block content %}
+    <div class="container py-5">
+        <div class="row justify-content-center">
+            <div class="col-lg-8">
+                <div class="card shadow-lg border-0 rounded-lg">
+                    <div class="card-header bg-{{ tentative.statue == 'reussi' ? 'success' : 'danger' }} text-white">
+                        <h3 class="mb-0">
+                            {% if tentative.statue == 'reussi' %}
+                                <i class="fas fa-check-circle me-2"></i>Exercice réussi !
+                            {% else %}
+                                <i class="fas fa-times-circle me-2"></i>Exercice non réussi
+                            {% endif %}
+                        </h3>
+                    </div>
+                    <div class="card-body">
+                        <div class="score-display text-center mb-4">
+                            <div class="display-1 {{ tentative.statue == 'reussi' ? 'text-success' : 'text-danger' }}">
+                                {{ tentative.score }}/100
+                            </div>
+                            <p class="text-muted">
+                                Note minimale requise : {{ tentative.exercice.noteMinimale * 5 }}/100
+                            </p>
+                        </div>
+
+                        {% if app.flashes('evaluation_feedback')|length > 0 %}
+                            <div class="feedback-section mb-4">
+                                <h4 class="mb-3">Retour sur votre code :</h4>
+                                {% for messages in app.flashes('evaluation_feedback') %}
+                                    {% for message in messages %}
+                                        <div class="alert alert-info">
+                                            {{ message }}
+                                        </div>
+                                    {% endfor %}
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+
+                        <div class="code-section mb-4">
+                            <h4>Votre réponse :</h4>
+                            <pre class="bg-light p-3 rounded"><code>{{ tentative.reponse }}</code></pre>
+                        </div>
+
+                        <div class="mt-4 d-flex justify-content-between">
+                            <a href="{{ path('app_exercice_show', {'id': tentative.exercice.id}) }}" class="btn btn-primary">
+                                <i class="fas fa-redo me-2"></i>Réessayer
+                            </a>
+                            <a href="{{ path('app_mes_tentatives') }}" class="btn btn-secondary">
+                                <i class="fas fa-list me-2"></i>Voir toutes mes tentatives
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <style>
+        .score-display {
+            padding: 2rem;
+            border-radius: 1rem;
+            background-color: #f8f9fa;
+        }
+        pre {
+            max-height: 300px;
+            overflow-y: auto;
+        }
+        .feedback-section .alert {
+            margin-bottom: 0.5rem;
+        }
+    </style>
+{% endblock %}

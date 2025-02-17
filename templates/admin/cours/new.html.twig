@@ -11,48 +11,87 @@
             </a>
         </div>
 
+        {% for label, messages in app.flashes %}
+            {% for message in messages %}
+                <div class="alert alert-{{ label == 'error' ? 'danger' : label }} alert-dismissible fade show" role="alert">
+                    {{ message }}
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+            {% endfor %}
+        {% endfor %}
+
         <div class="card shadow mb-4">
             <div class="card-body">
-                {{ form_start(form, {'attr': {'class': 'needs-validation', 'novalidate': 'novalidate'}}) }}
-                    <div class="row">
-                        <div class="col-md-6 mb-3">
-                            {{ form_label(form.titre, 'Title', {'label_attr': {'class': 'form-label'}}) }}
-                            {{ form_widget(form.titre, {'attr': {'class': 'form-control'}}) }}
+                {{ form_start(form, {'attr': {'class': 'needs-validation'}}) }}
+
+                {% if not form.vars.valid %}
+                    <div class="alert alert-danger">
+                        {{ form_errors(form) }}
+                    </div>
+                {% endif %}
+
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        {{ form_label(form.titre) }}
+                        {{ form_widget(form.titre, {'attr': {'class': 'form-control'}}) }}
+                        <div class="invalid-feedback">
                             {{ form_errors(form.titre) }}
                         </div>
+                    </div>
 
-                        <div class="col-md-6 mb-3">
-                            {{ form_label(form.categorieCours, 'Category', {'label_attr': {'class': 'form-label'}}) }}
-                            {{ form_widget(form.categorieCours, {'attr': {'class': 'form-select'}}) }}
+                    <div class="col-md-6 mb-3">
+                        {{ form_label(form.categorieCours) }}
+                        {{ form_widget(form.categorieCours, {'attr': {'class': 'form-select'}}) }}
+                        <div class="invalid-feedback">
                             {{ form_errors(form.categorieCours) }}
                         </div>
                     </div>
+                </div>
 
-                    <div class="mb-3">
-                        {{ form_label(form.description, 'Description', {'label_attr': {'class': 'form-label'}}) }}
-                        {{ form_widget(form.description, {'attr': {'class': 'form-control', 'rows': '4'}}) }}
+                <div class="mb-3">
+                    {{ form_label(form.description) }}
+                    {{ form_widget(form.description, {'attr': {'class': 'form-control', 'rows': '4'}}) }}
+                    <div class="invalid-feedback">
                         {{ form_errors(form.description) }}
                     </div>
+                </div>
 
-                    <div class="row">
-                        <div class="col-md-6 mb-3">
-                            {{ form_label(form.duree, 'Duration', {'label_attr': {'class': 'form-label'}}) }}
-                            {{ form_widget(form.duree, {'attr': {'class': 'form-control'}}) }}
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        {{ form_label(form.duree) }}
+                        {{ form_widget(form.duree, {'attr': {'class': 'form-control'}}) }}
+                        <div class="invalid-feedback">
                             {{ form_errors(form.duree) }}
                         </div>
+                    </div>
 
-                        <div class="col-md-6 mb-3">
-                            {{ form_label(form.niveau, 'Level', {'label_attr': {'class': 'form-label'}}) }}
-                            {{ form_widget(form.niveau, {'attr': {'class': 'form-select'}}) }}
+                    <div class="col-md-6 mb-3">
+                        {{ form_label(form.niveau) }}
+                        {{ form_widget(form.niveau, {'attr': {'class': 'form-control'}}) }}
+                        <div class="invalid-feedback">
                             {{ form_errors(form.niveau) }}
                         </div>
                     </div>
+                </div>
 
-                    <div class="text-end">
-                        <button type="submit" class="btn btn-primary">
-                            <i class="fas fa-save"></i> Create Course
-                        </button>
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        {{ form_label(form.instructeur) }}
+                        {{ form_widget(form.instructeur, {'attr': {'class': 'form-control'}}) }}
+                        <div class="invalid-feedback">
+                            {{ form_errors(form.instructeur) }}
+                        </div>
                     </div>
+                </div>
+
+                <div class="mt-4">
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-save"></i> Create Course
+                    </button>
+                </div>
+
                 {{ form_end(form) }}
             </div>
         </div>

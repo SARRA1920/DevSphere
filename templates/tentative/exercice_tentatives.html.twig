@@ -1,0 +1,140 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Tentatives pour {{ exercice.titre }}{% endblock %}
+
+{% block content %}
+    <div class="container py-5">
+        <div class="row mb-4">
+            <div class="col">
+                <h1>Tentatives pour l'exercice : {{ exercice.titre }}</h1>
+                <p class="text-muted">
+                    <i class="fas fa-info-circle me-1"></i>
+                    Note minimale requise : {{ exercice.noteMinimale }}/100
+                </p>
+            </div>
+        </div>
+
+        {% if tentatives is empty %}
+            <div class="alert alert-info">
+                <i class="fas fa-info-circle me-2"></i>
+                Vous n'avez pas encore fait de tentatives pour cet exercice.
+            </div>
+            
+            <div class="text-center mt-4">
+                <a href="{{ path('app_exercice_show', {'id': exercice.id}) }}" class="btn btn-primary btn-lg">
+                    <i class="fas fa-play me-1"></i>
+                    Commencer l'exercice
+                </a>
+            </div>
+        {% else %}
+            <!-- Progress Chart -->
+            <div class="card mb-4">
+                <div class="card-body">
+                    <h5 class="card-title">Progression</h5>
+                    <canvas id="progressChart"></canvas>
+                </div>
+            </div>
+
+            <!-- Attempts List -->
+            <div class="row">
+                {% for tentative in tentatives %}
+                    <div class="col-md-6 mb-4">
+                        <div class="card h-100 shadow-sm">
+                            <div class="card-header d-flex justify-content-between align-items-center">
+                                <span class="badge {% if tentative.statue == 'reussi' %}bg-success{% else %}bg-danger{% endif %}">
+                                    {{ tentative.statue|capitalize }}
+                                </span>
+                                <small class="text-muted">
+                                    {{ tentative.date|date('d/m/Y H:i') }}
+                                </small>
+                            </div>
+                            <div class="card-body">
+                                <div class="score-display text-center mb-3">
+                                    <div class="display-4 text-{{ tentative.score >= exercice.noteMinimale ? 'success' : 'danger' }}">
+                                        {{ tentative.score }}/100
+                                    </div>
+                                </div>
+                                <div class="reponse-section">
+                                    <h6>Réponse soumise :</h6>
+                                    <pre class="bg-light p-2 rounded"><code>{{ tentative.reponse }}</code></pre>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+
+            <div class="text-center mt-4">
+                <a href="{{ path('app_exercice_show', {'id': exercice.id}) }}" class="btn btn-primary">
+                    <i class="fas fa-redo me-1"></i>
+                    Réessayer l'exercice
+                </a>
+            </div>
+        {% endif %}
+    </div>
+
+    {% if tentatives is not empty %}
+        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                const ctx = document.getElementById('progressChart').getContext('2d');
+                const scores = {{ tentatives|map(t => t.score)|json_encode|raw }};
+                const dates = {{ tentatives|map(t => t.date|date('d/m/Y H:i'))|json_encode|raw }};
+                
+                new Chart(ctx, {
+                    type: 'line',
+                    data: {
+                        labels: dates.reverse(),
+                        datasets: [{
+                            label: 'Score',
+                            data: scores.reverse(),
+                            borderColor: 'rgb(75, 192, 192)',
+                            tension: 0.1
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        scales: {
+                            y: {
+                                beginAtZero: true,
+                                max: 100
+                            }
+                        },
+                        plugins: {
+                            title: {
+                                display: true,
+                                text: 'Évolution des scores'
+                            }
+                        }
+                    }
+                });
+            });
+        </script>
+    {% endif %}
+
+    <style>
+        .score-display {
+            padding: 1rem;
+            border-radius: 0.5rem;
+            background-color: #f8f9fa;
+        }
+        
+        .card {
+            transition: transform 0.2s;
+        }
+        
+        .card:hover {
+            transform: translateY(-5px);
+        }
+        
+        pre {
+            max-height: 150px;
+            overflow-y: auto;
+        }
+        
+        .badge {
+            padding: 0.5em 1em;
+            font-size: 0.875rem;
+        }
+    </style>
+{% endblock %}

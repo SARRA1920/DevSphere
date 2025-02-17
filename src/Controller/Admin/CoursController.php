@@ -10,8 +10,10 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 #[Route('/admin/cours')]
+#[IsGranted('ROLE_ADMIN')]
 class CoursController extends AbstractController
 {
     #[Route('/', name: 'admin_cours_index', methods: ['GET'])]
@@ -25,21 +27,28 @@ class CoursController extends AbstractController
     #[Route('/new', name: 'admin_cours_new', methods: ['GET', 'POST'])]
     public function new(Request $request, EntityManagerInterface $entityManager): Response
     {
-        $cours = new Cours();
-        $form = $this->createForm(CoursType::class, $cours);
+        $cour = new Cours();
+        $form = $this->createForm(CoursType::class, $cour);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $entityManager->persist($cours);
-            $entityManager->flush();
+            try {
+                // Set default image
+                $cour->setImage('default-course.jpg');
+                
+                $entityManager->persist($cour);
+                $entityManager->flush();
 
-            $this->addFlash('success', 'Course created successfully!');
-            return $this->redirectToRoute('admin_cours_index');
+                $this->addFlash('success', 'Course created successfully!');
+                return $this->redirectToRoute('admin_cours_index', [], Response::HTTP_SEE_OTHER);
+            } catch (\Exception $e) {
+                $this->addFlash('error', 'An error occurred: ' . $e->getMessage());
+            }
         }
 
-        return $this->render('admin/cours/new.html.twig', [
-            'cours' => $cours,
-            'form' => $form->createView(),
+        return $this->renderForm('admin/cours/new.html.twig', [
+            'cours' => $cour,
+            'form' => $form,
         ]);
     }
 
@@ -50,15 +59,19 @@ class CoursController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $entityManager->flush();
+            try {
+                $entityManager->flush();
 
-            $this->addFlash('success', 'Course updated successfully!');
-            return $this->redirectToRoute('admin_cours_index');
+                $this->addFlash('success', 'Course updated successfully!');
+                return $this->redirectToRoute('admin_cours_index', [], Response::HTTP_SEE_OTHER);
+            } catch (\Exception $e) {
+                $this->addFlash('error', 'An error occurred: ' . $e->getMessage());
+            }
         }
 
-        return $this->render('admin/cours/edit.html.twig', [
+        return $this->renderForm('admin/cours/edit.html.twig', [
             'cours' => $cours,
-            'form' => $form->createView(),
+            'form' => $form,
         ]);
     }
 
@@ -66,11 +79,15 @@ class CoursController extends AbstractController
     public function delete(Request $request, Cours $cours, EntityManagerInterface $entityManager): Response
     {
         if ($this->isCsrfTokenValid('delete'.$cours->getId(), $request->request->get('_token'))) {
-            $entityManager->remove($cours);
-            $entityManager->flush();
-            $this->addFlash('success', 'Course deleted successfully!');
+            try {
+                $entityManager->remove($cours);
+                $entityManager->flush();
+                $this->addFlash('success', 'Course deleted successfully!');
+            } catch (\Exception $e) {
+                $this->addFlash('error', 'An error occurred while deleting the course: ' . $e->getMessage());
+            }
         }
 
-        return $this->redirectToRoute('admin_cours_index');
+        return $this->redirectToRoute('admin_cours_index', [], Response::HTTP_SEE_OTHER);
     }
 }

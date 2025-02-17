@@ -33,27 +33,46 @@
                             <img class="img-fluid" src="{{ asset('img/course-1.jpg') }}" alt="Course Image">
                         </div>
                         <div class="p-4">
-                            <h3 class="mb-3">{{ cours.titre }}</h3>
-                            <div class="mb-3">
-                                <span class="badge bg-primary mb-2">{{ cours.categorieCours ? cours.categorieCours.nom : 'No Category' }}</span>
-                                <div class="mt-2">
-                                    <small class="fa fa-star text-primary"></small>
-                                    <small class="fa fa-star text-primary"></small>
-                                    <small class="fa fa-star text-primary"></small>
-                                    <small class="fa fa-star text-primary"></small>
-                                    <small class="fa fa-star text-primary"></small>
+                            <div class="course-details">
+                                <h3>{{ cours.titre }}</h3>
+                                <p>{{ cours.description }}</p>
+                                <div class="course-meta">
+                                    {% if cours.instructeur %}
+                                        <p><i class="fa fa-user-tie text-primary me-2"></i>{{ cours.instructeur }}</p>
+                                    {% endif %}
+                                    <p><i class="fa fa-clock text-primary me-2"></i>{{ cours.duree }}</p>
+                                    <p><i class="fa fa-graduation-cap text-primary me-2"></i>{{ cours.niveau }}</p>
                                 </div>
-                            </div>
-                            <p class="mb-4">{{ cours.description }}</p>
-                            <div class="row g-4">
-                                <div class="col-6">
-                                    <div class="d-flex align-items-center mb-3">
-                                        <i class="fa fa-clock text-primary me-2"></i>
-                                        <small>{{ cours.duree }}</small>
-                                    </div>
-                                    <div class="d-flex align-items-center mb-3">
-                                        <i class="fa fa-signal text-primary me-2"></i>
-                                        <small>{{ cours.niveau }}</small>
+                                {% if cours.pdfFilename %}
+                                    {% if app.user and cours.isUserEnrolled(app.user) %}
+                                        <div class="mt-4">
+                                            <a href="{{ path('app_cours_pdf', {'id': cours.id}) }}" class="btn btn-primary" target="_blank">
+                                                <i class="fa fa-file-pdf me-2"></i>Download Course Material
+                                            </a>
+                                        </div>
+                                    {% else %}
+                                        <div class="mt-4">
+                                            <div class="alert alert-info">
+                                                <i class="fa fa-info-circle me-2"></i>
+                                                {% if not app.user %}
+                                                    Please <a href="{{ path('app_login') }}">login</a> and enroll in this course to access the course materials.
+                                                {% else %}
+                                                    Enroll in this course to access the course materials.
+                                                {% endif %}
+                                            </div>
+                                        </div>
+                                    {% endif %}
+                                {% endif %}
+                                <div class="row g-4">
+                                    <div class="col-6">
+                                        <div class="d-flex align-items-center mb-3">
+                                            <i class="fa fa-clock text-primary me-2"></i>
+                                            <small>{{ cours.duree }}</small>
+                                        </div>
+                                        <div class="d-flex align-items-center mb-3">
+                                            <i class="fa fa-signal text-primary me-2"></i>
+                                            <small>{{ cours.niveau }}</small>
+                                        </div>
                                     </div>
                                 </div>
                             </div>

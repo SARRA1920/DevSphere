@@ -1,20 +1,177 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Hello HomeController!{% endblock %}
+{% block title %}Welcome to DevSphere{% endblock %}
 
-{% block body %}
-<style>
-    .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
-    .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
-</style>
+{% block content %}
+<div class="home-container">
+    <header class="hero">
+        <h1>Welcome to DevSphere</h1>
+        <p class="subtitle">Your Professional Development Community</p>
+    </header>
 
-<div class="example-wrapper">
-    <h1>Hello {{ controller_name }}! ✅</h1>
+    <section class="features">
+        <div class="feature-card">
+            <i class="fas fa-users"></i>
+            <h3>Connect</h3>
+            <p>Connect with fellow developers and expand your professional network</p>
+        </div>
+        <div class="feature-card">
+            <i class="fas fa-lightbulb"></i>
+            <h3>Learn</h3>
+            <p>Access resources and share knowledge with the community</p>
+        </div>
+        <div class="feature-card">
+            <i class="fas fa-code"></i>
+            <h3>Grow</h3>
+            <p>Enhance your skills and advance your career in technology</p>
+        </div>
+    </section>
 
-    This friendly message is coming from:
-    <ul>
-        <li>Your controller at <code>C:/Users/sarra/pi_symfony_DevSphere/src/Controller/HomeController.php</code></li>
-        <li>Your template at <code>C:/Users/sarra/pi_symfony_DevSphere/templates/home/index.html.twig</code></li>
-    </ul>
+    <section class="cta">
+        <h2>Start Your Journey Today</h2>
+        <div class="cta-buttons">
+            <a href="{{ path('app_signup') }}" class="btn-primary">Sign Up</a>
+            <a href="{{ path('app_login') }}" class="btn-secondary">Log In</a>
+        </div>
+    </section>
 </div>
+
+<style>
+.home-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 2rem;
+}
+
+.hero {
+    text-align: center;
+    padding: 4rem 0;
+    background: linear-gradient(135deg, #00bcd4 0%, #007b8a 100%);
+    color: white;
+    border-radius: 20px;
+    margin-bottom: 4rem;
+}
+
+.hero h1 {
+    font-size: 3rem;
+    margin-bottom: 1rem;
+}
+
+.subtitle {
+    font-size: 1.5rem;
+    opacity: 0.9;
+}
+
+.features {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 2rem;
+    margin-bottom: 4rem;
+}
+
+.feature-card {
+    background: white;
+    padding: 2rem;
+    border-radius: 15px;
+    text-align: center;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease;
+}
+
+.feature-card:hover {
+    transform: translateY(-5px);
+}
+
+.feature-card i {
+    font-size: 2.5rem;
+    color: #00bcd4;
+    margin-bottom: 1rem;
+}
+
+.feature-card h3 {
+    font-size: 1.5rem;
+    margin-bottom: 1rem;
+    color: #333;
+}
+
+.feature-card p {
+    color: #666;
+    line-height: 1.6;
+}
+
+.cta {
+    text-align: center;
+    padding: 4rem 0;
+}
+
+.cta h2 {
+    font-size: 2rem;
+    margin-bottom: 2rem;
+    color: #333;
+}
+
+.cta-buttons {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+}
+
+.btn-primary, .btn-secondary {
+    padding: 12px 30px;
+    border-radius: 25px;
+    text-decoration: none;
+    font-weight: 600;
+    transition: all 0.3s ease;
+}
+
+.btn-primary {
+    background: #00bcd4;
+    color: white;
+}
+
+.btn-primary:hover {
+    background: #008c9e;
+}
+
+.btn-secondary {
+    background: white;
+    color: #00bcd4;
+    border: 2px solid #00bcd4;
+}
+
+.btn-secondary:hover {
+    background: #f8f9fa;
+}
+
+@media (max-width: 768px) {
+    .home-container {
+        padding: 1rem;
+    }
+
+    .hero {
+        padding: 3rem 1rem;
+    }
+
+    .hero h1 {
+        font-size: 2.5rem;
+    }
+
+    .subtitle {
+        font-size: 1.2rem;
+    }
+
+    .features {
+        grid-template-columns: 1fr;
+    }
+
+    .cta-buttons {
+        flex-direction: column;
+    }
+
+    .btn-primary, .btn-secondary {
+        width: 100%;
+        text-align: center;
+    }
+}
+</style>
 {% endblock %}

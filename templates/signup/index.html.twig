@@ -1,0 +1,304 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Sign Up{% endblock %}
+
+{% block content %}
+<div class="signup-container">
+    <div class="signup-content">
+        <div class="signup-form">
+            {# Flash Messages #}
+            {% for label, messages in app.flashes %}
+                {% for message in messages %}
+                    <div class="alert alert-{{ label }} alert-dismissible fade show" role="alert">
+                        {{ message }}
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                {% endfor %}
+            {% endfor %}
+
+            <div class="illustration">
+                <img src="{{ asset('assets/images/signup-illustration.png') }}" alt="Sign up illustration">
+            </div>
+            
+            <form method="POST" action="{{ path('app_signup') }}" class="form-signup" enctype="multipart/form-data">
+                <div class="form-group">
+                    <label for="name">
+                        <i class="fas fa-user"></i>
+                    </label>
+                    <input type="text" id="name" name="name" placeholder="Your Name" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="phone">
+                        <i class="fas fa-phone"></i>
+                    </label>
+                    <input type="tel" id="phone" name="phone" placeholder="Your Phone Number" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="cin">
+                        <i class="fas fa-id-card"></i>
+                    </label>
+                    <input type="text" id="cin" name="cin" placeholder="Your CIN" required>
+                </div>
+
+                <div class="form-group file-group">
+                    <label for="image" class="file-label">
+                        <i class="fas fa-image"></i>
+                        <span>Upload Profile Image</span>
+                    </label>
+                    <input type="file" id="image" name="image" accept="image/*" required>
+                    <div class="file-name">No file chosen</div>
+                </div>
+
+                <div class="form-group">
+                    <label for="role">
+                        <i class="fas fa-user-tag"></i>
+                    </label>
+                    <select id="role" name="role" required>
+                        <option value="" disabled selected>Select Your Role</option>
+                        <option value="user">User</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="email">
+                        <i class="fas fa-envelope"></i>
+                    </label>
+                    <input type="email" id="email" name="email" placeholder="Your Email" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="password">
+                        <i class="fas fa-lock"></i>
+                    </label>
+                    <input type="password" id="password" name="password" placeholder="Password" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="confirm_password">
+                        <i class="fas fa-key"></i>
+                    </label>
+                    <input type="password" id="confirm_password" name="confirm_password" placeholder="Confirm Password" required>
+                </div>
+
+                <div class="form-actions">
+                    <button type="submit" class="btn-signup">Sign Up</button>
+                    <a href="{{ path('app_login') }}" class="btn-login">Already have an account?</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<style>
+.signup-container {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #f8f9fa;
+    padding: 2rem;
+}
+
+.signup-content {
+    background: white;
+    border-radius: 20px;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    max-width: 900px;
+    overflow: hidden;
+}
+
+.signup-form {
+    padding: 2rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.illustration {
+    margin-bottom: 2rem;
+    max-width: 400px;
+}
+
+.illustration img {
+    width: 100%;
+    height: auto;
+}
+
+.form-signup {
+    width: 100%;
+    max-width: 400px;
+}
+
+.form-group {
+    position: relative;
+    margin-bottom: 1.5rem;
+}
+
+.form-group label {
+    position: absolute;
+    left: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #6c757d;
+    z-index: 1;
+}
+
+.form-group input,
+.form-group select {
+    width: 100%;
+    padding: 12px 40px;
+    border: 1px solid #e0e0e0;
+    border-radius: 25px;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+    background-color: white;
+}
+
+.form-group input:focus,
+.form-group select:focus {
+    border-color: #00bcd4;
+    box-shadow: 0 0 0 2px rgba(0, 188, 212, 0.2);
+    outline: none;
+}
+
+/* File input styling */
+.file-group {
+    border: 1px solid #e0e0e0;
+    border-radius: 25px;
+    padding: 8px;
+}
+
+.file-group input[type="file"] {
+    display: none;
+}
+
+.file-label {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    cursor: pointer;
+    position: static;
+    transform: none;
+    padding: 8px 15px;
+}
+
+.file-name {
+    margin-left: 40px;
+    font-size: 0.9rem;
+    color: #6c757d;
+}
+
+.form-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    align-items: center;
+    margin-top: 2rem;
+}
+
+.btn-signup {
+    background: #00bcd4;
+    color: white;
+    border: none;
+    padding: 12px 40px;
+    border-radius: 25px;
+    font-size: 1rem;
+    cursor: pointer;
+    width: 100%;
+    transition: background 0.3s ease;
+}
+
+.btn-signup:hover {
+    background: #008c9e;
+}
+
+.btn-login {
+    color: #6c757d;
+    text-decoration: none;
+    font-size: 0.9rem;
+    transition: color 0.3s ease;
+}
+
+.btn-login:hover {
+    color: #00bcd4;
+}
+
+.alert {
+    width: 100%;
+    max-width: 400px;
+    margin-bottom: 1rem;
+    padding: 1rem;
+    border-radius: 10px;
+    text-align: center;
+}
+
+.alert-success {
+    background-color: #d4edda;
+    border-color: #c3e6cb;
+    color: #155724;
+}
+
+.alert-error {
+    background-color: #f8d7da;
+    border-color: #f5c6cb;
+    color: #721c24;
+}
+
+.btn-close {
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    cursor: pointer;
+    opacity: 0.5;
+}
+
+.btn-close:hover {
+    opacity: 1;
+}
+
+@media (max-width: 768px) {
+    .signup-container {
+        padding: 1rem;
+    }
+    
+    .signup-form {
+        padding: 1.5rem;
+    }
+}
+</style>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const fileInput = document.getElementById('image');
+    const fileName = document.querySelector('.file-name');
+    
+    fileInput.addEventListener('change', function() {
+        if (this.files && this.files[0]) {
+            fileName.textContent = this.files[0].name;
+        } else {
+            fileName.textContent = 'No file chosen';
+        }
+    });
+});
+
+// Auto-hide alerts after 5 seconds
+document.addEventListener('DOMContentLoaded', function() {
+    setTimeout(function() {
+        const alerts = document.querySelectorAll('.alert');
+        alerts.forEach(function(alert) {
+            const closeButton = alert.querySelector('.btn-close');
+            if (closeButton) {
+                closeButton.click();
+            }
+        });
+    }, 5000);
+});
+</script>
+{% endblock %}

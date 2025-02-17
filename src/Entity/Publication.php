@@ -2,12 +2,12 @@
 
 namespace App\Entity;
 
-use App\Enum\PublicationCategory;
 use App\Repository\PublicationRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: PublicationRepository::class)]
 class Publication
@@ -18,6 +18,13 @@ class Publication
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
+    #[Assert\NotBlank(message: 'Title cannot be empty')]
+    #[Assert\Length(
+        min: 3,
+        max: 255,
+        minMessage: 'Title must be at least {{ limit }} characters long',
+        maxMessage: 'Title cannot be longer than {{ limit }} characters'
+    )]
     private ?string $titre = null;
 
     #[ORM\Column(type: Types::DATE_MUTABLE)]
@@ -28,9 +35,15 @@ class Publication
 
     #[ORM\ManyToOne(inversedBy: 'publications')]
     #[ORM\JoinColumn(nullable: false)]
+    #[Assert\NotNull(message: 'Please select a category')]
     private ?CategoriePublication $category = null;
 
     #[ORM\Column(type: Types::TEXT)]
+    #[Assert\NotBlank(message: 'Content cannot be empty')]
+    #[Assert\Length(
+        min: 10,
+        minMessage: 'Content must be at least {{ limit }} characters long'
+    )]
     private ?string $contenu = null;
 
     /**

@@ -1,0 +1,215 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Exercices Disponibles{% endblock %}
+
+{% block content %}
+    <!-- Header Section -->
+    <div class="container-fluid bg-primary py-5 mb-5 page-header">
+        <div class="container py-5">
+            <div class="row justify-content-center">
+                <div class="col-lg-10 text-center">
+                    <h1 class="display-3 text-white animated slideInDown">Exercices Disponibles</h1>
+                    <nav aria-label="breadcrumb">
+                        <ol class="breadcrumb justify-content-center">
+                            <li class="breadcrumb-item"><a class="text-white" href="{{ path('app_home') }}">Accueil</a></li>
+                            <li class="breadcrumb-item text-white active">Exercices</li>
+                        </ol>
+                    </nav>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Exercises Section -->
+    <div class="container py-5">
+        <!-- Filter Section -->
+        <div class="row mb-4">
+            <div class="col-md-6 mx-auto">
+                <div class="filter-box bg-light p-4 rounded-lg shadow-sm">
+                    <h5 class="text-center mb-3">Filtrer par niveau</h5>
+                    <select class="form-select" id="difficultyFilter">
+                        <option value="all">Tous les niveaux</option>
+                        <option value="facile">Facile</option>
+                        <option value="moyen">Moyen</option>
+                        <option value="difficile">Difficile</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+
+        <!-- Exercises Grid -->
+        <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+            {% for exercice in exercices %}
+                <div class="col exercise-card" data-difficulty="{{ exercice.niveauDifficulte }}">
+                    <div class="card h-100 border-0 shadow-sm hover-card animated fadeIn">
+                        <!-- Card Header with Difficulty Badge -->
+                        <div class="card-header border-0 bg-white position-relative pt-4 pb-0">
+                            <span class="badge position-absolute top-0 start-50 translate-middle 
+                                {% if exercice.niveauDifficulte == 'facile' %}bg-success
+                                {% elseif exercice.niveauDifficulte == 'moyen' %}bg-warning
+                                {% else %}bg-danger{% endif %}">
+                                {{ exercice.niveauDifficulte|capitalize }}
+                            </span>
+                            <h5 class="card-title text-center mt-2">{{ exercice.titre }}</h5>
+                        </div>
+
+                        <!-- Card Body -->
+                        <div class="card-body">
+                            <!-- Exercise Type -->
+                            <div class="mb-3 text-center">
+                                <span class="badge bg-info">
+                                    <i class="fas fa-code me-1"></i>{{ exercice.type }}
+                                </span>
+                            </div>
+
+                            <!-- Exercise Info -->
+                            <div class="info-list">
+                                <div class="info-item">
+                                    <i class="fas fa-clock text-primary"></i>
+                                    <span>{{ exercice.tempsEstime }} minutes</span>
+                                </div>
+                                <div class="info-item">
+                                    <i class="fas fa-star text-warning"></i>
+                                    <span>Note minimale: {{ exercice.noteMinimale }}/20</span>
+                                </div>
+                            </div>
+
+                            <!-- PDF Link if available -->
+                            {% if exercice.fichierPdf %}
+                                <div class="text-center mt-3">
+                                    <a href="{{ asset('uploads/exercices/' ~ exercice.fichierPdf) }}" 
+                                       class="btn btn-outline-primary btn-sm" 
+                                       target="_blank">
+                                        <i class="fas fa-file-pdf me-1"></i>Voir l'énoncé
+                                    </a>
+                                </div>
+                            {% endif %}
+                        </div>
+
+                        <!-- Card Footer -->
+                        <div class="card-footer border-0 bg-white text-center pb-4">
+                            <a href="{{ path('app_exercice_show', {'id': exercice.id}) }}" 
+                               class="btn btn-primary">
+                                Commencer l'exercice
+                                <i class="fas fa-arrow-right ms-1"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            {% else %}
+                <div class="col-12">
+                    <div class="alert alert-info text-center" role="alert">
+                        <i class="fas fa-info-circle me-2"></i>
+                        Aucun exercice n'est disponible pour le moment.
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+
+    <style>
+        .page-header {
+            background: linear-gradient(rgba(24, 29, 56, .7), rgba(24, 29, 56, .7)), url('{{ asset('images/header-bg.jpg') }}');
+            background-position: center center;
+            background-repeat: no-repeat;
+            background-size: cover;
+        }
+        
+        .hover-card {
+            transition: all 0.3s ease;
+        }
+        
+        .hover-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 0.5rem 1rem rgba(0,0,0,0.15)!important;
+        }
+        
+        .filter-box {
+            border-radius: 15px;
+        }
+        
+        .info-list {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+        
+        .info-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.9rem;
+            color: #6c757d;
+        }
+        
+        .badge {
+            padding: 0.5em 1em;
+            font-weight: 500;
+            letter-spacing: 0.5px;
+        }
+        
+        .animated {
+            animation-duration: 1s;
+            animation-fill-mode: both;
+        }
+        
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .fadeIn {
+            animation-name: fadeIn;
+        }
+        
+        @keyframes slideInDown {
+            from {
+                transform: translate3d(0, -100%, 0);
+                visibility: visible;
+            }
+            to {
+                transform: translate3d(0, 0, 0);
+            }
+        }
+        
+        .slideInDown {
+            animation-name: slideInDown;
+        }
+
+        /* Add filter functionality */
+        .exercise-card {
+            transition: all 0.3s ease;
+        }
+        
+        .exercise-card.hidden {
+            display: none;
+        }
+    </style>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const difficultyFilter = document.getElementById('difficultyFilter');
+            const exerciseCards = document.querySelectorAll('.exercise-card');
+
+            difficultyFilter.addEventListener('change', function() {
+                const selectedDifficulty = this.value;
+                
+                exerciseCards.forEach(card => {
+                    const cardDifficulty = card.dataset.difficulty;
+                    
+                    if (selectedDifficulty === 'all' || selectedDifficulty === cardDifficulty) {
+                        card.classList.remove('hidden');
+                    } else {
+                        card.classList.add('hidden');
+                    }
+                });
+            });
+        });
+    </script>
+{% endblock %}

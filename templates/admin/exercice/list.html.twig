@@ -1,0 +1,228 @@
+{% extends 'admin/base.html.twig' %}
+
+{% block title %}Liste des exercices{% endblock %}
+
+{% block carousel %}{% endblock %}
+
+{% block content %}
+    <div class="container-fluid bg-primary py-5 mb-5 page-header">
+        <div class="container py-5">
+            <div class="row justify-content-center">
+                <div class="col-lg-10 text-center">
+                    <h1 class="display-3 text-white animated slideInDown">Liste des Exercices</h1>
+                    <nav aria-label="breadcrumb animated slideInDown">
+                        <ol class="breadcrumb justify-content-center mb-4">
+                            <li class="breadcrumb-item"><a href="{{ path('app_home') }}">Accueil</a></li>
+                            <li class="breadcrumb-item active" aria-current="page">Exercices</li>
+                        </ol>
+                    </nav>
+                    <a href="{{ path('app_exercice_new') }}" class="btn btn-light btn-lg animated slideInUp">
+                        <i class="fas fa-plus-circle me-2"></i>Ajouter un exercice
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container py-5">
+        {% for label, messages in app.flashes %}
+            {% for message in messages %}
+                <div class="alert alert-{{ label }} alert-dismissible fade show" role="alert">
+                    <i class="fas fa-{% if label == 'success' %}check-circle{% else %}exclamation-circle{% endif %} me-2"></i>
+                    {{ message }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            {% endfor %}
+        {% endfor %}
+
+        <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+            {% for exercice in exercices %}
+                <div class="col animated fadeIn">
+                    <div class="card h-100 shadow-sm hover-card">
+                        <div class="card-header bg-gradient-primary-to-secondary text-white p-3">
+                            <h5 class="card-title mb-0 text-truncate">{{ exercice.titre }}</h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="badge-container mb-3">
+                                <span class="badge {% if exercice.niveauDifficulte == 'facile' %}bg-success{% elseif exercice.niveauDifficulte == 'moyen' %}bg-warning{% else %}bg-danger{% endif %} mb-2">
+                                    <i class="fas fa-layer-group me-1"></i>{{ exercice.niveauDifficulte|capitalize }}
+                                </span>
+                                <span class="badge bg-info ms-2">
+                                    <i class="fas fa-tasks me-1"></i>{{ exercice.type|capitalize }}
+                                </span>
+                            </div>
+                            
+                            <div class="info-item mb-2">
+                                <i class="fas fa-clock text-primary me-2"></i>
+                                <span>{{ exercice.tempsEstime }} minutes</span>
+                            </div>
+                            
+                            <div class="info-item mb-3">
+                                <i class="fas fa-star text-primary me-2"></i>
+                                <span>Note minimale: {{ exercice.noteMinimale }}/20</span>
+                            </div>
+
+                            {% if exercice.fichierPdf %}
+                                <div class="pdf-button mb-3">
+                                    <a href="{{ asset('uploads/exercices/' ~ exercice.fichierPdf) }}" 
+                                       class="btn btn-outline-primary btn-sm w-100" 
+                                       target="_blank">
+                                        <i class="fas fa-file-pdf me-1"></i>Voir le PDF
+                                    </a>
+                                </div>
+                            {% endif %}
+                        </div>
+                        <div class="card-footer bg-transparent border-0 pt-0">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <a href="{{ path('app_exercice_show', {'id': exercice.id}) }}" 
+                                   class="btn btn-primary btn-sm">
+                                    <i class="fas fa-eye me-1"></i>Détails
+                                </a>
+                                <div class="btn-group">
+                                    <a href="{{ path('app_exercice_edit', {'id': exercice.id}) }}" 
+                                       class="btn btn-warning btn-sm">
+                                        <i class="fas fa-edit me-1"></i>Modifier
+                                    </a>
+                                    <form method="post" 
+                                          action="{{ path('app_exercice_delete', {'id': exercice.id}) }}" 
+                                          class="d-inline" 
+                                          onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer cet exercice ?');">
+                                        <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ exercice.id) }}">
+                                        <button class="btn btn-danger btn-sm">
+                                            <i class="fas fa-trash me-1"></i>
+                                        </button>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% else %}
+                <div class="col-12">
+                    <div class="alert alert-info text-center" role="alert">
+                        <i class="fas fa-info-circle me-2"></i>Aucun exercice n'a été trouvé.
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+
+    <style>
+        .bg-gradient-primary-to-secondary {
+            background: linear-gradient(45deg, #0d6efd, #6610f2);
+        }
+        .page-header {
+            position: relative;
+            background-size: cover;
+            background-position: center;
+            overflow: hidden;
+        }
+        .page-header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.2);
+            z-index: 1;
+        }
+        .page-header .container {
+            position: relative;
+            z-index: 2;
+        }
+        .hover-card {
+            transition: all 0.3s ease;
+            border: none;
+        }
+        .hover-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 0.5rem 2rem rgba(0,0,0,0.15)!important;
+        }
+        .card-header {
+            border-bottom: none;
+        }
+        .badge {
+            padding: 0.5em 1em;
+            font-weight: 500;
+            letter-spacing: 0.5px;
+        }
+        .info-item {
+            font-size: 0.9rem;
+            color: #6c757d;
+            display: flex;
+            align-items: center;
+        }
+        .btn {
+            padding: 0.5rem 1rem;
+            font-weight: 500;
+            border-radius: 0.5rem;
+            transition: all 0.3s ease;
+        }
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 0.25rem 0.5rem rgba(0,0,0,0.1);
+        }
+        .btn-group .btn {
+            margin-left: 0.25rem;
+        }
+        .pdf-button .btn {
+            transition: all 0.3s ease;
+        }
+        .pdf-button .btn:hover {
+            background-color: #0d6efd;
+            color: white;
+        }
+        .breadcrumb {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 0.75rem 1rem;
+            border-radius: 2rem;
+        }
+        .breadcrumb-item a {
+            color: white;
+            text-decoration: none;
+        }
+        .breadcrumb-item.active {
+            color: rgba(255, 255, 255, 0.8);
+        }
+        .animated {
+            animation-duration: 1s;
+            animation-fill-mode: both;
+        }
+        @keyframes slideInDown {
+            from {
+                transform: translate3d(0, -100%, 0);
+                visibility: visible;
+            }
+            to {
+                transform: translate3d(0, 0, 0);
+            }
+        }
+        .slideInDown {
+            animation-name: slideInDown;
+        }
+        @keyframes slideInUp {
+            from {
+                transform: translate3d(0, 100%, 0);
+                visibility: visible;
+            }
+            to {
+                transform: translate3d(0, 0, 0);
+            }
+        }
+        .slideInUp {
+            animation-name: slideInUp;
+        }
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+        .fadeIn {
+            animation-name: fadeIn;
+        }
+    </style>
+{% endblock %}

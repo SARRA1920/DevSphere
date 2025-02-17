@@ -18,28 +18,25 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
-    private ?string $nom = null;
-
-    #[ORM\Column(length: 255)]
-    private ?string $prenom = null;
+    private ?string $name = null;
 
     #[ORM\Column(length: 255, unique: true)]
     private ?string $email = null;
 
     #[ORM\Column(length: 255)]
-    private ?string $adresse = null;
-
-    #[ORM\Column]
-    private ?int $age = null;
-
-    #[ORM\Column(length: 255)]
-    private ?string $type = null;
-
-    #[ORM\Column(length: 255)]
     private ?string $password = null;
 
-    #[ORM\Column(type: 'json')]
-    private array $roles = [];
+    #[ORM\Column]
+    private ?int $phone = null;
+
+    #[ORM\Column]
+    private ?int $cin = null;
+
+    #[ORM\Column(length: 255)]
+    private ?string $image = null;
+
+    #[ORM\Column(length: 255)]
+    private ?string $role = null;
 
     /**
      * @var Collection<int, Inscription>
@@ -78,7 +75,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         $this->reclamations = new ArrayCollection();
         $this->exercices = new ArrayCollection();
         $this->participations = new ArrayCollection();
-        $this->roles = ['ROLE_USER'];
     }
 
     public function getId(): ?int
@@ -86,25 +82,14 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this->id;
     }
 
-    public function getNom(): ?string
+    public function getName(): ?string
     {
-        return $this->nom;
+        return $this->name;
     }
 
-    public function setNom(string $nom): static
+    public function setName(string $name): static
     {
-        $this->nom = $nom;
-        return $this;
-    }
-
-    public function getPrenom(): ?string
-    {
-        return $this->prenom;
-    }
-
-    public function setPrenom(string $prenom): static
-    {
-        $this->prenom = $prenom;
+        $this->name = $name;
         return $this;
     }
 
@@ -119,37 +104,101 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
-    public function getAdresse(): ?string
+    public function getPassword(): ?string
     {
-        return $this->adresse;
+        return $this->password;
     }
 
-    public function setAdresse(string $adresse): static
+    public function setPassword(string $password): static
     {
-        $this->adresse = $adresse;
+        $this->password = $password;
         return $this;
     }
 
-    public function getAge(): ?int
+    public function getPhone(): ?int
     {
-        return $this->age;
+        return $this->phone;
     }
 
-    public function setAge(int $age): static
+    public function setPhone(int $phone): static
     {
-        $this->age = $age;
+        $this->phone = $phone;
         return $this;
     }
 
-    public function getType(): ?string
+    public function getCin(): ?int
     {
-        return $this->type;
+        return $this->cin;
     }
 
-    public function setType(string $type): static
+    public function setCin(int $cin): static
     {
-        $this->type = $type;
+        $this->cin = $cin;
         return $this;
+    }
+
+    public function getImage(): ?string
+    {
+        return $this->image;
+    }
+
+    public function setImage(string $image): static
+    {
+        $this->image = $image;
+        return $this;
+    }
+
+    public function getRole(): ?string
+    {
+        return $this->role;
+    }
+
+    public function setRole(string $role): static
+    {
+        // Normalize the role to ensure it matches our expectations
+        $role = strtoupper($role);
+        if (str_starts_with($role, 'ROLE_')) {
+            $this->role = $role;
+        } else {
+            $this->role = strtolower($role);
+        }
+        return $this;
+    }
+
+    /**
+     * A visual identifier that represents this user.
+     *
+     * @see UserInterface
+     */
+    public function getUserIdentifier(): string
+    {
+        return (string) $this->email;
+    }
+
+    /**
+     * @see UserInterface
+     */
+    public function getRoles(): array
+    {
+        // Always include ROLE_USER as a base role
+        $roles = ['ROLE_USER'];
+        
+        // Convert stored role to Symfony's ROLE_XXX format
+        if ($this->role === 'admin') {
+            $roles[] = 'ROLE_ADMIN';
+        } elseif ($this->role === 'ROLE_ADMIN') {  // Also check for already prefixed role
+            $roles[] = 'ROLE_ADMIN';
+        }
+        
+        return array_unique($roles);
+    }
+
+    /**
+     * @see UserInterface
+     */
+    public function eraseCredentials(): void
+    {
+        // If you store any temporary, sensitive data on the user, clear it here
     }
 
     /**
@@ -166,19 +215,16 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
             $this->inscriptions->add($inscription);
             $inscription->setUser($this);
         }
-
         return $this;
     }
 
     public function removeInscription(Inscription $inscription): static
     {
         if ($this->inscriptions->removeElement($inscription)) {
-            // set the owning side to null (unless already changed)
             if ($inscription->getUser() === $this) {
                 $inscription->setUser(null);
             }
         }
-
         return $this;
     }
 
@@ -196,19 +242,16 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
             $this->publications->add($publication);
             $publication->setUser($this);
         }
-
         return $this;
     }
 
     public function removePublication(Publication $publication): static
     {
         if ($this->publications->removeElement($publication)) {
-            // set the owning side to null (unless already changed)
             if ($publication->getUser() === $this) {
                 $publication->setUser(null);
             }
         }
-
         return $this;
     }
 
@@ -226,19 +269,16 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
             $this->reclamations->add($reclamation);
             $reclamation->setUser($this);
         }
-
         return $this;
     }
 
     public function removeReclamation(Reclamation $reclamation): static
     {
         if ($this->reclamations->removeElement($reclamation)) {
-            // set the owning side to null (unless already changed)
             if ($reclamation->getUser() === $this) {
                 $reclamation->setUser(null);
             }
         }
-
         return $this;
     }
 
@@ -256,19 +296,16 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
             $this->exercices->add($exercice);
             $exercice->setUser($this);
         }
-
         return $this;
     }
 
     public function removeExercice(Exercice $exercice): static
     {
         if ($this->exercices->removeElement($exercice)) {
-            // set the owning side to null (unless already changed)
             if ($exercice->getUser() === $this) {
                 $exercice->setUser(null);
             }
         }
-
         return $this;
     }
 
@@ -286,53 +323,16 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
             $this->participations->add($participation);
             $participation->setUser($this);
         }
-
         return $this;
     }
 
     public function removeParticipation(Participation $participation): static
     {
         if ($this->participations->removeElement($participation)) {
-            // set the owning side to null (unless already changed)
             if ($participation->getUser() === $this) {
                 $participation->setUser(null);
             }
         }
-
         return $this;
-    }
-
-    public function getPassword(): string
-    {
-        return $this->password;
-    }
-
-    public function setPassword(string $password): static
-    {
-        $this->password = $password;
-        return $this;
-    }
-
-    public function getRoles(): array
-    {
-        $roles = $this->roles;
-        $roles[] = 'ROLE_USER';
-        return array_unique($roles);
-    }
-
-    public function setRoles(array $roles): static
-    {
-        $this->roles = $roles;
-        return $this;
-    }
-
-    public function eraseCredentials(): void
-    {
-        // If you store any temporary, sensitive data on the user, clear it here
-    }
-
-    public function getUserIdentifier(): string
-    {
-        return (string) $this->email;
     }
 }

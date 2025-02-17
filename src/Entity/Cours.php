@@ -50,6 +50,15 @@ class Cours
     )]
     private ?string $niveau = null;
 
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $instructeur = null;
+
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $image = null;
+
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $pdfFilename = null;
+
     #[ORM\ManyToOne(inversedBy: 'cours')]
     #[Assert\NotNull(message: "La catégorie du cours est obligatoire")]
     private ?CategorieCours $categorieCours = null;
@@ -111,6 +120,39 @@ class Cours
         return $this;
     }
 
+    public function getInstructeur(): ?string
+    {
+        return $this->instructeur;
+    }
+
+    public function setInstructeur(?string $instructeur): static
+    {
+        $this->instructeur = $instructeur;
+        return $this;
+    }
+
+    public function getImage(): ?string
+    {
+        return $this->image;
+    }
+
+    public function setImage(?string $image): static
+    {
+        $this->image = $image;
+        return $this;
+    }
+
+    public function getPdfFilename(): ?string
+    {
+        return $this->pdfFilename;
+    }
+
+    public function setPdfFilename(?string $pdfFilename): static
+    {
+        $this->pdfFilename = $pdfFilename;
+        return $this;
+    }
+
     public function getCategorieCours(): ?CategorieCours
     {
         return $this->categorieCours;
@@ -128,6 +170,16 @@ class Cours
     public function getInscriptions(): Collection
     {
         return $this->inscriptions;
+    }
+
+    public function isUserEnrolled(User $user): bool
+    {
+        foreach ($this->inscriptions as $inscription) {
+            if ($inscription->getUser() === $user) {
+                return true;
+            }
+        }
+        return false;
     }
 
     public function addInscription(InscriptionCours $inscription): static

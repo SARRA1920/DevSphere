@@ -1,0 +1,116 @@
+{% extends 'admin/base.html.twig' %}
+
+{% block title %}Détails de l'exercice{% endblock %}
+
+{% block content %}
+    <div class="container-fluid">
+        <h1 class="h3 mb-4 text-gray-800">{{ exercice.titre }}</h1>
+
+        <div class="card shadow mb-4">
+            <div class="card-header py-3 d-flex justify-content-between align-items-center">
+                <h6 class="m-0 font-weight-bold text-primary">Détails de l'exercice</h6>
+                <div>
+                    <a href="{{ path('admin_exercice_edit', {'id': exercice.id}) }}" class="btn btn-warning btn-sm">
+                        <i class="fas fa-edit"></i> Modifier
+                    </a>
+                    <a href="{{ path('admin_exercice_index') }}" class="btn btn-secondary btn-sm">
+                        <i class="fas fa-arrow-left"></i> Retour
+                    </a>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-8">
+                        <table class="table table-bordered">
+                            <tbody>
+                                <tr>
+                                    <th class="bg-light" style="width: 30%">Titre</th>
+                                    <td>{{ exercice.titre }}</td>
+                                </tr>
+                                <tr>
+                                    <th class="bg-light">Type</th>
+                                    <td>
+                                        <span class="badge {% if exercice.type == 'quiz' %}bg-info{% elseif exercice.type == 'pratique' %}bg-primary{% else %}bg-secondary{% endif %}">
+                                            {{ exercice.type|capitalize }}
+                                        </span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th class="bg-light">Niveau de difficulté</th>
+                                    <td>
+                                        <span class="badge {% if exercice.niveauDifficulte == 'facile' %}bg-success{% elseif exercice.niveauDifficulte == 'moyen' %}bg-warning{% else %}bg-danger{% endif %}">
+                                            {{ exercice.niveauDifficulte|capitalize }}
+                                        </span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th class="bg-light">Note minimale</th>
+                                    <td>{{ exercice.noteMinimale }}/20</td>
+                                </tr>
+                                <tr>
+                                    <th class="bg-light">Temps estimé</th>
+                                    <td>{{ exercice.tempsEstime }} minutes</td>
+                                </tr>
+                                <tr>
+                                    <th class="bg-light">Créé par</th>
+                                    <td>{{ exercice.user.name }}</td>
+                                </tr>
+                                {% if exercice.fichierPdf %}
+                                <tr>
+                                    <th class="bg-light">Fichier PDF</th>
+                                    <td>
+                                        <a href="{{ asset('uploads/exercices/' ~ exercice.fichierPdf) }}" target="_blank" class="btn btn-primary btn-sm">
+                                            <i class="fas fa-file-pdf"></i> Voir le PDF
+                                        </a>
+                                    </td>
+                                </tr>
+                                {% endif %}
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="card">
+                            <div class="card-header bg-primary text-white">
+                                <h6 class="m-0">Statistiques</h6>
+                            </div>
+                            <div class="card-body">
+                                <ul class="list-group list-group-flush">
+                                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                                        Tentatives totales
+                                        <span class="badge bg-primary rounded-pill">{{ exercice.tentatives|length }}</span>
+                                    </li>
+                                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                                        Réussites
+                                        <span class="badge bg-success rounded-pill">
+                                            {% set successCount = 0 %}
+                                            {% for tentative in exercice.tentatives %}
+                                                {% if tentative.note >= exercice.noteMinimale %}
+                                                    {% set successCount = successCount + 1 %}
+                                                {% endif %}
+                                            {% endfor %}
+                                            {{ successCount }}
+                                        </span>
+                                    </li>
+                                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                                        Échecs
+                                        <span class="badge bg-danger rounded-pill">
+                                            {{ exercice.tentatives|length - successCount }}
+                                        </span>
+                                    </li>
+                                    {% if exercice.tentatives|length > 0 %}
+                                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                                        Taux de réussite
+                                        <span class="badge {% if (successCount / exercice.tentatives|length) * 100 >= 70 %}bg-success{% elseif (successCount / exercice.tentatives|length) * 100 >= 40 %}bg-warning{% else %}bg-danger{% endif %} rounded-pill">
+                                            {{ ((successCount / exercice.tentatives|length) * 100)|round(1) }}%
+                                        </span>
+                                    </li>
+                                    {% endif %}
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

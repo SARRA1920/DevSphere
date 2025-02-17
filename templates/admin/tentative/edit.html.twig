@@ -1,0 +1,104 @@
+{% extends 'admin/base.html.twig' %}
+
+{% block title %}Modifier la tentative{% endblock %}
+
+{% block content %}
+    <div class="container-fluid">
+        <h1 class="h3 mb-4 text-gray-800">Modifier la tentative</h1>
+
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="card shadow mb-4">
+                    <div class="card-header py-3 d-flex justify-content-between align-items-center">
+                        <h6 class="m-0 font-weight-bold text-primary">Formulaire de modification</h6>
+                        <a href="{{ path('admin_tentative_index') }}" class="btn btn-secondary btn-sm">
+                            <i class="fas fa-arrow-left"></i> Retour à la liste
+                        </a>
+                    </div>
+                    <div class="card-body">
+                        {{ form_start(form, {'attr': {'class': 'needs-validation', 'novalidate': 'novalidate'}}) }}
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        {{ form_label(form.score) }}
+                                        {{ form_widget(form.score) }}
+                                        <div class="invalid-feedback">
+                                            {{ form_errors(form.score) }}
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        {{ form_label(form.statue) }}
+                                        {{ form_widget(form.statue) }}
+                                        <div class="invalid-feedback">
+                                            {{ form_errors(form.statue) }}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row mt-3">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        {{ form_label(form.date) }}
+                                        {{ form_widget(form.date) }}
+                                        <div class="invalid-feedback">
+                                            {{ form_errors(form.date) }}
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        {{ form_label(form.user) }}
+                                        {{ form_widget(form.user) }}
+                                        <div class="invalid-feedback">
+                                            {{ form_errors(form.user) }}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row mt-3">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        {{ form_label(form.exercice) }}
+                                        {{ form_widget(form.exercice) }}
+                                        <div class="invalid-feedback">
+                                            {{ form_errors(form.exercice) }}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="mt-4">
+                                <button type="submit" class="btn btn-primary">
+                                    <i class="fas fa-save"></i> Enregistrer les modifications
+                                </button>
+                            </div>
+                        {{ form_end(form) }}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script>
+        (function() {
+            'use strict';
+            window.addEventListener('load', function() {
+                var forms = document.getElementsByClassName('needs-validation');
+                var validation = Array.prototype.filter.call(forms, function(form) {
+                    form.addEventListener('submit', function(event) {
+                        if (form.checkValidity() === false) {
+                            event.preventDefault();
+                            event.stopPropagation();
+                        }
+                        form.classList.add('was-validated');
+                    }, false);
+                });
+            }, false);
+        })();
+    </script>
+{% endblock %}

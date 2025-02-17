@@ -33,28 +33,28 @@ class AppFixtures extends Fixture
             [
                 'PHP Symfony Framework',
                 'Master Symfony framework and build modern web applications',
-                '40 hours',
+                '40h',
                 'Intermediate',
                 0 // Web Development
             ],
             [
                 'React Native Fundamentals',
                 'Build cross-platform mobile apps with React Native',
-                '35 hours',
+                '35h',
                 'Beginner',
                 1 // Mobile Development
             ],
             [
                 'Python for Data Analysis',
                 'Learn data analysis with Python and popular libraries',
-                '45 hours',
+                '45h',
                 'Advanced',
                 2 // Data Science
             ],
             [
                 'Docker and Kubernetes',
                 'Master containerization and orchestration',
-                '30 hours',
+                '30h',
                 'Advanced',
                 3 // DevOps
             ]

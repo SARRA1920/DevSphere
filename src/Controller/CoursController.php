@@ -103,6 +103,34 @@ class CoursController extends AbstractController
         ]);
     }
 
+    #[Route('/{id}/pdf', name: 'app_cours_pdf', methods: ['GET'])]
+    public function downloadPdf(Cours $cours): Response
+    {
+        // Check if user is logged in
+        if (!$this->getUser()) {
+            throw $this->createAccessDeniedException('You must be logged in to access course materials.');
+        }
+
+        // Check if user is enrolled in the course
+        if (!$cours->isUserEnrolled($this->getUser())) {
+            throw $this->createAccessDeniedException('You must be enrolled in this course to access its materials.');
+        }
+
+        // Check if course has a PDF
+        if (!$cours->getPdfFilename()) {
+            throw $this->createNotFoundException('No PDF available for this course.');
+        }
+
+        $pdfPath = $this->getParameter('pdf_directory') . '/' . $cours->getPdfFilename();
+        
+        // Check if file exists
+        if (!file_exists($pdfPath)) {
+            throw $this->createNotFoundException('PDF file not found.');
+        }
+
+        return $this->file($pdfPath);
+    }
+
     #[Route('/{id}/edit', name: 'app_cours_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, Cours $cours, EntityManagerInterface $entityManager): Response
     {
