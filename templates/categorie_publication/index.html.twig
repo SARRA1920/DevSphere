@@ -1,0 +1,65 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Categories{% endblock %}
+
+{% block content %}
+    <!-- Header Start -->
+    <div class="container-fluid bg-primary py-5 mb-5 page-header">
+        <div class="container py-5">
+            <div class="row justify-content-center">
+                <div class="col-lg-10 text-center">
+                    <h1 class="display-3 text-white animated slideInDown">Categories</h1>
+                    <nav aria-label="breadcrumb">
+                        <ol class="breadcrumb justify-content-center">
+                            <li class="breadcrumb-item"><a class="text-white" href="{{ path('app_forum') }}">Home</a></li>
+                            <li class="breadcrumb-item text-white active" aria-current="page">Categories</li>
+                        </ol>
+                    </nav>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Header End -->
+
+    <!-- Categories List Start -->
+    <div class="container-xxl py-5">
+        <div class="container">
+            <div class="text-center wow fadeInUp" data-wow-delay="0.1s">
+                <h6 class="section-title bg-white text-center text-primary px-3">Forum</h6>
+                <h1 class="mb-5">Categories</h1>
+            </div>
+            <div class="row g-4 justify-content-center">
+                {% for categorie in categories %}
+                    <div class="col-lg-4 col-md-6 wow fadeInUp" data-wow-delay="0.1s">
+                        <div class="course-item bg-light">
+                            <div class="position-relative overflow-hidden">
+                                <div class="p-4 pb-0">
+                                    <h5 class="mb-4">{{ categorie.name }}</h5>
+                                    <p>{{ categorie.description }}</p>
+                                </div>
+                                <div class="w-100 d-flex justify-content-between p-4">
+                                    <a class="btn btn-sm btn-primary px-3" href="{{ path('app_forum_category', {'id': categorie.id}) }}">View Topics</a>
+                                    {% if is_granted('ROLE_ADMIN') %}
+                                        <div>
+                                            <a class="btn btn-sm btn-outline-primary" href="{{ path('app_categorie_edit', {'id': categorie.id}) }}">Edit</a>
+                                        </div>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                {% else %}
+                    <div class="col-12 text-center">
+                        <p>No categories found.</p>
+                    </div>
+                {% endfor %}
+            </div>
+            {% if is_granted('ROLE_ADMIN') %}
+                <div class="text-center mt-5">
+                    <a href="{{ path('app_categorie_new') }}" class="btn btn-primary py-3 px-5">Create New Category</a>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+    <!-- Categories List End -->
+{% endblock %}

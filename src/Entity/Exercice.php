@@ -21,18 +21,18 @@ class Exercice
     #[ORM\Column(length: 255)]
     private ?string $niveau_difficulte = null;
 
-    #[ORM\ManyToOne(inversedBy: 'exercice')]
+    #[ORM\ManyToOne(inversedBy: 'exercices')]
     private ?User $user = null;
 
     /**
-     * @var Collection<int, tentative>
+     * @var Collection<int, Tentative>
      */
-    #[ORM\OneToMany(targetEntity: tentative::class, mappedBy: 'exercice')]
-    private Collection $tentative;
+    #[ORM\OneToMany(targetEntity: Tentative::class, mappedBy: 'exercice')]
+    private Collection $tentatives;
 
     public function __construct()
     {
-        $this->tentative = new ArrayCollection();
+        $this->tentatives = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -77,26 +77,26 @@ class Exercice
     }
 
     /**
-     * @return Collection<int, tentative>
+     * @return Collection<int, Tentative>
      */
-    public function getTentative(): Collection
+    public function getTentatives(): Collection
     {
-        return $this->tentative;
+        return $this->tentatives;
     }
 
-    public function addTentative(tentative $tentative): static
+    public function addTentative(Tentative $tentative): static
     {
-        if (!$this->tentative->contains($tentative)) {
-            $this->tentative->add($tentative);
+        if (!$this->tentatives->contains($tentative)) {
+            $this->tentatives->add($tentative);
             $tentative->setExercice($this);
         }
 
         return $this;
     }
 
-    public function removeTentative(tentative $tentative): static
+    public function removeTentative(Tentative $tentative): static
     {
-        if ($this->tentative->removeElement($tentative)) {
+        if ($this->tentatives->removeElement($tentative)) {
             // set the owning side to null (unless already changed)
             if ($tentative->getExercice() === $this) {
                 $tentative->setExercice(null);

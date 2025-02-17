@@ -17,8 +17,8 @@
     <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;500;600&family=Nunito:wght@600;700;800&display=swap" rel="stylesheet">
 
     <!-- Icon Font Stylesheet -->
-    <link href={{asset('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.0/css/all.min.css')}} rel="stylesheet">
-    <link href={{asset('https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.1/font/bootstrap-icons.css')}} rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.0/css/all.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.1/font/bootstrap-icons.css" rel="stylesheet">
 
     <!-- Libraries Stylesheet -->
     <link href="{{ asset('lib/animate/animate.min.css') }}" rel="stylesheet">
@@ -46,7 +46,7 @@
     {% block navbar %}
     <!-- Navbar Start -->
     <nav class="navbar navbar-expand-lg bg-white navbar-light shadow sticky-top p-0">
-        <a href="{{ path('home') }}" class="navbar-brand d-flex align-items-center px-4 px-lg-5">
+        <a href="{{ path('app_home') }}" class="navbar-brand d-flex align-items-center px-4 px-lg-5">
             <h2 class="m-0 text-primary"><i class="fa fa-book me-3"></i>DEVSPHERE</h2>
         </a>
         <button type="button" class="navbar-toggler me-4" data-bs-toggle="collapse" data-bs-target="#navbarCollapse">
@@ -54,13 +54,13 @@
         </button>
         <div class="collapse navbar-collapse" id="navbarCollapse">
             <div class="navbar-nav ms-auto p-4 p-lg-0">
-                <a href="{{ path('home') }}" class="nav-item nav-link active">Home</a>
-                <a href="{{ path('about') }}" class="nav-item nav-link">About Us</a>
-                <a href="{{ path('cours') }}" class="nav-item nav-link">Courses</a>
+                <a href="{{ path('app_home') }}" class="nav-item nav-link active">Home</a>
+                <a href="{{ path('app_about') }}" class="nav-item nav-link">About Us</a>
+                <a href="{{ path('app_cours') }}" class="nav-item nav-link">Courses</a>
                 <a href="{{ path('app_exercice') }}" class="nav-item nav-link">Exercise</a>
                 <a href="{{ path('app_forum') }}" class="nav-item nav-link">Forum</a>
-                <a href="{{ path('reclamation') }}" class="nav-item nav-link">Reclamation</a>
-                <a href="{{ path('event') }}" class="nav-item nav-link">Event</a>
+                <a href="{{ path('app_reclamation') }}" class="nav-item nav-link">Reclamation</a>
+                <a href="{{ path('app_event') }}" class="nav-item nav-link">Event</a>
             </div>
            
         </div>
@@ -109,16 +109,7 @@
     <!-- Carousel End -->
     {% endblock %}
 
-    {% block content %}
-    <!-- Main Content Start -->
-    <div class="container-xxl py-5">
-        <div class="container">
-            <h1>Main Content Here</h1>
-            <!-- Add more sections as needed -->
-        </div>
-    </div>
-    <!-- Main Content End -->
-    {% endblock %}
+    {% block content %}{% endblock %}
 
     {% block footer %}
     <!-- Footer Start -->
@@ -127,7 +118,7 @@
             <div class="row g-5">
                 <div class="col-lg-3 col-md-6">
                     <h4 class="text-white mb-3">Quick Link</h4>
-                    <a class="btn btn-link" href="{{ path('about') }}">About Us</a>
+                    <a class="btn btn-link" href="{{ path('app_about') }}">About Us</a>
                     
                     <a class="btn btn-link" href="#">Privacy Policy</a>
                     <a class="btn btn-link" href="#">Terms & Condition</a>
@@ -171,10 +162,10 @@
     <!-- JavaScript Libraries -->
     <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="lib/wow/wow.min.js"></script>
-    <script src="lib/easing/easing.min.js"></script>
-    <script src="lib/waypoints/waypoints.min.js"></script>
-    <script src="lib/owlcarousel/owl.carousel.min.js"></script>
+    <script src="{{ asset('lib/wow/wow.min.js') }}"></script>
+    <script src="{{ asset('lib/easing/easing.min.js') }}"></script>
+    <script src="{{ asset('lib/waypoints/waypoints.min.js') }}"></script>
+    <script src="{{ asset('lib/owlcarousel/owl.carousel.min.js') }}"></script>
 
     <!-- Template Javascript -->
     <script src="{{ asset('js/main.js') }}"></script>

@@ -19,24 +19,27 @@ class Publication
     #[ORM\Column(length: 255)]
     private ?string $titre = null;
 
-    #[ORM\Column(type: Types::DATE_MUTABLE)]
+    #[ORM\Column(type: Types::TEXT)]
+    private ?string $contenu = null;
+
+    #[ORM\Column(type: Types::DATETIME_MUTABLE)]
     private ?\DateTimeInterface $date = null;
 
-    #[ORM\ManyToOne(inversedBy: 'publication')]
+    #[ORM\ManyToOne(inversedBy: 'publications')]
+    #[ORM\JoinColumn(nullable: false)]
     private ?User $user = null;
 
-    #[ORM\ManyToOne(inversedBy: 'publication')]
-    private ?Categoriepublication $categoriepublication = null;
+    #[ORM\ManyToOne(inversedBy: 'publications')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?CategoriePublication $category = null;
 
-    /**
-     * @var Collection<int, commentaire>
-     */
-    #[ORM\OneToMany(targetEntity: commentaire::class, mappedBy: 'publication')]
-    private Collection $commentaire;
+    #[ORM\OneToMany(mappedBy: 'publication', targetEntity: Commentaire::class, orphanRemoval: true)]
+    private Collection $commentaires;
 
     public function __construct()
     {
-        $this->commentaire = new ArrayCollection();
+        $this->commentaires = new ArrayCollection();
+        $this->date = new \DateTime();
     }
 
     public function getId(): ?int
@@ -52,7 +55,17 @@ class Publication
     public function setTitre(string $titre): static
     {
         $this->titre = $titre;
+        return $this;
+    }
 
+    public function getContenu(): ?string
+    {
+        return $this->contenu;
+    }
+
+    public function setContenu(string $contenu): static
+    {
+        $this->contenu = $contenu;
         return $this;
     }
 
@@ -64,7 +77,6 @@ class Publication
     public function setDate(\DateTimeInterface $date): static
     {
         $this->date = $date;
-
         return $this;
     }
 
@@ -76,43 +88,41 @@ class Publication
     public function setUser(?User $user): static
     {
         $this->user = $user;
-
         return $this;
     }
 
-    public function getCategoriepublication(): ?Categoriepublication
+    public function getCategory(): ?CategoriePublication
     {
-        return $this->categoriepublication;
+        return $this->category;
     }
 
-    public function setCategoriepublication(?Categoriepublication $categoriepublication): static
+    public function setCategory(?CategoriePublication $category): static
     {
-        $this->categoriepublication = $categoriepublication;
-
+        $this->category = $category;
         return $this;
     }
 
     /**
-     * @return Collection<int, commentaire>
+     * @return Collection<int, Commentaire>
      */
-    public function getCommentaire(): Collection
+    public function getCommentaires(): Collection
     {
-        return $this->commentaire;
+        return $this->commentaires;
     }
 
-    public function addCommentaire(commentaire $commentaire): static
+    public function addCommentaire(Commentaire $commentaire): static
     {
-        if (!$this->commentaire->contains($commentaire)) {
-            $this->commentaire->add($commentaire);
+        if (!$this->commentaires->contains($commentaire)) {
+            $this->commentaires->add($commentaire);
             $commentaire->setPublication($this);
         }
 
         return $this;
     }
 
-    public function removeCommentaire(commentaire $commentaire): static
+    public function removeCommentaire(Commentaire $commentaire): static
     {
-        if ($this->commentaire->removeElement($commentaire)) {
+        if ($this->commentaires->removeElement($commentaire)) {
             // set the owning side to null (unless already changed)
             if ($commentaire->getPublication() === $this) {
                 $commentaire->setPublication(null);

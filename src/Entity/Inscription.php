@@ -17,21 +17,18 @@ class Inscription
     private ?int $id = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
-    private ?\DateTimeInterface $DateInscription = null;
+    private ?\DateTimeInterface $dateInscription = null;
 
     #[ORM\Column(length: 255)]
-    private ?string $Statue = null;
-
-    #[ORM\ManyToOne(inversedBy: 'inscription')]
-    private ?User $idi = null;
+    private ?string $statut = null;
 
     #[ORM\ManyToOne(inversedBy: 'inscriptions')]
     private ?User $user = null;
 
     /**
-     * @var Collection<int, cours>
+     * @var Collection<int, Cours>
      */
-    #[ORM\OneToMany(targetEntity: cours::class, mappedBy: 'inscription')]
+    #[ORM\OneToMany(targetEntity: Cours::class, mappedBy: 'inscription')]
     private Collection $cours;
 
     public function __construct()
@@ -46,36 +43,24 @@ class Inscription
 
     public function getDateInscription(): ?\DateTimeInterface
     {
-        return $this->DateInscription;
+        return $this->dateInscription;
     }
 
-    public function setDateInscription(\DateTimeInterface $DateInscription): static
+    public function setDateInscription(\DateTimeInterface $dateInscription): static
     {
-        $this->DateInscription = $DateInscription;
+        $this->dateInscription = $dateInscription;
 
         return $this;
     }
 
-    public function getStatue(): ?string
+    public function getStatut(): ?string
     {
-        return $this->Statue;
+        return $this->statut;
     }
 
-    public function setStatue(string $Statue): static
+    public function setStatut(string $statut): static
     {
-        $this->Statue = $Statue;
-
-        return $this;
-    }
-
-    public function getIdi(): ?User
-    {
-        return $this->idi;
-    }
-
-    public function setIdi(?User $idi): static
-    {
-        $this->idi = $idi;
+        $this->statut = $statut;
 
         return $this;
     }
@@ -93,29 +78,29 @@ class Inscription
     }
 
     /**
-     * @return Collection<int, cours>
+     * @return Collection<int, Cours>
      */
     public function getCours(): Collection
     {
         return $this->cours;
     }
 
-    public function addCour(cours $cour): static
+    public function addCours(Cours $cours): static
     {
-        if (!$this->cours->contains($cour)) {
-            $this->cours->add($cour);
-            $cour->setInscription($this);
+        if (!$this->cours->contains($cours)) {
+            $this->cours->add($cours);
+            $cours->setInscription($this);
         }
 
         return $this;
     }
 
-    public function removeCour(cours $cour): static
+    public function removeCours(Cours $cours): static
     {
-        if ($this->cours->removeElement($cour)) {
+        if ($this->cours->removeElement($cours)) {
             // set the owning side to null (unless already changed)
-            if ($cour->getInscription() === $this) {
-                $cour->setInscription(null);
+            if ($cours->getInscription() === $this) {
+                $cours->setInscription(null);
             }
         }
 

@@ -16,20 +16,17 @@ class CategoriePublication
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
-    private ?string $nom = null;
+    private ?string $name = null;
 
     #[ORM\Column(length: 255)]
     private ?string $description = null;
 
-    /**
-     * @var Collection<int, publication>
-     */
-    #[ORM\OneToMany(targetEntity: publication::class, mappedBy: 'categoriepublication')]
-    private Collection $publication;
+    #[ORM\OneToMany(mappedBy: 'category', targetEntity: Publication::class)]
+    private Collection $publications;
 
     public function __construct()
     {
-        $this->publication = new ArrayCollection();
+        $this->publications = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -37,15 +34,14 @@ class CategoriePublication
         return $this->id;
     }
 
-    public function getNom(): ?string
+    public function getName(): ?string
     {
-        return $this->nom;
+        return $this->name;
     }
 
-    public function setNom(string $nom): static
+    public function setName(string $name): static
     {
-        $this->nom = $nom;
-
+        $this->name = $name;
         return $this;
     }
 
@@ -57,34 +53,33 @@ class CategoriePublication
     public function setDescription(string $description): static
     {
         $this->description = $description;
-
         return $this;
     }
 
     /**
-     * @return Collection<int, publication>
+     * @return Collection<int, Publication>
      */
-    public function getPublication(): Collection
+    public function getPublications(): Collection
     {
-        return $this->publication;
+        return $this->publications;
     }
 
-    public function addPublication(publication $publication): static
+    public function addPublication(Publication $publication): static
     {
-        if (!$this->publication->contains($publication)) {
-            $this->publication->add($publication);
-            $publication->setCategoriepublication($this);
+        if (!$this->publications->contains($publication)) {
+            $this->publications->add($publication);
+            $publication->setCategory($this);
         }
 
         return $this;
     }
 
-    public function removePublication(publication $publication): static
+    public function removePublication(Publication $publication): static
     {
-        if ($this->publication->removeElement($publication)) {
+        if ($this->publications->removeElement($publication)) {
             // set the owning side to null (unless already changed)
-            if ($publication->getCategoriepublication() === $this) {
-                $publication->setCategoriepublication(null);
+            if ($publication->getCategory() === $this) {
+                $publication->setCategory(null);
             }
         }
 

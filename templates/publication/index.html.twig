@@ -1,0 +1,92 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Publications - DevSphere Forum{% endblock %}
+
+{% block content %}
+    <!-- Header Start -->
+    <div class="container-fluid bg-primary py-5 mb-5 page-header">
+        <div class="container py-5">
+            <div class="row justify-content-center">
+                <div class="col-lg-10 text-center">
+                    <h1 class="display-3 text-white animated slideInDown">Publications</h1>
+                    <nav aria-label="breadcrumb">
+                        <ol class="breadcrumb justify-content-center">
+                            <li class="breadcrumb-item"><a class="text-white" href="{{ path('home') }}">Home</a></li>
+                            <li class="breadcrumb-item text-white active" aria-current="page">Publications</li>
+                        </ol>
+                    </nav>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Header End -->
+
+    <!-- Publications Start -->
+    <div class="container-xxl py-5">
+        <div class="container">
+            <!-- Flash Messages -->
+            {% for label, messages in app.flashes %}
+                {% for message in messages %}
+                    <div class="alert alert-{{ label }} alert-dismissible fade show" role="alert">
+                        {{ message }}
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                {% endfor %}
+            {% endfor %}
+
+            <!-- Add New Publication Button -->
+            <div class="text-end mb-4">
+                <a href="{{ path('app_publication_new') }}" class="btn btn-primary">
+                    <i class="fas fa-plus-circle me-2"></i>New Publication
+                </a>
+            </div>
+
+            <!-- Publications List -->
+            <div class="row g-4">
+                {% if publications is empty %}
+                    <div class="col-12 text-center">
+                        <p>No publications found. Be the first to create one!</p>
+                    </div>
+                {% else %}
+                    {% for publication in publications %}
+                        <div class="col-lg-4 col-md-6 wow fadeInUp" data-wow-delay="0.1s">
+                            <div class="course-item bg-light">
+                                <div class="position-relative overflow-hidden">
+                                    <div class="w-100 d-flex justify-content-center position-absolute bottom-0 start-0 mb-4">
+                                        <a href="{{ path('app_publication_show', {'id': publication.id}) }}" class="flex-shrink-0 btn btn-sm btn-primary px-3">Read More</a>
+                                    </div>
+                                </div>
+                                <div class="p-4">
+                                    <div class="d-flex justify-content-between mb-3">
+                                        <small class="flex-fill text-center py-2">
+                                            <i class="far fa-calendar-alt text-primary me-2"></i>
+                                            {{ publication.date|date('d M Y') }}
+                                        </small>
+                                        {% if publication.categoriepublication %}
+                                            <small class="flex-fill text-center py-2">
+                                                <i class="far fa-folder text-primary me-2"></i>
+                                                {{ publication.categoriepublication.name }}
+                                            </small>
+                                        {% endif %}
+                                    </div>
+                                    <h5 class="mb-4">{{ publication.titre }}</h5>
+                                    <div class="d-flex justify-content-between">
+                                        <small class="flex-fill text-center py-2">
+                                            <i class="far fa-user text-primary me-2"></i>
+                                            {{ publication.user ? publication.user.username : 'Anonymous' }}
+                                        </small>
+                                        <small class="flex-fill text-center py-2">
+                                            <i class="far fa-comment text-primary me-2"></i>
+                                            {{ publication.commentaire|length }} Comments
+                                        </small>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                {% endif %}
+            </div>
+        </div>
+    </div>
+    <!-- Publications End -->
+{% endblock %}

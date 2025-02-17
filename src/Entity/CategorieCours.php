@@ -16,18 +16,18 @@ class CategorieCours
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
-    private ?string $Nom = null;
+    private ?string $nom = null;
 
     #[ORM\Column(length: 255)]
-    private ?string $Description = null;
+    private ?string $description = null;
 
     #[ORM\Column(length: 255)]
-    private ?string $Niveau = null;
+    private ?string $niveau = null;
 
     /**
-     * @var Collection<int, cours>
+     * @var Collection<int, Cours>
      */
-    #[ORM\OneToMany(targetEntity: cours::class, mappedBy: 'categoriecours')]
+    #[ORM\OneToMany(targetEntity: Cours::class, mappedBy: 'categorieCours')]
     private Collection $cours;
 
     public function __construct()
@@ -40,73 +40,66 @@ class CategorieCours
         return $this->id;
     }
 
-    public function setID(int $ID): static
-    {
-        $this->ID = $ID;
-
-        return $this;
-    }
-
     public function getNom(): ?string
     {
-        return $this->Nom;
+        return $this->nom;
     }
 
-    public function setNom(string $Nom): static
+    public function setNom(string $nom): static
     {
-        $this->Nom = $Nom;
+        $this->nom = $nom;
 
         return $this;
     }
 
     public function getDescription(): ?string
     {
-        return $this->Description;
+        return $this->description;
     }
 
-    public function setDescription(string $Description): static
+    public function setDescription(string $description): static
     {
-        $this->Description = $Description;
+        $this->description = $description;
 
         return $this;
     }
 
     public function getNiveau(): ?string
     {
-        return $this->Niveau;
+        return $this->niveau;
     }
 
-    public function setNiveau(string $Niveau): static
+    public function setNiveau(string $niveau): static
     {
-        $this->Niveau = $Niveau;
+        $this->niveau = $niveau;
 
         return $this;
     }
 
     /**
-     * @return Collection<int, cours>
+     * @return Collection<int, Cours>
      */
     public function getCours(): Collection
     {
         return $this->cours;
     }
 
-    public function addCour(cours $cour): static
+    public function addCours(Cours $cours): static
     {
-        if (!$this->cours->contains($cour)) {
-            $this->cours->add($cour);
-            $cour->setCategoriecours($this);
+        if (!$this->cours->contains($cours)) {
+            $this->cours->add($cours);
+            $cours->setCategorieCours($this);
         }
 
         return $this;
     }
 
-    public function removeCour(cours $cour): static
+    public function removeCours(Cours $cours): static
     {
-        if ($this->cours->removeElement($cour)) {
+        if ($this->cours->removeElement($cours)) {
             // set the owning side to null (unless already changed)
-            if ($cour->getCategoriecours() === $this) {
-                $cour->setCategoriecours(null);
+            if ($cours->getCategorieCours() === $this) {
+                $cours->setCategorieCours(null);
             }
         }
 
