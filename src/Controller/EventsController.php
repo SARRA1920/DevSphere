@@ -16,7 +16,25 @@ use Knp\Component\Pager\PaginatorInterface;
 final class EventsController extends AbstractController
 {
     
+    #[Route(name: 'events_index', methods: ['GET'])]
+    public function events_index(
+        EventsRepository $eventsRepository, 
+        PaginatorInterface $paginator, 
+        Request $request
+    ): Response {
+        $query = $eventsRepository->createQueryBuilder('e')->getQuery();
 
+        $pagination = $paginator->paginate(
+            $query, // Query to paginate
+            $request->query->getInt('page', 1), // Current page, defaults to 1
+            3 // Items per page
+        );
+
+        return $this->render('events.html.twig', [
+            'pagination' => $pagination,
+        ]);
+    }
+    
     #[Route('/back', name: 'app_events_index', methods: ['GET'])]
     public function index(EventsRepository $eventsRepository): Response
     {
