@@ -126,14 +126,17 @@
             <a class="nav-link {% if app.request.get('_route') starts with 'admin_cours' %}active{% endif %}" href="{{ path('admin_cours_index') }}">
                 <i class="fas fa-book"></i> Cours
             </a>
-            <a class="nav-link {% if app.request.get('_route') starts with 'admin_categorie_cours' %}active{% endif %}" href="{{ path('admin_categorie_cours_index') }}">
-                <i class="fas fa-list"></i> Categories
-            </a>
             <a class="nav-link {% if app.request.get('_route') starts with 'admin_exercice' %}active{% endif %}" href="{{ path('admin_exercice_index') }}">
                 <i class="fas fa-tasks"></i> Exercices
             </a>
-             <a class="nav-link {% if app.request.get('_route') starts with 'admin_tentative' %}active{% endif %}" href="{{ path('admin_tentative_index') }}">
-                <i class="fas fa-tasks"></i> Tentatives
+            <a class="nav-link {% if app.request.get('_route') starts with 'app_reclamation' %}active{% endif %}" href="{{ path('app_reclamation_index') }}">
+                <i class="fas fa-exclamation-circle"></i> Réclamations
+            </a>
+            <a class="nav-link {% if app.request.get('_route') starts with 'app_forum' %}active{% endif %}" href="{{ path('app_forum') }}">
+                <i class="fas fa-comments"></i> Forum
+            </a>
+            <a class="nav-link {% if app.request.get('_route') starts with 'app_events_index' %}active{% endif %}" href="{{ path('app_events_index') }}">
+                <i class="fas fa-comments"></i> Events
             </a>
             <div class="mt-auto">
                 <a href="{{ path('app_home') }}" class="btn-back-to-site">

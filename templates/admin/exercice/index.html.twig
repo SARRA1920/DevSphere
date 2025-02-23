@@ -1,61 +1,71 @@
 {% extends 'admin/base.html.twig' %}
 
-{% block title %}Liste des exercices{% endblock %}
+{% block title %}Gestion des Exercices{% endblock %}
 
 {% block content %}
     <div class="container-fluid">
+        <div class="d-sm-flex align-items-center justify-content-between mb-4">
+            <h1 class="h3 mb-0 text-gray-800">Gestion des Exercices</h1>
+            <a href="{{ path('admin_exercice_new') }}" class="btn btn-primary">
+                <i class="fas fa-plus"></i> Ajouter un exercice
+            </a>
+        </div>
+
         <div class="card shadow mb-4">
-            <div class="card-header py-3 d-flex justify-content-between align-items-center">
-                <h6 class="m-0 font-weight-bold text-primary">Liste des exercices</h6>
-                <a href="{{ path('admin_exercice_new') }}" class="btn btn-primary">
-                    <i class="fas fa-plus"></i> Nouvel exercice
-                </a>
-            </div>
             <div class="card-body">
                 <div class="table-responsive">
-                    <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                    <table class="table table-bordered" id="dataTable">
                         <thead>
                             <tr>
-                                <th>ID</th>
                                 <th>Titre</th>
-                                <th>Niveau</th>
+                                <th>Niveau de difficulté</th>
                                 <th>Note minimale</th>
                                 <th>Temps estimé</th>
                                 <th>Type</th>
+                                <th>PDF</th>
                                 <th>Actions</th>
                             </tr>
                         </thead>
                         <tbody>
-                        {% for exercice in exercices %}
-                            <tr>
-                                <td>{{ exercice.id }}</td>
-                                <td>{{ exercice.titre }}</td>
-                                <td>{{ exercice.niveauDifficulte }}</td>
-                                <td>{{ exercice.noteMinimale }}</td>
-                                <td>{{ exercice.tempsEstime }} min</td>
-                                <td>{{ exercice.type }}</td>
-                                <td>
-                                    <div class="btn-group" role="group">
-                                        <a href="{{ path('admin_exercice_show', {'id': exercice.id}) }}" class="btn btn-info btn-sm">
-                                            <i class="fas fa-eye"></i>
-                                        </a>
-                                        <a href="{{ path('admin_exercice_edit', {'id': exercice.id}) }}" class="btn btn-warning btn-sm">
-                                            <i class="fas fa-edit"></i>
-                                        </a>
-                                        <form method="post" action="{{ path('admin_exercice_delete', {'id': exercice.id}) }}" style="display: inline-block" onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer cet exercice ?');">
-                                            <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ exercice.id) }}">
-                                            <button class="btn btn-danger btn-sm">
-                                                <i class="fas fa-trash"></i>
-                                            </button>
-                                        </form>
-                                    </div>
-                                </td>
-                            </tr>
-                        {% else %}
-                            <tr>
-                                <td colspan="7" class="text-center">Aucun exercice trouvé</td>
-                            </tr>
-                        {% endfor %}
+                            {% for exercice in exercices %}
+                                <tr>
+                                    <td>{{ exercice.titre }}</td>
+                                    <td>
+                                        <span class="badge badge-{{ exercice.niveauDifficulte == 'facile' ? 'success' : (exercice.niveauDifficulte == 'moyen' ? 'warning' : 'danger') }}">
+                                            {{ exercice.niveauDifficulte|capitalize }}
+                                        </span>
+                                    </td>
+                                    <td>{{ exercice.noteMinimale }}/20</td>
+                                    <td>{{ exercice.tempsEstime }} min</td>
+                                    <td>{{ exercice.type }}</td>
+                                    <td>
+                                        {% if exercice.fichierPdf %}
+                                            <a href="{{ asset('uploads/exercices/' ~ exercice.fichierPdf) }}" class="btn btn-info btn-sm" target="_blank">
+                                                <i class="fas fa-file-pdf"></i> Voir
+                                            </a>
+                                        {% else %}
+                                            <span class="text-muted">Aucun fichier</span>
+                                        {% endif %}
+                                    </td>
+                                    <td>
+                                        <div class="btn-group">
+                                            <a href="{{ path('admin_exercice_edit', {'id': exercice.id}) }}" class="btn btn-warning btn-sm" title="Modifier">
+                                                <i class="fas fa-edit"></i>
+                                            </a>
+                                            <form method="post" action="{{ path('admin_exercice_delete', {'id': exercice.id}) }}" style="display: inline-block" onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer cet exercice ?');">
+                                                <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ exercice.id) }}">
+                                                <button class="btn btn-danger btn-sm" title="Supprimer">
+                                                    <i class="fas fa-trash"></i>
+                                                </button>
+                                            </form>
+                                        </div>
+                                    </td>
+                                </tr>
+                            {% else %}
+                                <tr>
+                                    <td colspan="7" class="text-center">Aucun exercice trouvé</td>
+                                </tr>
+                            {% endfor %}
                         </tbody>
                     </table>
                 </div>

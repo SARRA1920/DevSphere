@@ -1,0 +1,46 @@
+{% extends 'base.html.twig' %}
+
+{% block content %}
+    <div class="container-xxl py-5">
+        <div class="container">
+            <div class="text-center wow fadeInUp" data-wow-delay="0.1s">
+                <h6 class="section-title bg-white text-center text-primary px-3">Events</h6>
+                <h1 class="mb-5">My events</h1>
+            </div>
+            <div class="row g-4 justify-content-center">
+              <table class="table">
+                <thead>
+                    <tr>
+                        <th>Titre</th>
+                        <th>Date</th>
+                        <th>Location</th>
+                        <th>Type</th>
+                        <th>actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                {% for participation in participations %}
+                    <tr>
+                         <td>{{ participation.idE.titre }}</td>
+                        <td>{{ participation.idE.date is not null ? participation.idE.date|date('Y-m-d') : '' }}</td>
+                        <td>{{ participation.idE.location }}</td>
+                        <td>{{ participation.idE.type }}</td>
+                        <td>
+                            {{ include('participation/_deletef_form.html.twig', {'id': participation.id}) }}
+                        </td>
+                    </tr>
+                {% else %}
+                    <tr>
+                        <td colspan="2">no records found</td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+            </div>
+            <center>
+                <br><br><br>
+                <a href="{{ path('events_index')}}" class="flex-shrink-0 btn btn-sm btn-primary px-3" style="border-radius: 30px 30px 30px 30px;">All events</a>
+            </center>
+        </div>
+    </div>
+{% endblock %}

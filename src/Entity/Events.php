@@ -5,6 +5,7 @@ namespace App\Entity;
 use App\Repository\EventsRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: EventsRepository::class)]
 class Events
@@ -15,22 +16,30 @@ class Events
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
+    #[Assert\NotBlank]
+    #[Assert\Regex(pattern: "/^[a-zA-Z0-9\s]+$/", message: "The title must contain only letters and spaces.")]
     private ?string $titre = null;
 
     #[ORM\Column(length: 255)]
+    #[Assert\NotBlank]
+    #[Assert\Regex(pattern: "/^[a-zA-Z\s]+$/", message: "The type must contain only letters and spaces.")]
     private ?string $type = null;
 
     #[ORM\Column]
+    #[Assert\NotBlank]
+    #[Assert\Type(type: "integer", message: "Capacity must be a number.")]
+    #[Assert\Positive(message: "Capacity must be a positive number.")]
     private ?int $capacity = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
+    #[Assert\NotBlank]
+    #[Assert\Type(\DateTimeInterface::class)]
+    #[Assert\GreaterThan("today", message: "The event date must be in the future.")]
     private ?\DateTimeInterface $date = null;
 
     #[ORM\Column(length: 255)]
+    #[Assert\NotBlank(message: "Location cannot be empty.")]
     private ?string $location = null;
-
-    #[ORM\ManyToOne(inversedBy: 'events')]
-    private ?Participation $participation = null;
 
     public function getId(): ?int
     {
@@ -45,7 +54,6 @@ class Events
     public function setTitre(string $titre): static
     {
         $this->titre = $titre;
-
         return $this;
     }
 
@@ -57,7 +65,6 @@ class Events
     public function setType(string $type): static
     {
         $this->type = $type;
-
         return $this;
     }
 
@@ -69,7 +76,6 @@ class Events
     public function setCapacity(int $capacity): static
     {
         $this->capacity = $capacity;
-
         return $this;
     }
 
@@ -81,7 +87,6 @@ class Events
     public function setDate(\DateTimeInterface $date): static
     {
         $this->date = $date;
-
         return $this;
     }
 
@@ -93,19 +98,6 @@ class Events
     public function setLocation(string $location): static
     {
         $this->location = $location;
-
-        return $this;
-    }
-
-    public function getParticipation(): ?Participation
-    {
-        return $this->participation;
-    }
-
-    public function setParticipation(?Participation $participation): static
-    {
-        $this->participation = $participation;
-
         return $this;
     }
 }

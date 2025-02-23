@@ -3,8 +3,7 @@
 namespace App\Entity;
 
 use App\Repository\ParticipationRepository;
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: ParticipationRepository::class)]
@@ -15,64 +14,52 @@ class Participation
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\ManyToOne(inversedBy: 'participations')]
-    private ?User $user = null;
+    #[ORM\ManyToOne(targetEntity: "App\Entity\Events")]
+    #[ORM\JoinColumn(name: "id_e", referencedColumnName: "id")]
+    private ?Events $idE = null;
 
-    /**
-     * @var Collection<int, Events>
-     */
-    #[ORM\OneToMany(targetEntity: Events::class, mappedBy: 'participation')]
-    private Collection $events;
-
-    public function __construct()
-    {
-        $this->events = new ArrayCollection();
-    }
+    #[ORM\ManyToOne(targetEntity: "App\Entity\User", cascade: ["persist"])]  // Add cascade={"persist"}
+    #[ORM\JoinColumn(name: "id_u", referencedColumnName: "id")]
+    private ?User $idU = null;
 
     public function getId(): ?int
     {
         return $this->id;
     }
 
-    public function getUser(): ?User
+    public function getIdE(): ?Events
     {
-        return $this->user;
+        return $this->idE;
     }
 
-    public function setUser(?User $user): static
+    public function setIdE(?Events $idE): static
     {
-        $this->user = $user;
+        $this->idE = $idE;
 
         return $this;
     }
 
-    /**
-     * @return Collection<int, Events>
-     */
-    public function getEvents(): Collection
+    public function getIdU(): ?User
     {
-        return $this->events;
+        return $this->idU;
     }
 
-    public function addEvent(Events $event): static
+    public function setIdU(?User $idU): static
     {
-        if (!$this->events->contains($event)) {
-            $this->events->add($event);
-            $event->setParticipation($this);
-        }
+        $this->idU = $idU;
 
         return $this;
     }
 
-    public function removeEvent(Events $event): static
+    public function __toString(): string
     {
-        if ($this->events->removeElement($event)) {
-            // set the owning side to null (unless already changed)
-            if ($event->getParticipation() === $this) {
-                $event->setParticipation(null);
-            }
-        }
-
-        return $this;
+        return sprintf(
+            'Participation (ID: %d) - User: %s %s, Event: %s',
+            $this->id ?? 0,
+            $this->idU ? $this->idU->getPrenom() : 'Unknown',
+            $this->idU ? $this->idU->getNom() : 'Unknown',
+            $this->idE ? $this->idE->getTitle() : 'Unknown Event'
+        );
     }
+
 }

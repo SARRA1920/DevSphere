@@ -1,0 +1,57 @@
+{% extends 'base.html.twig' %}
+
+{% block content %}
+    <div class="container-xxl py-5">
+        <div class="container">
+            <div class="text-center wow fadeInUp" data-wow-delay="0.1s">
+                <h6 class="section-title bg-white text-center text-primary px-3">Events</h6>
+                <h1 class="mb-5">Our events</h1>
+            </div>
+            <div class="row g-4 justify-content-center">
+    {% for event in pagination %}
+        <div class="col-lg-4 col-md-6 wow fadeInUp" data-wow-delay="0.1s">
+            <div class="course-item bg-light">
+                <div class="position-relative overflow-hidden">
+                    <img class="img-fluid" src="{{ asset('assets-front/img/' ~ event.type ~ '.jpg') }}" alt="">
+                </div>
+                <div class="text-center p-4 pb-0">
+                    <h2 class="mb-4">{{ event.titre }}</h2>
+                    <a href="{{ path('app_participation_new', {'id': event.id}) }}" 
+                      class="flex-shrink-0 btn btn-sm btn-primary px-3" 
+                      style="border-radius: 30px 30px 30px 30px;">
+                      Join Now
+                    </a>
+                    <br><br>
+                </div>
+                <div class="d-flex border-top">
+                    <small class="flex-fill text-center border-end py-2">
+                        <i class="fa fa-map text-primary me-2"></i>{{ event.location }}
+                    </small>
+                    <small class="flex-fill text-center border-end py-2">
+                        <i class="fa fa-clock text-primary me-2"></i>
+                        <span>{{ event.date ? event.date|date('d') : '21' }}</span><br>
+                        {{ event.date ? event.date|date('F') : 'December' }}
+                    </small>
+                    <small class="flex-fill text-center py-2">
+                        <i class="fa fa-user text-primary me-2"></i>{{ event.capacity }} Students
+                    </small>
+                </div>
+            </div>
+        </div>
+    {% else %}
+        <p>No events found</p>
+    {% endfor %}
+</div>
+
+<!-- Pagination Controls -->
+<div class="d-flex justify-content-center">
+    {{ knp_pagination_render(pagination) }}
+</div>
+
+            <center>
+                <br><br><br>
+                <a href="{{ path('myevents', {'id':1}) }}" " class="flex-shrink-0 btn btn-sm btn-primary px-3" style="border-radius: 30px 30px 30px 30px;">My events</a>
+            </center>
+        </div>
+    </div>
+{% endblock %}

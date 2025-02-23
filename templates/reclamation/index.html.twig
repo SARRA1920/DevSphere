@@ -1,20 +1,98 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Hello ReclamationController!{% endblock %}
+{% block title %}Gestion des Réclamations{% endblock %}
 
-{% block body %}
-<style>
-    .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
-    .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
-</style>
+{% block content %}
+<div class="container mt-4">
+    <h1>{% if is_granted('ROLE_ADMIN') %}Gestion des Réclamations{% else %}Mes Réclamations{% endif %}</h1>
 
-<div class="example-wrapper">
-    <h1>Hello {{ controller_name }}! ✅</h1>
+    {% for label, messages in app.flashes %}
+        {% for message in messages %}
+            <div class="alert alert-{{ label }} alert-dismissible fade show" role="alert">
+                {{ message }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        {% endfor %}
+    {% endfor %}
 
-    This friendly message is coming from:
-    <ul>
-        <li>Your controller at <code>C:/Users/sarra/pi_symfony_DevSphere/src/Controller/ReclamationController.php</code></li>
-        <li>Your template at <code>C:/Users/sarra/pi_symfony_DevSphere/templates/reclamation/index.html.twig</code></li>
-    </ul>
+    {% if is_granted('ROLE_USER') %}
+        <a href="{{ path('app_reclamation_new') }}" class="btn btn-primary mb-3">
+            <i class="fas fa-plus"></i> Nouvelle Réclamation
+        </a>
+    {% endif %}
+
+    <div class="card shadow">
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Type</th>
+                            <th>Date</th>
+                            <th>Réclamation</th>
+                            {% if is_granted('ROLE_ADMIN') %}
+                                <th>Utilisateur</th>
+                            {% endif %}
+                            <th>Statut</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    {% for reclamation in reclamations %}
+                        <tr>
+                            <td>{{ reclamation.id }}</td>
+                            <td>{{ reclamation.type }}</td>
+                            <td>{{ reclamation.date ? reclamation.date|date('Y-m-d H:i') : '' }}</td>
+                            <td>{{ reclamation.reclamation|slice(0, 50) }}...</td>
+                            {% if is_granted('ROLE_ADMIN') %}
+                                <td>{{ reclamation.user ? reclamation.user.email : 'N/A' }}</td>
+                            {% endif %}
+                            <td>
+                                {% if reclamation.reponse %}
+                                    <span class="badge bg-success">Répondu</span>
+                                {% else %}
+                                    <span class="badge bg-warning">En attente</span>
+                                {% endif %}
+                            </td>
+                            <td>
+                                <div class="btn-group" role="group">
+                                    <a href="{{ path('app_reclamation_show', {'id': reclamation.id}) }}" class="btn btn-info btn-sm" title="Voir">
+                                        <i class="fas fa-eye"></i>
+                                    </a>
+                                    
+                                    {% if not reclamation.reponse and (is_granted('ROLE_ADMIN') or app.user == reclamation.user) %}
+                                        <a href="{{ path('app_reclamation_edit', {'id': reclamation.id}) }}" class="btn btn-warning btn-sm" title="Modifier">
+                                            <i class="fas fa-edit"></i>
+                                        </a>
+                                    {% endif %}
+
+                                    {% if is_granted('ROLE_ADMIN') and not reclamation.reponse %}
+                                        <a href="{{ path('app_reponse_new', {'id': reclamation.id}) }}" class="btn btn-success btn-sm" title="Répondre">
+                                            <i class="fas fa-reply"></i>
+                                        </a>
+                                    {% endif %}
+
+                                    {% if app.user == reclamation.user %}
+                                        <form method="post" action="{{ path('app_reclamation_delete', {'id': reclamation.id}) }}" onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer cette réclamation ?');" style="display: inline-block;">
+                                            <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ reclamation.id) }}">
+                                            <button class="btn btn-danger btn-sm" title="Supprimer">
+                                                <i class="fas fa-trash"></i>
+                                            </button>
+                                        </form>
+                                    {% endif %}
+                                </div>
+                            </td>
+                        </tr>
+                    {% else %}
+                        <tr>
+                            <td colspan="{{ is_granted('ROLE_ADMIN') ? 7 : 6 }}" class="text-center">Aucune réclamation trouvée</td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
 </div>
 {% endblock %}
