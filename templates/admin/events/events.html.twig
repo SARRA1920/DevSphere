@@ -52,6 +52,34 @@
                                 </div>
             </div>
         </div>
+        <div class="card shadow mb-4">
+            <div class="card-body">
+                <div class="table-responsive">
+                    <h4 class="page-title">Top 3 Events</h4>
+                    <table class="table table-bordered">
+                        <thead>
+                            <tr>
+                                <th>Event Title</th>
+                                <th>Participation Count</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for event in top_events %}
+                                <tr>
+                                    <td>{{ event.titre }}</td>
+                                    <td>{{ event.participation_count }}</td>
+                                </tr>
+                            {% else %}
+                                <tr>
+                                    <td colspan="2">No top events found.</td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
     </div>
 {% endblock %}
 
