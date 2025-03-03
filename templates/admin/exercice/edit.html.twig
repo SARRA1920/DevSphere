@@ -4,71 +4,74 @@
 
 {% block content %}
     <div class="container-fluid">
-        <h1 class="h3 mb-4 text-gray-800">Modifier l'exercice</h1>
+        <div class="d-sm-flex align-items-center justify-content-between mb-4">
+            <h1 class="h3 mb-0 text-gray-800">Modifier l'exercice</h1>
+            <div>
+                <a href="{{ path('admin_exercice_index') }}" class="btn btn-secondary">
+                    <i class="fas fa-arrow-left"></i> Retour à la liste
+                </a>
+                <form method="post" action="{{ path('admin_exercice_delete', {'id': exercice.id}) }}" style="display: inline-block" onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer cet exercice ?');">
+                    <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ exercice.id) }}">
+                    <button class="btn btn-danger">
+                        <i class="fas fa-trash"></i> Supprimer
+                    </button>
+                </form>
+            </div>
+        </div>
 
         <div class="card shadow mb-4">
-            <div class="card-header py-3">
-                <h6 class="m-0 font-weight-bold text-primary">Formulaire de modification</h6>
-            </div>
             <div class="card-body">
                 {{ form_start(form, {'attr': {'class': 'needs-validation'}}) }}
                     <div class="row">
-                        <div class="col-md-6">
-                            <div class="mb-3">
-                                {{ form_label(form.titre) }}
-                                {{ form_widget(form.titre) }}
-                                {{ form_errors(form.titre) }}
-                            </div>
-
-                            <div class="mb-3">
-                                {{ form_label(form.niveauDifficulte) }}
-                                {{ form_widget(form.niveauDifficulte) }}
-                                {{ form_errors(form.niveauDifficulte) }}
-                            </div>
-
-                            <div class="mb-3">
-                                {{ form_label(form.type) }}
-                                {{ form_widget(form.type) }}
-                                {{ form_errors(form.type) }}
-                            </div>
+                        <div class="col-md-6 mb-3">
+                            {{ form_label(form.titre, 'Titre', {'label_attr': {'class': 'form-label'}}) }}
+                            {{ form_widget(form.titre, {'attr': {'class': 'form-control'}}) }}
+                            {{ form_errors(form.titre) }}
                         </div>
 
-                        <div class="col-md-6">
-                            <div class="mb-3">
-                                {{ form_label(form.noteMinimale) }}
-                                {{ form_widget(form.noteMinimale) }}
-                                {{ form_errors(form.noteMinimale) }}
-                            </div>
-
-                            <div class="mb-3">
-                                {{ form_label(form.tempsEstime) }}
-                                {{ form_widget(form.tempsEstime) }}
-                                {{ form_errors(form.tempsEstime) }}
-                            </div>
-
-                            <div class="mb-3">
-                                {{ form_label(form.user) }}
-                                {{ form_widget(form.user) }}
-                                {{ form_errors(form.user) }}
-                            </div>
-
-                            <div class="mb-3">
-                                {{ form_label(form.fichier_pdf) }}
-                                {{ form_widget(form.fichier_pdf) }}
-                                {{ form_errors(form.fichier_pdf) }}
-                                {% if exercice.fichierPdf %}
-                                    <div class="mt-2">
-                                        <p>Fichier actuel : {{ exercice.fichierPdf }}</p>
-                                    </div>
-                                {% endif %}
-                            </div>
+                        <div class="col-md-6 mb-3">
+                            {{ form_label(form.niveauDifficulte, 'Niveau de difficulté', {'label_attr': {'class': 'form-label'}}) }}
+                            {{ form_widget(form.niveauDifficulte, {'attr': {'class': 'form-select'}}) }}
+                            {{ form_errors(form.niveauDifficulte) }}
                         </div>
                     </div>
 
-                    <div class="d-flex justify-content-between">
-                        <a href="{{ path('admin_exercice_index') }}" class="btn btn-secondary">
-                            <i class="fas fa-arrow-left"></i> Retour à la liste
-                        </a>
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            {{ form_label(form.noteMinimale, 'Note minimale', {'label_attr': {'class': 'form-label'}}) }}
+                            {{ form_widget(form.noteMinimale, {'attr': {'class': 'form-control'}}) }}
+                            {{ form_errors(form.noteMinimale) }}
+                        </div>
+
+                        <div class="col-md-6 mb-3">
+                            {{ form_label(form.tempsEstime, 'Temps estimé (minutes)', {'label_attr': {'class': 'form-label'}}) }}
+                            {{ form_widget(form.tempsEstime, {'attr': {'class': 'form-control'}}) }}
+                            {{ form_errors(form.tempsEstime) }}
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        {{ form_label(form.type, 'Type d\'exercice', {'label_attr': {'class': 'form-label'}}) }}
+                        {{ form_widget(form.type, {'attr': {'class': 'form-select'}}) }}
+                        {{ form_errors(form.type) }}
+                    </div>
+
+                    <div class="mb-3">
+                        {{ form_label(form.fichier_pdf, 'Fichier PDF', {'label_attr': {'class': 'form-label'}}) }}
+                        {{ form_widget(form.fichier_pdf, {'attr': {'class': 'form-control'}}) }}
+                        {{ form_errors(form.fichier_pdf) }}
+                        {% if exercice.fichierPdf %}
+                            <div class="mt-2">
+                                <p class="mb-1">Fichier actuel : {{ exercice.fichierPdf }}</p>
+                                <a href="{{ asset('uploads/exercices/' ~ exercice.fichierPdf) }}" class="btn btn-info btn-sm" target="_blank">
+                                    <i class="fas fa-file-pdf"></i> Voir le PDF
+                                </a>
+                            </div>
+                        {% endif %}
+                        <small class="text-muted">Format accepté : PDF</small>
+                    </div>
+
+                    <div class="mt-4">
                         <button type="submit" class="btn btn-primary">
                             <i class="fas fa-save"></i> Enregistrer les modifications
                         </button>
@@ -82,15 +85,12 @@
 {% block javascripts %}
     {{ parent() }}
     <script>
-        // Prévisualisation du fichier PDF
+        // Validation du fichier PDF
         document.getElementById('{{ form.fichier_pdf.vars.id }}').addEventListener('change', function(e) {
             const file = e.target.files[0];
-            if (file) {
-                const reader = new FileReader();
-                reader.onload = function(e) {
-                    // Vous pouvez ajouter ici une prévisualisation si nécessaire
-                };
-                reader.readAsDataURL(file);
+            if (file && file.type !== 'application/pdf') {
+                alert('Veuillez sélectionner un fichier PDF');
+                this.value = '';
             }
         });
     </script>

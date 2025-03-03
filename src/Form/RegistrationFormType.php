@@ -8,6 +8,7 @@ use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Validator\Constraints\IsTrue;
@@ -23,11 +24,15 @@ class RegistrationFormType extends AbstractType
                 'attr' => ['class' => 'form-control'],
                 'label_attr' => ['class' => 'form-label'],
             ])
-            ->add('nom', TextType::class, [
+            ->add('name', TextType::class, [
                 'attr' => ['class' => 'form-control'],
                 'label_attr' => ['class' => 'form-label'],
             ])
-            ->add('prenom', TextType::class, [
+            ->add('phone', IntegerType::class, [
+                'attr' => ['class' => 'form-control'],
+                'label_attr' => ['class' => 'form-label'],
+            ])
+            ->add('cin', IntegerType::class, [
                 'attr' => ['class' => 'form-control'],
                 'label_attr' => ['class' => 'form-label'],
             ])

@@ -7,6 +7,9 @@
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
     <meta content="" name="keywords">
     <meta content="" name="description">
+    {% if app.user %}
+    <meta name="csrf-token" content="{{ csrf_token('reaction') }}">
+    {% endif %}
 
     <!-- Favicon -->
     <link href="{{ asset('img/favicon.ico') }}" rel="icon">
@@ -55,18 +58,16 @@
         </button>
         <div class="collapse navbar-collapse" id="navbarCollapse">
             <div class="navbar-nav ms-auto p-4 p-lg-0">
-                <a href="{{ path('app_home') }}" class="nav-item nav-link {% if app.request.attributes.get('_route') == 'app_home' %}active{% endif %}">Home</a>
+                <a href="{{ path('app_home') }}" class="nav-item nav-link {% if app.request.get('_route') == 'app_home' %}active{% endif %}">Accueil</a>
                 {% if is_granted('ROLE_ADMIN') %}
-                    <a href="{{ path('admin_dashboard') }}" class="nav-item nav-link {% if app.request.attributes.get('_route') starts with 'admin_' %}active{% endif %}">Administration</a>
+                    <a href="{{ path('admin_dashboard') }}" class="nav-item nav-link {% if app.request.get('_route') starts with 'admin_' %}active{% endif %}">Administration</a>
                 {% endif %}
                 <a href="{{ path('app_about') }}" class="nav-item nav-link">About Us</a>
                 <a href="{{ path('app_cours_index') }}" class="nav-item nav-link">Courses</a>
-
-                
                 <a href="{{ path('app_exercice_list') }}" class="nav-item nav-link">Exercise</a>
-                <a href="{{ path('app_forum') }}" class="nav-item nav-link {% if app.request.attributes.get('_route') starts with 'app_forum' %}active{% endif %}">Forum</a>
-                <a href="{{ path('app_reclamation') }}" class="nav-item nav-link">Reclamation</a>
-                <a href="{{ path('app_event') }}" class="nav-item nav-link">Event</a>
+                <a href="{{ path('app_forum_index') }}" class="nav-item nav-link {% if app.request.attributes.get('_route') starts with 'app_forum' %}active{% endif %}">Forum</a>
+                <a href="{{ path('app_reclamation_index') }}" class="nav-item nav-link {% if app.request.attributes.get('_route') starts with 'app_reclamation' %}active{% endif %}">Reclamation</a>
+                <a href="{{ path('events_index') }}" class="nav-item nav-link">Event</a>
                 {% if app.user %}
                     <div class="nav-item dropdown">
                         <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">
@@ -195,6 +196,8 @@
     <!-- Template Javascript -->
     <script src="{{ asset('js/main.js') }}"></script>
     {% endblock %}
+    
+    {% block javascripts %}{% endblock %}
 </body>
 
 </html>

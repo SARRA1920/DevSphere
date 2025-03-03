@@ -1,0 +1,137 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Gestion des Mots Inappropriés - DevSphere{% endblock %}
+
+{% block content %}
+    <div class="container-xxl py-5">
+        <div class="container">
+            <div class="text-center wow fadeInUp" data-wow-delay="0.1s">
+                <h6 class="section-title bg-white text-center text-primary px-3">Administration</h6>
+                <h1 class="mb-5">Gestion des Mots Inappropriés</h1>
+            </div>
+
+            <div class="row g-4">
+                <div class="col-12">
+                    {% for label, messages in app.flashes %}
+                        {% for message in messages %}
+                            <div class="alert alert-{{ label }} alert-dismissible fade show" role="alert">
+                                {{ message }}
+                                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                            </div>
+                        {% endfor %}
+                    {% endfor %}
+
+                    <div class="mb-4">
+                        <a href="{{ path('app_bad_word_new') }}" class="btn btn-primary">
+                            <i class="fas fa-plus"></i> Ajouter un nouveau mot
+                        </a>
+                    </div>
+
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="table-responsive">
+                                <table class="table table-striped">
+                                    <thead>
+                                        <tr>
+                                            <th>ID</th>
+                                            <th>Mot</th>
+                                            <th>Sévérité</th>
+                                            <th>Statut</th>
+                                            <th>Date de création</th>
+                                            <th>Actions</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% for bad_word in bad_words %}
+                                            <tr>
+                                                <td>{{ bad_word.id }}</td>
+                                                <td>{{ bad_word.word }}</td>
+                                                <td>
+                                                    <div class="severity-indicator">
+                                                        {% for i in 1..10 %}
+                                                            <span class="severity-dot {% if i <= bad_word.severity %}active{% endif %}"></span>
+                                                        {% endfor %}
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <div class="form-check form-switch">
+                                                        <input class="form-check-input toggle-status" type="checkbox" 
+                                                               data-id="{{ bad_word.id }}"
+                                                               {% if bad_word.isActive %}checked{% endif %}>
+                                                    </div>
+                                                </td>
+                                                <td>{{ bad_word.createdAt|date('Y-m-d H:i') }}</td>
+                                                <td>
+                                                    <div class="btn-group">
+                                                        <a href="{{ path('app_bad_word_edit', {'id': bad_word.id}) }}" 
+                                                           class="btn btn-sm btn-info">
+                                                            <i class="fas fa-edit"></i>
+                                                        </a>
+                                                        <form method="post" action="{{ path('app_bad_word_delete', {'id': bad_word.id}) }}"
+                                                              onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer ce mot ?');"
+                                                              style="display: inline-block;">
+                                                            <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ bad_word.id) }}">
+                                                            <button class="btn btn-sm btn-danger">
+                                                                <i class="fas fa-trash"></i>
+                                                            </button>
+                                                        </form>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        {% else %}
+                                            <tr>
+                                                <td colspan="6" class="text-center">Aucun mot inapproprié trouvé</td>
+                                            </tr>
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <style>
+        .severity-indicator {
+            display: flex;
+            gap: 2px;
+        }
+        .severity-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background-color: #ddd;
+        }
+        .severity-dot.active {
+            background-color: #dc3545;
+        }
+    </style>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            document.querySelectorAll('.toggle-status').forEach(function(toggle) {
+                toggle.addEventListener('change', function() {
+                    const id = this.dataset.id;
+                    fetch(`/admin/bad-words/${id}/toggle`, {
+                        method: 'POST',
+                        headers: {
+                            'X-Requested-With': 'XMLHttpRequest'
+                        }
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (!data.success) {
+                            this.checked = !this.checked;
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                        this.checked = !this.checked;
+                    });
+                });
+            });
+        });
+    </script>
+{% endblock %}

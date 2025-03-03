@@ -1,0 +1,12 @@
+welcome: Welcome
+forum:
+  title: Forum
+  post: Post
+  comment: Comment
+  translate: Translate
+  translate_to: Translate to
+  original_content: Original content
+  translated_content: Translated content
+  translation_error: Translation error
+  retry: Retry
+  close: Close

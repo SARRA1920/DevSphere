@@ -8,6 +8,10 @@ parameters:
     images_directory: '%kernel.project_dir%/public/uploads/images'
     pdf_directory: '%kernel.project_dir%/public/uploads/pdfs'
     exercices_directory: '%kernel.project_dir%/public/uploads/exercices'
+    translation_api_url: 'https://libretranslate.com/translate'
+    translation_api_key: ~  # Set this to your API key if needed
+    locale: 'en'
+    supported_locales: ['en', 'fr', 'es', 'de', 'it', 'pt', 'ru', 'zh', 'ja', 'ar']
 
 services:
     # default configuration for services in *this* file
@@ -26,3 +30,10 @@ services:
 
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones
+
+    # Translation service configuration
+    App\Service\TranslationService:
+        public: true
+        arguments:
+            $apiUrl: 'https://libretranslate.com/translate'
+            $apiKey: null

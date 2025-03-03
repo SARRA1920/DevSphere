@@ -1,0 +1,3 @@
+app_reclamation_stats:
+    path: /admin/reclamation/stats
+    controller: App\Controller\ReclamationStatsController::index

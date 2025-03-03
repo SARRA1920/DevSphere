@@ -2,195 +2,163 @@
 
 {% block title %}Dashboard{% endblock %}
 
-{% block body %}
-    <div class="container-fluid">
-        <h1 class="h3 mb-4 text-gray-800">Dashboard</h1>
+{% block content %}
+<!-- Page Heading -->
+<div class="d-sm-flex align-items-center justify-content-between mb-4">
+    <h1 class="h3 mb-0 text-gray-800">Dashboard</h1>
+</div>
 
-        <!-- Stats Cards -->
-        <div class="row">
-            <!-- Categories Card -->
-            <div class="col-xl-3 col-md-6 mb-4">
-                <div class="card border-left-primary shadow h-100 py-2">
-                    <div class="card-body">
-                        <div class="row no-gutters align-items-center">
-                            <div class="col mr-2">
-                                <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
-                                    Catégories</div>
-                                <div class="h5 mb-0 font-weight-bold text-gray-800">{{ total_categories }}</div>
-                            </div>
-                            <div class="col-auto">
-                                <i class="fas fa-folder fa-2x text-gray-300"></i>
-                            </div>
-                        </div>
+<!-- Content Row -->
+<div class="row">
+    <!-- Total Users Card -->
+    <div class="col-xl-3 col-md-6 mb-4">
+        <div class="card border-left-primary shadow h-100 py-2">
+            <div class="card-body">
+                <div class="row no-gutters align-items-center">
+                    <div class="col mr-2">
+                        <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
+                            Utilisateurs</div>
+                        <div class="h5 mb-0 font-weight-bold text-gray-800">{{ totalUsers }}</div>
                     </div>
-                </div>
-            </div>
-
-            <!-- Courses Card -->
-            <div class="col-xl-3 col-md-6 mb-4">
-                <div class="card border-left-success shadow h-100 py-2">
-                    <div class="card-body">
-                        <div class="row no-gutters align-items-center">
-                            <div class="col mr-2">
-                                <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
-                                    Cours</div>
-                                <div class="h5 mb-0 font-weight-bold text-gray-800">{{ total_courses }}</div>
-                            </div>
-                            <div class="col-auto">
-                                <i class="fas fa-book fa-2x text-gray-300"></i>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Inscriptions Card -->
-            <div class="col-xl-3 col-md-6 mb-4">
-                <div class="card border-left-warning shadow h-100 py-2">
-                    <div class="card-body">
-                        <div class="row no-gutters align-items-center">
-                            <div class="col mr-2">
-                                <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">
-                                    Inscriptions</div>
-                                <div class="h5 mb-0 font-weight-bold text-gray-800">{{ total_inscriptions }}</div>
-                            </div>
-                            <div class="col-auto">
-                                <i class="fas fa-user-graduate fa-2x text-gray-300"></i>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Exercices Card -->
-            <div class="col-xl-3 col-md-6 mb-4">
-                <div class="card border-left-info shadow h-100 py-2">
-                    <div class="card-body">
-                        <div class="row no-gutters align-items-center">
-                            <div class="col mr-2">
-                                <div class="text-xs font-weight-bold text-info text-uppercase mb-1">
-                                    Exercices</div>
-                                <div class="h5 mb-0 font-weight-bold text-gray-800">{{ total_exercices }}</div>
-                            </div>
-                            <div class="col-auto">
-                                <i class="fas fa-tasks fa-2x text-gray-300"></i>
-                            </div>
-                        </div>
-                        <div class="mt-3">
-                            <a href="{{ path('admin_exercice_index') }}" class="btn btn-info btn-sm btn-block">
-                                <i class="fas fa-cog fa-sm"></i> Gérer les exercices
-                            </a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="row">
-            <!-- Recent Categories -->
-            <div class="col-lg-6 mb-4">
-                <div class="card shadow mb-4">
-                    <div class="card-header py-3">
-                        <h6 class="m-0 font-weight-bold text-primary">Catégories récentes</h6>
-                    </div>
-                    <div class="card-body">
-                        <div class="table-responsive">
-                            <table class="table">
-                                <thead>
-                                    <tr>
-                                        <th>Nom</th>
-                                        <th>Description</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    {% for categorie in recent_categories %}
-                                        <tr>
-                                            <td>{{ categorie.nom }}</td>
-                                            <td>{{ categorie.description|slice(0, 50) }}...</td>
-                                        </tr>
-                                    {% endfor %}
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Recent Courses -->
-            <div class="col-lg-6 mb-4">
-                <div class="card shadow mb-4">
-                    <div class="card-header py-3">
-                        <h6 class="m-0 font-weight-bold text-primary">Cours récents</h6>
-                    </div>
-                    <div class="card-body">
-                        <div class="table-responsive">
-                            <table class="table">
-                                <thead>
-                                    <tr>
-                                        <th>Titre</th>
-                                        <th>Catégorie</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    {% for cours in recent_courses %}
-                                        <tr>
-                                            <td>{{ cours.titre }}</td>
-                                            <td>{{ cours.categorie.nom }}</td>
-                                        </tr>
-                                    {% endfor %}
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Recent Exercices -->
-            <div class="col-lg-12 mb-4">
-                <div class="card shadow mb-4">
-                    <div class="card-header py-3 d-flex justify-content-between align-items-center">
-                        <h6 class="m-0 font-weight-bold text-primary">Exercices récents</h6>
-                        <a href="{{ path('admin_exercice_index') }}" class="btn btn-primary btn-sm">
-                            <i class="fas fa-tasks fa-sm"></i> Voir tous les exercices
-                        </a>
-                    </div>
-                    <div class="card-body">
-                        <div class="table-responsive">
-                            <table class="table">
-                                <thead>
-                                    <tr>
-                                        <th>Titre</th>
-                                        <th>Niveau</th>
-                                        <th>Type</th>
-                                        <th>Actions</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    {% for exercice in recent_exercices %}
-                                        <tr>
-                                            <td>{{ exercice.titre }}</td>
-                                            <td>
-                                                <span class="badge bg-{{ exercice.niveauDifficulte == 'facile' ? 'success' : (exercice.niveauDifficulte == 'moyen' ? 'warning' : 'danger') }}">
-                                                    {{ exercice.niveauDifficulte|capitalize }}
-                                                </span>
-                                            </td>
-                                            <td>{{ exercice.type|capitalize }}</td>
-                                            <td>
-                                                <a href="{{ path('admin_exercice_show', {'id': exercice.id}) }}" class="btn btn-info btn-sm">
-                                                    <i class="fas fa-eye"></i>
-                                                </a>
-                                                <a href="{{ path('admin_exercice_edit', {'id': exercice.id}) }}" class="btn btn-warning btn-sm">
-                                                    <i class="fas fa-edit"></i>
-                                                </a>
-                                            </td>
-                                        </tr>
-                                    {% endfor %}
-                                </tbody>
-                            </table>
-                        </div>
+                    <div class="col-auto">
+                        <i class="fas fa-users fa-2x text-gray-300"></i>
                     </div>
                 </div>
             </div>
         </div>
     </div>
+
+    <!-- Total Courses Card -->
+    <div class="col-xl-3 col-md-6 mb-4">
+        <div class="card border-left-success shadow h-100 py-2">
+            <div class="card-body">
+                <div class="row no-gutters align-items-center">
+                    <div class="col mr-2">
+                        <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
+                            Cours</div>
+                        <div class="h5 mb-0 font-weight-bold text-gray-800">{{ totalCourses ?? 0 }}</div>
+                    </div>
+                    <div class="col-auto">
+                        <i class="fas fa-book fa-2x text-gray-300"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Total Exercises Card -->
+    <div class="col-xl-3 col-md-6 mb-4">
+        <div class="card border-left-info shadow h-100 py-2">
+            <div class="card-body">
+                <div class="row no-gutters align-items-center">
+                    <div class="col mr-2">
+                        <div class="text-xs font-weight-bold text-info text-uppercase mb-1">
+                            Exercices</div>
+                        <div class="h5 mb-0 font-weight-bold text-gray-800">{{ totalExercices ?? 0 }}</div>
+                    </div>
+                    <div class="col-auto">
+                        <i class="fas fa-tasks fa-2x text-gray-300"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Total Claims Card -->
+    <div class="col-xl-3 col-md-6 mb-4">
+        <div class="card border-left-warning shadow h-100 py-2">
+            <div class="card-body">
+                <div class="row no-gutters align-items-center">
+                    <div class="col mr-2">
+                        <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">
+                            Réclamations</div>
+                        <div class="h5 mb-0 font-weight-bold text-gray-800">{{ totalReclamations ?? 0 }}</div>
+                    </div>
+                    <div class="col-auto">
+                        <i class="fas fa-exclamation-circle fa-2x text-gray-300"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Content Row -->
+<div class="row">
+    <!-- Recent Users -->
+    <div class="col-xl-8 col-lg-7">
+        <div class="card shadow mb-4">
+            <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                <h6 class="m-0 font-weight-bold text-primary">Utilisateurs Récents</h6>
+                <a href="{{ path('admin_users_index') }}" class="btn btn-primary btn-sm">
+                    Voir Tous
+                </a>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Nom</th>
+                                <th>Email</th>
+                                <th>Rôle</th>
+                                <th>Date d'inscription</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for user in recentUsers|default([]) %}
+                                <tr>
+                                    <td>{{ user.name }}</td>
+                                    <td>{{ user.email }}</td>
+                                    <td>
+                                        <span class="badge badge-{{ user.role == 'admin' ? 'primary' : 'secondary' }}">
+                                            {{ user.role|upper }}
+                                        </span>
+                                    </td>
+                                    <td>{{ user.createdAt|date('d/m/Y') }}</td>
+                                </tr>
+                            {% else %}
+                                <tr>
+                                    <td colspan="4" class="text-center">Aucun utilisateur récent</td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Recent Claims -->
+    <div class="col-xl-4 col-lg-5">
+        <div class="card shadow mb-4">
+            <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                <h6 class="m-0 font-weight-bold text-primary">Réclamations Récentes</h6>
+                <a href="{{ path('app_reclamation_index') }}" class="btn btn-primary btn-sm">
+                    Voir Toutes
+                </a>
+            </div>
+            <div class="card-body">
+                {% for reclamation in recentReclamations|default([]) %}
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <div>
+                            <h6 class="mb-0">{{ reclamation.title }}</h6>
+                            <small class="text-muted">{{ reclamation.createdAt|date('d/m/Y H:i') }}</small>
+                        </div>
+                        <span class="badge badge-{{ reclamation.status == 'resolved' ? 'success' : 'warning' }}">
+                            {{ reclamation.status|capitalize }}
+                        </span>
+                    </div>
+                {% else %}
+                    <p class="text-center mb-0">Aucune réclamation récente</p>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block javascripts %}
+<!-- Page level plugins -->
+<script src="{{ asset('admin/vendor/chart.js/Chart.min.js') }}"></script>
 {% endblock %}

@@ -31,7 +31,7 @@ class Commentaire
     /**
      * @var Collection<int, Reaction>
      */
-    #[ORM\OneToMany(targetEntity: Reaction::class, mappedBy: 'commentaire')]
+    #[ORM\OneToMany(targetEntity: Reaction::class, mappedBy: 'commentaire', orphanRemoval: true, cascade: ['persist', 'remove'])]
     private Collection $reactions;
 
     public function __construct()

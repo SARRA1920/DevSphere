@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\User;
+use App\Form\RegistrationFormType;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -10,16 +11,9 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\String\Slugger\SluggerInterface;
-use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
-use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
 
 final class SignupController extends AbstractController
 {
-    public function __construct(
-        private TokenStorageInterface $tokenStorage
-    ) {
-    }
-
     #[Route('/signup', name: 'app_signup')]
     public function index(
         Request $request, 
@@ -27,86 +21,59 @@ final class SignupController extends AbstractController
         EntityManagerInterface $entityManager,
         SluggerInterface $slugger
     ): Response {
-        // Only handle POST requests for form submission
-        if ($request->isMethod('POST')) {
-            try {
-                // Create a new User entity
-                $user = new User();
-                
-                // Set basic user information
-                $user->setName($request->request->get('name'));
-                $user->setEmail($request->request->get('email'));
-                $user->setPhone((int)$request->request->get('phone'));
-                $user->setCin((int)$request->request->get('cin'));
-                
-                // Force role to be 'user' for security
-                $user->setRole('user');
+        $user = new User();
+        $form = $this->createForm(RegistrationFormType::class, $user);
+        $form->handleRequest($request);
 
-                // Handle password
-                $plaintextPassword = $request->request->get('password');
-                $hashedPassword = $passwordHasher->hashPassword(
+        if ($form->isSubmitted() && $form->isValid()) {
+            // Hasher le mot de passe
+            $user->setPassword(
+                $passwordHasher->hashPassword(
                     $user,
-                    $plaintextPassword
-                );
-                $user->setPassword($hashedPassword);
+                    $form->get('plainPassword')->getData()
+                )
+            );
 
-                // Handle file upload
-                $imageFile = $request->files->get('image');
-                if ($imageFile) {
-                    $originalFilename = pathinfo($imageFile->getClientOriginalName(), PATHINFO_FILENAME);
-                    $safeFilename = $slugger->slug($originalFilename);
-                    $newFilename = $safeFilename.'-'.uniqid().'.'.$imageFile->guessExtension();
+            // Définir le rôle par défaut
+            $user->setRole('user');
 
-                    try {
-                        $imageFile->move(
-                            $this->getParameter('profile_images_directory'),
-                            $newFilename
-                        );
-                    } catch (\Exception $e) {
-                        $this->addFlash('error', 'Erreur lors du téléchargement de l\'image');
-                        return $this->redirectToRoute('app_signup');
-                    }
+            // Gérer l'upload de l'image
+            $imageFile = $request->files->get('image');
+            if ($imageFile) {
+                $originalFilename = pathinfo($imageFile->getClientOriginalName(), PATHINFO_FILENAME);
+                $safeFilename = $slugger->slug($originalFilename);
+                $newFilename = $safeFilename.'-'.uniqid().'.'.$imageFile->guessExtension();
 
+                try {
+                    $imageFile->move(
+                        $this->getParameter('profile_images_directory'),
+                        $newFilename
+                    );
                     $user->setImage($newFilename);
+                } catch (\Exception $e) {
+                    $this->addFlash('error', 'Erreur lors du téléchargement de l\'image');
+                    return $this->redirectToRoute('app_signup');
                 }
+            } else {
+                // Image par défaut si aucune image n'est téléchargée
+                $user->setImage('default-profile.png');
+            }
 
-                // Save to database
+            // Sauvegarder l'utilisateur
+            try {
                 $entityManager->persist($user);
                 $entityManager->flush();
 
-                // Add success message with user's name and role-specific information
-                if (in_array('ROLE_ADMIN', $user->getRoles())) {
-                    $this->addFlash('success', 'Bienvenue ' . $user->getName() . ' ! Votre compte administrateur a été créé avec succès.');
-                    
-                    // Log in the user programmatically
-                    $token = new UsernamePasswordToken(
-                        $user,
-                        'main', // Firewall name
-                        $user->getRoles()
-                    );
-                    
-                    $this->tokenStorage->setToken($token);
-                    
-                    // Update the session
-                    $request->getSession()->set('_security_main', serialize($token));
-                    
-                    // Redirect to admin dashboard
-                    return $this->redirectToRoute('admin_dashboard');
-                } else {
-                    $this->addFlash('success', 'Bienvenue ' . $user->getName() . ' ! Votre compte a été créé avec succès. Vous pouvez maintenant vous connecter.');
-                    // Redirect to login page for regular users
-                    return $this->redirectToRoute('app_login');
-                }
-                
+                $this->addFlash('success', 'Votre compte a été créé avec succès. Vous pouvez maintenant vous connecter.');
+                return $this->redirectToRoute('app_login');
             } catch (\Exception $e) {
-                $this->addFlash('error', 'Une erreur s\'est produite lors de la création de votre compte. Veuillez vérifier vos informations et réessayer.');
+                $this->addFlash('error', 'Une erreur est survenue lors de la création de votre compte. Veuillez réessayer.');
                 return $this->redirectToRoute('app_signup');
             }
         }
 
-        // Display the signup form for GET requests
         return $this->render('signup/index.html.twig', [
-            'controller_name' => 'SignupController',
+            'registrationForm' => $form,
         ]);
     }
 }

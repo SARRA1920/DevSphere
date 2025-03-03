@@ -1,291 +1,255 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Sign Up{% endblock %}
+{% block title %}Sign Up - DevSphere{% endblock %}
 
 {% block content %}
-<div class="signup-container">
-    <div class="signup-content">
-        <div class="signup-form">
-            {# Flash Messages #}
-            {% for label, messages in app.flashes %}
-                {% for message in messages %}
-                    <div class="alert alert-{{ label }} alert-dismissible fade show" role="alert">
-                        {{ message }}
-                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                    </div>
-                {% endfor %}
-            {% endfor %}
-
-            <div class="illustration">
-                <img src="{{ asset('assets/images/signup-illustration.png') }}" alt="Sign up illustration">
+<!-- Sign Up Start -->
+<div class="container-xxl py-5">
+    <div class="container">
+        <div class="row g-4">
+            <div class="col-lg-6 wow fadeInUp" data-wow-delay="0.1s" style="min-height: 400px;">
+                <div class="position-relative h-100">
+                    <img class="img-fluid position-absolute w-100 h-100" src="{{ asset('img/signup.jpg') }}" alt="" style="object-fit: cover; border-radius: 15px;">
+                </div>
             </div>
-            
-            <form method="POST" action="{{ path('app_signup') }}" class="form-signup" enctype="multipart/form-data">
-                <div class="form-group">
-                    <label for="name">
-                        <i class="fas fa-user"></i>
-                    </label>
-                    <input type="text" id="name" name="name" placeholder="Your Name" required>
-                </div>
+            <div class="col-lg-6 wow fadeInUp" data-wow-delay="0.3s">
+                <h6 class="section-title bg-white text-start text-primary pe-3">Sign Up</h6>
+                <h1 class="mb-4">Join DevSphere Community</h1>
 
-                <div class="form-group">
-                    <label for="phone">
-                        <i class="fas fa-phone"></i>
-                    </label>
-                    <input type="tel" id="phone" name="phone" placeholder="Your Phone Number" required>
-                </div>
+                {% for label, messages in app.flashes %}
+                    {% for message in messages %}
+                        <div class="alert alert-{{ label }} alert-dismissible fade show" role="alert">
+                            {{ message }}
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>
+                    {% endfor %}
+                {% endfor %}
 
-                <div class="form-group">
-                    <label for="cin">
-                        <i class="fas fa-id-card"></i>
-                    </label>
-                    <input type="text" id="cin" name="cin" placeholder="Your CIN" required>
-                </div>
-
-                <div class="form-group file-group">
-                    <label for="image" class="file-label">
-                        <i class="fas fa-image"></i>
-                        <span>Upload Profile Image</span>
-                    </label>
-                    <input type="file" id="image" name="image" accept="image/*" required>
-                    <div class="file-name">No file chosen</div>
-                </div>
-
-                <div class="form-group">
-                    <label for="role">
-                        <i class="fas fa-user-tag"></i>
-                    </label>
-                    <select id="role" name="role" required>
-                        <option value="" disabled selected>Select Your Role</option>
-                        <option value="user">User</option>
-                    </select>
-                </div>
-
-                <div class="form-group">
-                    <label for="email">
-                        <i class="fas fa-envelope"></i>
-                    </label>
-                    <input type="email" id="email" name="email" placeholder="Your Email" required>
-                </div>
-
-                <div class="form-group">
-                    <label for="password">
-                        <i class="fas fa-lock"></i>
-                    </label>
-                    <input type="password" id="password" name="password" placeholder="Password" required>
-                </div>
-
-                <div class="form-group">
-                    <label for="confirm_password">
-                        <i class="fas fa-key"></i>
-                    </label>
-                    <input type="password" id="confirm_password" name="confirm_password" placeholder="Confirm Password" required>
-                </div>
-
-                <div class="form-actions">
-                    <button type="submit" class="btn-signup">Sign Up</button>
-                    <a href="{{ path('app_login') }}" class="btn-login">Already have an account?</a>
-                </div>
-            </form>
+                {{ form_start(registrationForm, {'attr': {'class': 'signup-form', 'novalidate': 'novalidate', 'enctype': 'multipart/form-data'}}) }}
+                    <div class="row g-3">
+                        <div class="col-12">
+                            <div class="form-floating">
+                                {{ form_widget(registrationForm.name, {
+                                    'attr': {
+                                        'class': 'form-control',
+                                        'placeholder': 'Your Name'
+                                    }
+                                }) }}
+                                {{ form_label(registrationForm.name, 'Your Name') }}
+                                {{ form_errors(registrationForm.name) }}
+                            </div>
+                        </div>
+                        <div class="col-12">
+                            <div class="form-floating">
+                                {{ form_widget(registrationForm.email, {
+                                    'attr': {
+                                        'class': 'form-control',
+                                        'placeholder': 'Your Email'
+                                    }
+                                }) }}
+                                {{ form_label(registrationForm.email, 'Your Email') }}
+                                {{ form_errors(registrationForm.email) }}
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-floating">
+                                {{ form_widget(registrationForm.phone, {
+                                    'attr': {
+                                        'class': 'form-control',
+                                        'placeholder': 'Phone Number'
+                                    }
+                                }) }}
+                                {{ form_label(registrationForm.phone, 'Phone Number') }}
+                                {{ form_errors(registrationForm.phone) }}
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-floating">
+                                {{ form_widget(registrationForm.cin, {
+                                    'attr': {
+                                        'class': 'form-control',
+                                        'placeholder': 'CIN'
+                                    }
+                                }) }}
+                                {{ form_label(registrationForm.cin, 'CIN') }}
+                                {{ form_errors(registrationForm.cin) }}
+                            </div>
+                        </div>
+                        <div class="col-12">
+                            <div class="form-floating">
+                                {{ form_widget(registrationForm.plainPassword, {
+                                    'attr': {
+                                        'class': 'form-control',
+                                        'placeholder': 'Password'
+                                    }
+                                }) }}
+                                {{ form_label(registrationForm.plainPassword, 'Password') }}
+                                {{ form_errors(registrationForm.plainPassword) }}
+                            </div>
+                        </div>
+                        <div class="col-12">
+                            <div class="custom-file-upload">
+                                <label for="image" class="upload-label">
+                                    <i class="fas fa-cloud-upload-alt"></i>
+                                    <span>Choose Profile Picture</span>
+                                </label>
+                                <input type="file" id="image" name="image" accept="image/*" class="form-control">
+                                <div class="selected-file mt-2 text-muted small"></div>
+                            </div>
+                        </div>
+                        <div class="col-12">
+                            <div class="form-check">
+                                {{ form_widget(registrationForm.agreeTerms, {'attr': {'class': 'form-check-input'}}) }}
+                                {{ form_label(registrationForm.agreeTerms, 'I agree to the terms and conditions', {'label_attr': {'class': 'form-check-label'}}) }}
+                                {{ form_errors(registrationForm.agreeTerms) }}
+                            </div>
+                        </div>
+                        <div class="col-12">
+                            <button class="btn btn-primary w-100 py-3" type="submit">Sign Up</button>
+                        </div>
+                        <div class="col-12 text-center">
+                            <p class="mb-0">Already have an account? <a href="{{ path('app_login') }}" class="text-primary">Login here</a></p>
+                        </div>
+                    </div>
+                {{ form_end(registrationForm) }}
+            </div>
         </div>
     </div>
 </div>
+<!-- Sign Up End -->
 
 <style>
-.signup-container {
-    min-height: 100vh;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background-color: #f8f9fa;
-    padding: 2rem;
-}
-
-.signup-content {
-    background: white;
-    border-radius: 20px;
-    box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
-    width: 100%;
-    max-width: 900px;
-    overflow: hidden;
-}
-
-.signup-form {
-    padding: 2rem;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-}
-
-.illustration {
-    margin-bottom: 2rem;
-    max-width: 400px;
-}
-
-.illustration img {
-    width: 100%;
-    height: auto;
-}
-
-.form-signup {
-    width: 100%;
-    max-width: 400px;
-}
-
-.form-group {
-    position: relative;
-    margin-bottom: 1.5rem;
-}
-
-.form-group label {
-    position: absolute;
-    left: 15px;
-    top: 50%;
-    transform: translateY(-50%);
-    color: #6c757d;
-    z-index: 1;
-}
-
-.form-group input,
-.form-group select {
-    width: 100%;
-    padding: 12px 40px;
-    border: 1px solid #e0e0e0;
-    border-radius: 25px;
-    font-size: 1rem;
+.custom-file-upload {
+    border: 2px dashed #ddd;
+    border-radius: 10px;
+    padding: 20px;
+    text-align: center;
     transition: all 0.3s ease;
-    background-color: white;
+    background: #f8f9fa;
 }
 
-.form-group input:focus,
-.form-group select:focus {
-    border-color: #00bcd4;
-    box-shadow: 0 0 0 2px rgba(0, 188, 212, 0.2);
-    outline: none;
+.custom-file-upload:hover {
+    border-color: #06BBCC;
+    background: #fff;
 }
 
-/* File input styling */
-.file-group {
-    border: 1px solid #e0e0e0;
-    border-radius: 25px;
-    padding: 8px;
+.upload-label {
+    display: block;
+    cursor: pointer;
+    margin-bottom: 0;
 }
 
-.file-group input[type="file"] {
+.upload-label i {
+    font-size: 2rem;
+    color: #06BBCC;
+    margin-bottom: 10px;
+}
+
+.upload-label span {
+    display: block;
+    color: #666;
+}
+
+input[type="file"] {
     display: none;
 }
 
-.file-label {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    cursor: pointer;
-    position: static;
-    transform: none;
-    padding: 8px 15px;
+.selected-file {
+    margin-top: 10px;
+    font-size: 0.875rem;
 }
 
-.file-name {
-    margin-left: 40px;
-    font-size: 0.9rem;
-    color: #6c757d;
+.form-floating {
+    margin-bottom: 1rem;
 }
 
-.form-actions {
-    display: flex;
-    flex-direction: column;
-    gap: 1rem;
-    align-items: center;
-    margin-top: 2rem;
+.form-floating > label {
+    left: 1rem;
 }
 
-.btn-signup {
-    background: #00bcd4;
-    color: white;
-    border: none;
-    padding: 12px 40px;
-    border-radius: 25px;
-    font-size: 1rem;
-    cursor: pointer;
-    width: 100%;
-    transition: background 0.3s ease;
+.form-control:focus {
+    border-color: #06BBCC;
+    box-shadow: 0 0 0 0.25rem rgba(6, 187, 204, 0.25);
 }
 
-.btn-signup:hover {
-    background: #008c9e;
-}
-
-.btn-login {
-    color: #6c757d;
-    text-decoration: none;
-    font-size: 0.9rem;
-    transition: color 0.3s ease;
-}
-
-.btn-login:hover {
-    color: #00bcd4;
+.signup-form {
+    background: #fff;
+    padding: 30px;
+    border-radius: 15px;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
 }
 
 .alert {
-    width: 100%;
-    max-width: 400px;
-    margin-bottom: 1rem;
-    padding: 1rem;
     border-radius: 10px;
-    text-align: center;
+    margin-bottom: 20px;
 }
 
-.alert-success {
-    background-color: #d4edda;
-    border-color: #c3e6cb;
-    color: #155724;
+.form-check {
+    margin: 1rem 0;
 }
 
-.alert-error {
-    background-color: #f8d7da;
-    border-color: #f5c6cb;
-    color: #721c24;
+.form-check-input:checked {
+    background-color: #06BBCC;
+    border-color: #06BBCC;
 }
 
-.btn-close {
+.btn-primary {
+    background-color: #06BBCC;
+    border-color: #06BBCC;
+}
+
+.btn-primary:hover {
+    background-color: #0aa1b0;
+    border-color: #0aa1b0;
+}
+
+.text-primary {
+    color: #06BBCC !important;
+}
+
+.section-title {
+    position: relative;
+    display: inline-block;
+    text-transform: uppercase;
+}
+
+.section-title::before {
     position: absolute;
-    right: 10px;
+    content: "";
+    width: 45px;
+    height: 2px;
     top: 50%;
-    transform: translateY(-50%);
-    background: none;
-    border: none;
-    font-size: 1.5rem;
-    cursor: pointer;
-    opacity: 0.5;
+    left: -55px;
+    margin-top: -1px;
+    background: #06BBCC;
 }
 
-.btn-close:hover {
-    opacity: 1;
+.section-title::after {
+    position: absolute;
+    content: "";
+    width: 45px;
+    height: 2px;
+    top: 50%;
+    right: -55px;
+    margin-top: -1px;
+    background: #06BBCC;
 }
 
-@media (max-width: 768px) {
-    .signup-container {
-        padding: 1rem;
-    }
-    
-    .signup-form {
-        padding: 1.5rem;
-    }
+.wow {
+    visibility: visible !important;
 }
 </style>
 
 <script>
-document.addEventListener('DOMContentLoaded', function() {
-    const fileInput = document.getElementById('image');
-    const fileName = document.querySelector('.file-name');
+document.getElementById('image').addEventListener('change', function(e) {
+    var fileName = e.target.files[0] ? e.target.files[0].name : 'No file chosen';
+    document.querySelector('.selected-file').textContent = fileName;
     
-    fileInput.addEventListener('change', function() {
-        if (this.files && this.files[0]) {
-            fileName.textContent = this.files[0].name;
-        } else {
-            fileName.textContent = 'No file chosen';
-        }
-    });
+    if (e.target.files[0]) {
+        document.querySelector('.upload-label i').className = 'fas fa-check text-success';
+    } else {
+        document.querySelector('.upload-label i').className = 'fas fa-cloud-upload-alt';
+    }
 });
 
 // Auto-hide alerts after 5 seconds
@@ -293,10 +257,8 @@ document.addEventListener('DOMContentLoaded', function() {
     setTimeout(function() {
         const alerts = document.querySelectorAll('.alert');
         alerts.forEach(function(alert) {
-            const closeButton = alert.querySelector('.btn-close');
-            if (closeButton) {
-                closeButton.click();
-            }
+            const bsAlert = new bootstrap.Alert(alert);
+            bsAlert.close();
         });
     }, 5000);
 });

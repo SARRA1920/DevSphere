@@ -52,9 +52,16 @@ class Publication
     #[ORM\OneToMany(targetEntity: Commentaire::class, mappedBy: 'publication', orphanRemoval: true, cascade: ['persist', 'remove'])]
     private Collection $commentaires;
 
+    /**
+     * @var Collection<int, Reaction>
+     */
+    #[ORM\OneToMany(targetEntity: Reaction::class, mappedBy: 'publication', orphanRemoval: true, cascade: ['persist', 'remove'])]
+    private Collection $reactions;
+
     public function __construct()
     {
         $this->commentaires = new ArrayCollection();
+        $this->reactions = new ArrayCollection();
         $this->date = new \DateTime();
     }
 
@@ -142,6 +149,36 @@ class Publication
             // set the owning side to null (unless already changed)
             if ($commentaire->getPublication() === $this) {
                 $commentaire->setPublication(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Reaction>
+     */
+    public function getReactions(): Collection
+    {
+        return $this->reactions;
+    }
+
+    public function addReaction(Reaction $reaction): static
+    {
+        if (!$this->reactions->contains($reaction)) {
+            $this->reactions->add($reaction);
+            $reaction->setPublication($this);
+        }
+
+        return $this;
+    }
+
+    public function removeReaction(Reaction $reaction): static
+    {
+        if ($this->reactions->removeElement($reaction)) {
+            // set the owning side to null (unless already changed)
+            if ($reaction->getPublication() === $this) {
+                $reaction->setPublication(null);
             }
         }
 

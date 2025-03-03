@@ -1,0 +1,16 @@
+<h2>Réponse à votre réclamation</h2>
+
+<p>Bonjour,</p>
+
+<p>Votre réclamation de type "{{ reclamation.type }}" a reçu une réponse de notre équipe.</p>
+
+<h3>Votre réclamation :</h3>
+<p>{{ reclamation.reclamation }}</p>
+
+<h3>Notre réponse :</h3>
+<p>{{ reponse.reponse }}</p>
+
+<p>Date de réponse : {{ reponse.date|date('d/m/Y H:i') }}</p>
+
+<p>Merci de votre confiance,<br>
+L'équipe DevSphere</p>

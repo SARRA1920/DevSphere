@@ -5,6 +5,7 @@ namespace App\Repository;
 use App\Entity\Reclamation;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
+use Doctrine\ORM\Query;
 
 /**
  * @extends ServiceEntityRepository<Reclamation>
@@ -16,28 +17,29 @@ class ReclamationRepository extends ServiceEntityRepository
         parent::__construct($registry, Reclamation::class);
     }
 
-    //    /**
-    //     * @return Reclamation[] Returns an array of Reclamation objects
-    //     */
-    //    public function findByExampleField($value): array
-    //    {
-    //        return $this->createQueryBuilder('r')
-    //            ->andWhere('r.exampleField = :val')
-    //            ->setParameter('val', $value)
-    //            ->orderBy('r.id', 'ASC')
-    //            ->setMaxResults(10)
-    //            ->getQuery()
-    //            ->getResult()
-    //        ;
-    //    }
+    public function findBySearch(?string $query): array
+    {
+        if (empty($query)) {
+            return $this->findBy([], ['date' => 'DESC']);
+        }
 
-    //    public function findOneBySomeField($value): ?Reclamation
-    //    {
-    //        return $this->createQueryBuilder('r')
-    //            ->andWhere('r.exampleField = :val')
-    //            ->setParameter('val', $value)
-    //            ->getQuery()
-    //            ->getOneOrNullResult()
-    //        ;
-    //    }
+        $qb = $this->createQueryBuilder('r')
+            ->leftJoin('r.user', 'u')
+            ->where('r.type LIKE :query')
+            ->orWhere('r.reclamation LIKE :query')
+            ->orWhere('u.email LIKE :query')
+            ->setParameter('query', '%' . $query . '%')
+            ->orderBy('r.date', 'DESC');
+
+        return $qb->getQuery()->getResult();
+    }
+
+    public function getStatsByType(): array
+    {
+        return $this->createQueryBuilder('r')
+            ->select('r.type, COUNT(r.id) as count')
+            ->groupBy('r.type')
+            ->getQuery()
+            ->getResult();
+    }
 }

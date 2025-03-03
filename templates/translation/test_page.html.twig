@@ -1,0 +1,166 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Translation Test{% endblock %}
+
+{% block body %}
+<div class="container mt-5">
+    <h1>Translation Test Page</h1>
+    
+    <div class="card mb-4">
+        <div class="card-header">
+            <h2>Translation Files</h2>
+        </div>
+        <div class="card-body">
+            <ul>
+                {% for file in files %}
+                    <li>{{ file }}</li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+    
+    <div class="card mb-4">
+        <div class="card-header">
+            <h2>Translation Test</h2>
+        </div>
+        <div class="card-body">
+            <form action="{{ path('app_translation_test_page') }}" method="get" class="mb-4">
+                <div class="row">
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label for="text">Text to translate:</label>
+                            <input type="text" id="text" name="text" class="form-control" value="{{ text }}">
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label for="locale">Target Locale:</label>
+                            <select id="locale" name="locale" class="form-control">
+                                {% for loc in locales %}
+                                    <option value="{{ loc }}" {% if loc == locale %}selected{% endif %}>{{ loc }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <button type="submit" class="btn btn-primary mt-4">Test Translation</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+    
+    <div class="card mb-4">
+        <div class="card-header">
+            <h2>Translation Results</h2>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <th>Key</th>
+                            <th>Domain</th>
+                            {% for loc in locales %}
+                                <th>{{ loc }}</th>
+                            {% endfor %}
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for word in words %}
+                            <tr>
+                                <td rowspan="2">{{ word }}</td>
+                                <td>messages</td>
+                                {% for loc in locales %}
+                                    <td>{{ translations[word][loc]['messages'] }}</td>
+                                {% endfor %}
+                            </tr>
+                            <tr>
+                                <td>forum</td>
+                                {% for loc in locales %}
+                                    <td>{{ translations[word][loc]['forum'] }}</td>
+                                {% endfor %}
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    
+    <div class="card mb-4">
+        <div class="card-header">
+            <h2>Translation Service Test</h2>
+        </div>
+        <div class="card-body">
+            <div id="translationServiceTest">
+                <div class="form-group">
+                    <label for="serviceText">Text to translate with TranslationService:</label>
+                    <input type="text" id="serviceText" class="form-control" value="{{ text }}">
+                </div>
+                <div class="form-group">
+                    <label for="serviceLocale">Target Locale:</label>
+                    <select id="serviceLocale" class="form-control">
+                        {% for loc in locales %}
+                            <option value="{{ loc }}" {% if loc == locale %}selected{% endif %}>{{ loc }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <button id="testServiceBtn" class="btn btn-primary mt-2">Test Service</button>
+                
+                <div class="mt-3">
+                    <h4>Result:</h4>
+                    <div id="serviceResult" class="p-3 border rounded">
+                        <div class="spinner-border d-none" role="status">
+                            <span class="sr-only">Loading...</span>
+                        </div>
+                        <div id="resultContent"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const testServiceBtn = document.getElementById('testServiceBtn');
+    const serviceText = document.getElementById('serviceText');
+    const serviceLocale = document.getElementById('serviceLocale');
+    const spinner = document.querySelector('.spinner-border');
+    const resultContent = document.getElementById('resultContent');
+    
+    testServiceBtn.addEventListener('click', function() {
+        const text = serviceText.value;
+        const locale = serviceLocale.value;
+        
+        // Show spinner
+        spinner.classList.remove('d-none');
+        resultContent.textContent = '';
+        
+        // Call the direct test endpoint
+        fetch(`/translation/test/direct?text=${encodeURIComponent(text)}&lang=${locale}`)
+            .then(response => response.json())
+            .then(data => {
+                // Hide spinner
+                spinner.classList.add('d-none');
+                
+                // Display result
+                resultContent.innerHTML = `
+                    <p><strong>Original:</strong> ${text}</p>
+                    <p><strong>Translated:</strong> ${data.translated}</p>
+                    <p><strong>Source Language:</strong> ${data.sourceLang}</p>
+                    <p><strong>Target Language:</strong> ${data.targetLang}</p>
+                `;
+            })
+            .catch(error => {
+                // Hide spinner
+                spinner.classList.add('d-none');
+                
+                // Display error
+                resultContent.innerHTML = `<p class="text-danger">Error: ${error.message}</p>`;
+            });
+    });
+});
+</script>
+{% endblock %}

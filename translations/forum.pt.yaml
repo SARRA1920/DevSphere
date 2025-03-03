@@ -1,0 +1,39 @@
+forum:
+  title: Fórum
+  post: Publicação
+  comment_label: Comentário
+  translate: Traduzir
+  translate_to: Traduzir para
+  original_content: Conteúdo original
+  translated_content: Conteúdo traduzido
+  translation_error: Erro de tradução
+  retry: Tentar novamente
+  close: Fechar
+  
+  # Common forum phrases
+  welcome_message: Bem-vindo ao nosso fórum!
+  recent_posts: Publicações recentes
+  popular_topics: Tópicos populares
+  post_reply: Responder
+  search_forum: Pesquisar no fórum
+  
+  # Publication related
+  publication:
+    title: Título
+    content: Conteúdo
+    author: Autor
+    date: Data
+    comments: Comentários
+    share: Compartilhar
+    report: Denunciar
+    edit: Editar
+    delete: Excluir
+    
+  # Comment related
+  comment:
+    author: Autor
+    date: Data
+    reply: Responder
+    edit: Editar
+    delete: Excluir
+    report: Denunciar

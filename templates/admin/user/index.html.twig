@@ -1,0 +1,70 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Gestion des Utilisateurs{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <h1>Gestion des Utilisateurs</h1>
+
+    {% for label, messages in app.flashes %}
+        {% for message in messages %}
+            <div class="alert alert-{{ label }} alert-dismissible fade show" role="alert">
+                {{ message }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        {% endfor %}
+    {% endfor %}
+
+    <div class="card shadow">
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Email</th>
+                            <th>Rôles</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    {% for user in users %}
+                        <tr>
+                            <td>{{ user.id }}</td>
+                            <td>{{ user.email }}</td>
+                            <td>
+                                {% for role in user.roles %}
+                                    {% if role != 'ROLE_USER' %}
+                                        <span class="badge bg-{{ role == 'ROLE_ADMIN' ? 'primary' : 'secondary' }}">
+                                            {{ role }}
+                                        </span>
+                                    {% endif %}
+                                {% endfor %}
+                            </td>
+                            <td>
+                                {% if 'ROLE_SUPER_ADMIN' not in user.roles %}
+                                    <form method="post" action="{{ path('admin_user_toggle_role', {'id': user.id}) }}" style="display: inline-block;">
+                                        <input type="hidden" name="_token" value="{{ csrf_token('toggle-role' ~ user.id) }}">
+                                        <button type="submit" class="btn btn-{{ 'ROLE_ADMIN' in user.roles ? 'danger' : 'success' }} btn-sm">
+                                            {% if 'ROLE_ADMIN' in user.roles %}
+                                                <i class="fas fa-user-minus"></i> Retirer les droits admin
+                                            {% else %}
+                                                <i class="fas fa-user-plus"></i> Donner les droits admin
+                                            {% endif %}
+                                        </button>
+                                    </form>
+                                {% endif %}
+                            </td>
+                        </tr>
+                    {% else %}
+                        <tr>
+                            <td colspan="4" class="text-center">Aucun utilisateur trouvé</td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

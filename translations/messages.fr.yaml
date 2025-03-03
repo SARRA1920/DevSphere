@@ -1,0 +1,270 @@
+welcome: Bienvenue
+hello: Bonjour
+thank_you: Merci
+yes: Oui
+no: Non
+search: Rechercher
+submit: Soumettre
+cancel: Annuler
+save: Enregistrer
+delete: Supprimer
+edit: Modifier
+view: Voir
+back: Retour
+next: Suivant
+previous: Précédent
+home: Accueil
+login: Connexion
+logout: Déconnexion
+register: S'inscrire
+profile: Profil
+settings: Paramètres
+help: Aide
+about: À propos
+contact: Contact
+error: Erreur
+success: Succès
+warning: Avertissement
+info: Information
+loading: Chargement
+please_wait: Veuillez patienter
+forum:
+  title: Forum
+  post: Publication
+  comment: Commentaire
+  translate: Traduire
+  translate_to: Traduire en
+  original_content: Contenu original
+  translated_content: Contenu traduit
+  translation_error: Erreur de traduction
+  retry: Réessayer
+  close: Fermer
+
+# Common words and phrases for forum posts
+i: Je
+am: suis
+you: Tu
+he: Il
+she: Elle
+we: Nous
+they: Ils
+is: est
+are: sont
+was: était
+were: étaient
+have: avoir
+has: a
+had: avait
+will: va
+would: voudrais
+can: peut
+could: pourrait
+should: devrait
+may: peut
+might: pourrait
+must: doit
+want: veux
+need: besoin
+like: aime
+love: adore
+hate: déteste
+think: pense
+know: sais
+see: vois
+hear: entends
+feel: sens
+do: fais
+does: fait
+did: a fait
+go: vais
+went: suis allé
+come: viens
+say: dis
+said: a dit
+tell: dire
+told: a dit
+ask: demande
+answer: réponds
+assist: aide
+thank: remercie
+everyone: tout le monde
+because: parce que
+for: pour
+with: avec
+without: sans
+from: de
+to: à
+in: dans
+on: sur
+at: à
+by: par
+concerning: à propos de
+between: entre
+among: parmi
+through: à travers
+during: pendant
+before: avant
+after: après
+above: au-dessus
+below: en dessous
+under: sous
+over: sur
+against: contre
+within: dans
+outside: dehors
+inside: dedans
+around: autour
+behind: derrière
+beyond: au-delà
+near: près
+far: loin
+off: éteint
+up: en haut
+down: en bas
+out: dehors
+good: bon
+bad: mauvais
+better: meilleur
+best: le meilleur
+worse: pire
+worst: le pire
+new: nouveau
+old: vieux
+young: jeune
+big: grand
+small: petit
+large: large
+little: petit
+high: haut
+low: bas
+long: long
+short: court
+wide: large
+narrow: étroit
+deep: profond
+shallow: peu profond
+heavy: lourd
+light: léger
+dark: sombre
+bright: lumineux
+hot: chaud
+cold: froid
+warm: tiède
+cool: frais
+clean: propre
+dirty: sale
+easy: facile
+difficult: difficile
+hard: dur
+soft: doux
+strong: fort
+weak: faible
+rich: riche
+poor: pauvre
+happy: heureux
+sad: triste
+angry: en colère
+afraid: effrayé
+brave: courageux
+shy: timide
+proud: fier
+ashamed: honteux
+excited: excité
+bored: ennuyé
+tired: fatigué
+awake: éveillé
+asleep: endormi
+alive: vivant
+dead: mort
+right: correct
+wrong: incorrect
+'true': vrai
+'false': faux
+same: même
+different: différent
+early: tôt
+late: tard
+fast: rapide
+slow: lent
+open: ouvert
+closed: fermé
+full: plein
+empty: vide
+busy: occupé
+free: libre
+ready: prêt
+time: temps
+day: jour
+night: nuit
+morning: matin
+afternoon: après-midi
+evening: soir
+week: semaine
+month: mois
+year: année
+today: aujourd'hui
+tomorrow: demain
+yesterday: hier
+now: maintenant
+later: plus tard
+soon: bientôt
+always: toujours
+never: jamais
+sometimes: parfois
+often: souvent
+rarely: rarement
+usually: habituellement
+finally: finalement
+again: encore
+once: une fois
+twice: deux fois
+first: premier
+last: dernier
+some: quelques
+any: n'importe quel
+many: beaucoup
+few: peu
+all: tous
+none: aucun
+each: chaque
+every: chaque
+other: autre
+another: un autre
+both: les deux
+more: plus
+less: moins
+most: la plupart
+least: le moins
+enough: assez
+too: trop
+very: très
+really: vraiment
+quite: assez
+rather: plutôt
+almost: presque
+just: juste
+only: seulement
+even: même
+still: encore
+already: déjà
+yet: encore
+also: aussi
+or: ou
+and: et
+but: mais
+so: donc
+if: si
+unless: à moins que
+although: bien que
+though: bien que
+while: pendant que
+when: quand
+where: où
+how: comment
+what: quoi
+which: lequel
+who: qui
+whom: qui
+whose: dont
+why: pourquoi
+whether: si

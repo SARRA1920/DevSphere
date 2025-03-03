@@ -68,6 +68,12 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\OneToMany(targetEntity: Participation::class, mappedBy: 'user')]
     private Collection $participations;
 
+    /**
+     * @var Collection<int, Reaction>
+     */
+    #[ORM\OneToMany(targetEntity: Reaction::class, mappedBy: 'user', orphanRemoval: true)]
+    private Collection $reactions;
+
     public function __construct()
     {
         $this->inscriptions = new ArrayCollection();
@@ -75,6 +81,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         $this->reclamations = new ArrayCollection();
         $this->exercices = new ArrayCollection();
         $this->participations = new ArrayCollection();
+        $this->reactions = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -331,6 +338,33 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         if ($this->participations->removeElement($participation)) {
             if ($participation->getUser() === $this) {
                 $participation->setUser(null);
+            }
+        }
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Reaction>
+     */
+    public function getReactions(): Collection
+    {
+        return $this->reactions;
+    }
+
+    public function addReaction(Reaction $reaction): static
+    {
+        if (!$this->reactions->contains($reaction)) {
+            $this->reactions->add($reaction);
+            $reaction->setUser($this);
+        }
+        return $this;
+    }
+
+    public function removeReaction(Reaction $reaction): static
+    {
+        if ($this->reactions->removeElement($reaction)) {
+            if ($reaction->getUser() === $this) {
+                $reaction->setUser(null);
             }
         }
         return $this;

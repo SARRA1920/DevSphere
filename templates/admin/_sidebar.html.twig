@@ -1,0 +1,110 @@
+<!-- Sidebar -->
+<ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
+    <!-- Sidebar - Brand -->
+    <a class="sidebar-brand d-flex align-items-center justify-content-center" href="{{ path('admin_dashboard') }}">
+        <div class="sidebar-brand-icon rotate-n-15">
+            <i class="fas fa-laugh-wink"></i>
+        </div>
+        <div class="sidebar-brand-text mx-3">DevSphere Admin</div>
+    </a>
+
+    <!-- Divider -->
+    <hr class="sidebar-divider my-0">
+
+    <!-- Nav Item - Dashboard -->
+    <li class="nav-item">
+        <a class="nav-link" href="{{ path('admin_dashboard') }}">
+            <i class="fas fa-fw fa-tachometer-alt"></i>
+            <span>Dashboard</span>
+        </a>
+    </li>
+
+    <!-- Divider -->
+    <hr class="sidebar-divider">
+
+    <!-- Heading -->
+    <div class="sidebar-heading">
+        Gestion des Cours
+    </div>
+
+    <!-- Nav Item - Exercices -->
+    <li class="nav-item">
+        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseExercices"
+            aria-expanded="true" aria-controls="collapseExercices">
+            <i class="fas fa-fw fa-tasks"></i>
+            <span>Exercices</span>
+        </a>
+        <div id="collapseExercices" class="collapse" aria-labelledby="headingExercices" data-parent="#accordionSidebar">
+            <div class="bg-white py-2 collapse-inner rounded">
+                <h6 class="collapse-header">Actions:</h6>
+                <a class="collapse-item" href="{{ path('app_exercice_list') }}">Liste des exercices</a>
+                <a class="collapse-item" href="{{ path('app_exercice_new') }}">Ajouter un exercice</a>
+            </div>
+        </div>
+    </li>
+
+    <!-- Nav Item - Cours -->
+    <li class="nav-item">
+        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseCours"
+            aria-expanded="true" aria-controls="collapseCours">
+            <i class="fas fa-fw fa-book"></i>
+            <span>Cours</span>
+        </a>
+        <div id="collapseCours" class="collapse" aria-labelledby="headingCours" data-parent="#accordionSidebar">
+            <div class="bg-white py-2 collapse-inner rounded">
+                <h6 class="collapse-header">Actions:</h6>
+                <a class="collapse-item" href="{{ path('app_cours_index') }}">Liste des cours</a>
+                <a class="collapse-item" href="{{ path('app_cours_new') }}">Ajouter un cours</a>
+            </div>
+        </div>
+    </li>
+
+    <!-- Divider -->
+    <hr class="sidebar-divider">
+
+    <!-- Heading -->
+    <div class="sidebar-heading">
+        Communication
+    </div>
+
+    <!-- Nav Item - Réclamations -->
+    <li class="nav-item">
+        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseReclamations"
+            aria-expanded="true" aria-controls="collapseReclamations">
+            <i class="fas fa-fw fa-exclamation-circle"></i>
+            <span>Réclamations</span>
+        </a>
+        <div id="collapseReclamations" class="collapse" aria-labelledby="headingReclamations" data-parent="#accordionSidebar">
+            <div class="bg-white py-2 collapse-inner rounded">
+                <h6 class="collapse-header">Actions:</h6>
+                <a class="collapse-item" href="{{ path('app_reclamation_index') }}">Liste des réclamations</a>
+                <a class="collapse-item" href="{{ path('app_reclamation_new') }}">Nouvelle réclamation</a>
+            </div>
+        </div>
+    </li>
+
+    <!-- Nav Item - Forum -->
+    <li class="nav-item">
+        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseForum"
+            aria-expanded="true" aria-controls="collapseForum">
+            <i class="fas fa-fw fa-comments"></i>
+            <span>Forum</span>
+        </a>
+        <div id="collapseForum" class="collapse" aria-labelledby="headingForum" data-parent="#accordionSidebar">
+            <div class="bg-white py-2 collapse-inner rounded">
+                <h6 class="collapse-header">Actions:</h6>
+                <a class="collapse-item" href="{{ path('app_forum_index') }}">Voir le forum</a>
+                <a class="collapse-item" href="{{ path('app_forum_new') }}">Nouveau sujet</a>
+            </div>
+        </div>
+    </li>
+
+    <!-- Divider -->
+    <hr class="sidebar-divider d-none d-md-block">
+
+    <!-- Sidebar Toggler (Sidebar) -->
+    <div class="text-center d-none d-md-inline">
+        <button class="rounded-circle border-0" id="sidebarToggle"></button>
+    </div>
+</ul>
+<!-- End of Sidebar -->

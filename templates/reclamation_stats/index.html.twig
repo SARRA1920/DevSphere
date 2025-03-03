@@ -1,0 +1,129 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Statistiques des Réclamations - DevSphere{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        .stats-container {
+            margin-top: 2rem;
+            padding: 20px;
+        }
+        .chart-container {
+            width: 100%;
+            max-width: 600px;
+            margin: 0 auto;
+            height: 400px;
+        }
+        .card {
+            box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+            margin-bottom: 1rem;
+        }
+        .card-header {
+            background-color: #f8f9fa;
+            border-bottom: 1px solid #dee2e6;
+        }
+    </style>
+{% endblock %}
+
+{% block content %}
+    <div class="container-xxl py-5">
+        <div class="container">
+            <div class="text-center wow fadeInUp" data-wow-delay="0.1s">
+                <h6 class="section-title bg-white text-center text-primary px-3">Statistiques</h6>
+                <h1 class="mb-5">Statistiques des Réclamations</h1>
+            </div>
+
+            <div class="row g-4">
+                <div class="col-md-6">
+                    <div class="service-item bg-light rounded pt-3">
+                        <div class="p-4">
+                            <h5>Statistiques par Type</h5>
+                            <table class="table table-striped">
+                                <thead>
+                                    <tr>
+                                        <th>Type</th>
+                                        <th>Nombre</th>
+                                        <th>Pourcentage</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% set total = 0 %}
+                                    {% for stat in stats %}
+                                        {% set total = total + stat.count %}
+                                    {% endfor %}
+
+                                    {% for stat in stats %}
+                                        <tr>
+                                            <td>{{ stat.type }}</td>
+                                            <td>{{ stat.count }}</td>
+                                            <td>{{ ((stat.count / total) * 100)|round(1) }}%</td>
+                                        </tr>
+                                    {% endfor %}
+                                    <tr class="table-info">
+                                        <td><strong>Total</strong></td>
+                                        <td><strong>{{ total }}</strong></td>
+                                        <td><strong>100%</strong></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-6">
+                    <div class="service-item bg-light rounded pt-3">
+                        <div class="p-4">
+                            <h5>Graphique</h5>
+                            <div style="height: 300px;">
+                                <canvas id="reclamationsChart"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="text-center mt-4">
+                <a href="{{ path('app_reclamation_index') }}" class="btn btn-primary">
+                    <i class="fas fa-arrow-left"></i> Retour à la liste
+                </a>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@3.7.1/dist/chart.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            {% if stats is not empty %}
+                var ctx = document.getElementById('reclamationsChart').getContext('2d');
+                new Chart(ctx, {
+                    type: 'pie',
+                    data: {
+                        labels: {{ chartData.labels|json_encode|raw }},
+                        datasets: [{
+                            data: {{ chartData.data|json_encode|raw }},
+                            backgroundColor: {{ chartData.backgroundColor|json_encode|raw }}
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: {
+                                position: 'bottom'
+                            },
+                            title: {
+                                display: true,
+                                text: 'Répartition des Réclamations par Type'
+                            }
+                        }
+                    }
+                });
+            {% endif %}
+        });
+    </script>
+{% endblock %}

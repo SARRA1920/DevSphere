@@ -1,0 +1,39 @@
+forum:
+  title: Форум
+  post: Публикация
+  comment_label: Комментарий
+  translate: Перевести
+  translate_to: Перевести на
+  original_content: Оригинальный контент
+  translated_content: Переведенный контент
+  translation_error: Ошибка перевода
+  retry: Повторить
+  close: Закрыть
+  
+  # Common forum phrases
+  welcome_message: Добро пожаловать на наш форум!
+  recent_posts: Недавние публикации
+  popular_topics: Популярные темы
+  post_reply: Ответить
+  search_forum: Поиск по форуму
+  
+  # Publication related
+  publication:
+    title: Заголовок
+    content: Содержание
+    author: Автор
+    date: Дата
+    comments: Комментарии
+    share: Поделиться
+    report: Пожаловаться
+    edit: Редактировать
+    delete: Удалить
+    
+  # Comment related
+  comment:
+    author: Автор
+    date: Дата
+    reply: Ответить
+    edit: Редактировать
+    delete: Удалить
+    report: Пожаловаться

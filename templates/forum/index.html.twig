@@ -2,6 +2,113 @@
 
 {% block title %}Forum - DevSphere{% endblock %}
 
+{% block stylesheets %}
+    {{ parent() }}
+    <style>
+        /* Translation Styles */
+        .translated-content {
+            display: none;
+            margin-top: 15px;
+            padding: 10px;
+            background-color: #f8f9fa;
+            border-left: 3px solid #0d6efd;
+            border-radius: 4px;
+            position: relative;
+        }
+        
+        .translation-language-label {
+            font-size: 0.9em;
+            color: #6c757d;
+            margin-bottom: 5px;
+        }
+        
+        .translation-language {
+            font-weight: bold;
+            color: #0d6efd;
+        }
+        
+        .translated-title {
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+        
+        .translated-body {
+            margin-top: 5px;
+        }
+        
+        .close-translation {
+            position: absolute;
+            top: 5px;
+            right: 5px;
+            cursor: pointer;
+            color: #6c757d;
+            font-size: 1.2em;
+            line-height: 1;
+        }
+        
+        .close-translation:hover {
+            color: #dc3545;
+        }
+        
+        /* Translation dropdown styles */
+        .translation-dropdown {
+            margin-left: 10px;
+        }
+        
+        .translation-btn {
+            background-color: #f8f9fa;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            padding: 2px 8px;
+            font-size: 0.8rem;
+            color: #666;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+        }
+        
+        .translation-btn:hover {
+            background-color: #e9ecef;
+        }
+        
+        .translation-icon {
+            margin-right: 5px;
+            font-size: 0.9rem;
+        }
+        
+        .dropdown-menu {
+            min-width: 120px;
+            padding: 0.25rem 0;
+        }
+        
+        .dropdown-item {
+            padding: 0.25rem 1rem;
+            font-size: 0.85rem;
+        }
+        
+        /* Search Styles */
+        .loading-spinner {
+            text-align: center;
+            padding: 2rem;
+        }
+        
+        .form-label {
+            font-weight: 600;
+        }
+        
+        .search-form {
+            background-color: #f8f9fa;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+        
+        .form-control:focus, .form-select:focus {
+            border-color: #80bdff;
+            box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+        }
+    </style>
+{% endblock %}
+
 {% block content %}
     <!-- Header Start -->
     <div class="container-fluid bg-primary py-5 mb-5 page-header">
@@ -33,50 +140,439 @@
                         {% endif %}
                     </div>
 
-                    {% for publication in publications %}
-                        <div class="bg-light rounded p-4 mb-4">
-                            <h3 class="mb-3">
-                                <a href="{{ path('app_forum_show', {'id': publication.id}) }}" class="text-dark text-decoration-none">
-                                    {{ publication.titre }}
-                                </a>
-                            </h3>
-                            <div class="d-flex align-items-center mb-3">
-                                <div>
-                                    <span class="text-primary">{{ publication.user ? publication.user.email : 'Anonymous' }}</span>
-                                    <span class="text-muted ms-2">{{ publication.date|date('M d, Y') }}</span>
+                    <!-- Search and Filter Form -->
+                    <div class="search-form p-4 mb-4">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group mb-3">
+                                    <label for="searchKeyword" class="form-label">Search</label>
+                                    <input type="text" class="form-control" id="searchKeyword" placeholder="Search topics...">
                                 </div>
                             </div>
-                            <div class="mb-3">
-                                <span class="badge bg-primary">{{ publication.category.category.value }}</span>
-                                <span class="text-muted ms-3">
-                                    <i class="fa fa-comments me-1"></i>
-                                    {{ publication.commentaires|length }} Comments
-                                </span>
+                            <div class="col-md-4">
+                                <div class="form-group mb-3">
+                                    <label for="categoryFilter" class="form-label">Category</label>
+                                    <select class="form-select" id="categoryFilter">
+                                        <option value="">All Categories</option>
+                                        {% for category in categories %}
+                                            <option value="{{ category.category.value }}">
+                                                {{ category.category.value }} ({{ category.count }})
+                                            </option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
                             </div>
-                            <div class="d-flex justify-content-between">
-                                <a href="{{ path('app_forum_show', {'id': publication.id}) }}" class="btn btn-sm btn-outline-primary">Read More</a>
-                                {% if app.user == publication.user %}
-                                    <div>
-                                        <a href="{{ path('app_forum_edit', {'id': publication.id}) }}" class="btn btn-sm btn-outline-secondary me-2">Edit</a>
-                                        <form action="{{ path('app_forum_delete', {'id': publication.id}) }}" method="post" style="display: inline-block">
-                                            <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ publication.id) }}">
-                                            <button class="btn btn-sm btn-outline-danger" onclick="return confirm('Are you sure?')">Delete</button>
-                                        </form>
+                            <div class="col-md-2 d-flex align-items-end">
+                                <div class="d-flex flex-column w-100">
+                                    <button type="button" id="searchButton" class="btn btn-primary mb-2">
+                                        <i class="fas fa-search"></i> Search
+                                    </button>
+                                    <button type="button" id="clearSearchButton" class="btn btn-outline-secondary mb-3">
+                                        <i class="fas fa-times"></i> Clear
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Loading spinner -->
+                    <div id="loadingSpinner" class="loading-spinner" style="display: none;">
+                        <div class="spinner-border text-primary" role="status">
+                            <span class="visually-hidden">Loading...</span>
+                        </div>
+                        <p class="mt-2">Searching...</p>
+                    </div>
+                    
+                    <!-- Results count -->
+                    <div id="resultsCountContainer" class="alert alert-info mb-4" style="display: none;">
+                        Found <span id="resultsCount">0</span> results
+                    </div>
+                    
+                    <!-- Results container -->
+                    <div id="publicationsContainer">
+                        {% for publication in publications %}
+                            <div class="bg-light rounded p-4 mb-4 publication-item">
+                                <h3 class="mb-3">
+                                    <a href="{{ path('app_forum_show', {'id': publication.id}) }}" class="text-dark text-decoration-none">
+                                        {{ publication.titre }}
+                                    </a>
+                                    <div class="dropdown translation-dropdown d-inline-block">
+                                        <button class="translation-btn dropdown-toggle" type="button" id="translationDropdown{{ publication.id }}" data-bs-toggle="dropdown" aria-expanded="false">
+                                            <i class="fas fa-language translation-icon"></i> Translate
+                                        </button>
+                                        <ul class="dropdown-menu" aria-labelledby="translationDropdown{{ publication.id }}">
+                                            {% for code, name in supportedLanguages %}
+                                                <li><a class="dropdown-item" href="#" onclick="translatePublication({{ publication.id }}, '{{ code }}'); return false;">{{ name }}</a></li>
+                                            {% endfor %}
+                                        </ul>
                                     </div>
+                                </h3>
+                                <div class="d-flex align-items-center mb-3">
+                                    <div>
+                                        <span class="text-primary">{{ publication.user ? publication.user.email : 'Anonymous' }}</span>
+                                        <span class="text-muted ms-2">{{ publication.date|date('M d, Y') }}</span>
+                                    </div>
+                                </div>
+                                <div class="mb-3">
+                                    <span class="badge bg-primary">{{ publication.category.category.value }}</span>
+                                    <span class="text-muted ms-3">
+                                        <i class="fa fa-comments me-1"></i>
+                                        {{ publication.commentaires|length }} Comments
+                                    </span>
+                                </div>
+                                
+                                <!-- Translated content container -->
+                                <div id="translated-publication-{{ publication.id }}" class="translated-content mb-3">
+                                    <!-- Translation will be inserted here by JavaScript -->
+                                </div>
+                                
+                                <div class="d-flex justify-content-between">
+                                    <a href="{{ path('app_forum_show', {'id': publication.id}) }}" class="btn btn-sm btn-outline-primary">Read More</a>
+                                    {% if app.user == publication.user %}
+                                        <div>
+                                            <a href="{{ path('app_forum_edit', {'id': publication.id}) }}" class="btn btn-sm btn-outline-secondary me-2">Edit</a>
+                                            <form action="{{ path('app_forum_delete', {'id': publication.id}) }}" method="post" style="display: inline-block">
+                                                <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ publication.id) }}">
+                                                <button class="btn btn-sm btn-outline-danger" onclick="return confirm('Are you sure?')">Delete</button>
+                                            </form>
+                                        </div>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        {% else %}
+                            <div class="text-center py-5 no-results">
+                                <p class="text-muted mb-0">No topics found.</p>
+                                {% if app.user %}
+                                    <a href="{{ path('app_forum_new') }}" class="btn btn-primary mt-3">Create the First Topic</a>
                                 {% endif %}
                             </div>
-                        </div>
-                    {% else %}
-                        <div class="text-center py-5">
-                            <p class="text-muted mb-0">No topics found.</p>
-                            {% if app.user %}
-                                <a href="{{ path('app_forum_new') }}" class="btn btn-primary mt-3">Create the First Topic</a>
-                            {% endif %}
-                        </div>
-                    {% endfor %}
+                        {% endfor %}
+                    </div>
                 </div>
             </div>
         </div>
     </div>
     <!-- Forum End -->
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script>
+        // Function to translate a publication
+        function translatePublication(publicationId, targetLang) {
+            console.log(`Translating publication ${publicationId} to ${targetLang}`);
+            
+            // Show loading spinner
+            const loadingElement = document.querySelector(`.translation-loading-${publicationId}`);
+            if (loadingElement) {
+                loadingElement.style.display = 'block';
+            }
+            
+            // Hide any existing translation
+            const translationContainer = document.querySelector(`.translation-container-${publicationId}`);
+            if (translationContainer) {
+                translationContainer.style.display = 'none';
+            }
+            
+            // Make request to translation endpoint
+            fetch(`/forum/translate/publication/${publicationId}/${targetLang}`)
+                .then(response => {
+                    console.log('Translation response status:', response.status);
+                    if (!response.ok) {
+                        throw new Error(`HTTP error! status: ${response.status}`);
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    console.log('Translation response:', data);
+                    
+                    // Hide loading spinner
+                    if (loadingElement) {
+                        loadingElement.style.display = 'none';
+                    }
+                    
+                    if (data.success) {
+                        // Update translation elements
+                        const titleElement = document.querySelector(`.translated-title-${publicationId}`);
+                        const contentElement = document.querySelector(`.translated-content-${publicationId}`);
+                        
+                        if (titleElement) {
+                            titleElement.textContent = data.title || '';
+                        }
+                        
+                        if (contentElement) {
+                            contentElement.textContent = data.content || '';
+                        }
+                        
+                        // Show translation container
+                        if (translationContainer) {
+                            translationContainer.style.display = 'block';
+                        }
+                    } else {
+                        alert('Translation failed: ' + (data.error || 'Unknown error'));
+                    }
+                })
+                .catch(error => {
+                    console.error('Translation error:', error);
+                    
+                    // Hide loading spinner
+                    if (loadingElement) {
+                        loadingElement.style.display = 'none';
+                    }
+                    
+                    alert('Error translating content: ' + error.message);
+                });
+        }
+        
+        // AJAX Search functionality
+        document.addEventListener('DOMContentLoaded', function() {
+            const searchButton = document.getElementById('searchButton');
+            const keywordInput = document.getElementById('searchKeyword');
+            const categorySelect = document.getElementById('categoryFilter');
+            const publicationsContainer = document.getElementById('publicationsContainer');
+            const loadingSpinner = document.getElementById('loadingSpinner');
+            const clearSearchButton = document.getElementById('clearSearchButton');
+            const resultsCount = document.getElementById('resultsCount');
+            const resultsCountContainer = document.getElementById('resultsCountContainer');
+            
+            // Add event listeners
+            searchButton.addEventListener('click', performSearch);
+            keywordInput.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    performSearch();
+                }
+            });
+            clearSearchButton.addEventListener('click', clearSearch);
+            
+            function performSearch() {
+                const keyword = keywordInput.value.trim();
+                const category = categorySelect.value;
+                
+                console.log('Performing search with:', { keyword, category });
+                
+                // Show loading spinner
+                publicationsContainer.style.display = 'none';
+                loadingSpinner.style.display = 'block';
+                resultsCountContainer.style.display = 'none';
+                
+                // Build query parameters
+                const params = new URLSearchParams();
+                if (keyword) params.append('keyword', keyword);
+                if (category) params.append('category', category);
+                
+                const searchUrl = "/forum-search/ajax?" + params.toString();
+                console.log('Search URL:', searchUrl);
+                
+                // Make AJAX request
+                fetch(searchUrl)
+                    .then(response => {
+                        console.log('Search response status:', response.status);
+                        if (!response.ok) {
+                            throw new Error(`HTTP error! status: ${response.status}`);
+                        }
+                        return response.json();
+                    })
+                    .then(data => {
+                        console.log('Search results:', data);
+                        
+                        // Hide loading spinner
+                        loadingSpinner.style.display = 'none';
+                        publicationsContainer.style.display = 'block';
+                        
+                        if (data.success) {
+                            renderResults(data.publications);
+                        } else {
+                            publicationsContainer.innerHTML = '<div class="alert alert-danger">Search failed: ' + (data.error || 'Unknown error') + '</div>';
+                            resultsCountContainer.style.display = 'none';
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Search error:', error);
+                        
+                        // Hide loading spinner
+                        loadingSpinner.style.display = 'none';
+                        publicationsContainer.style.display = 'block';
+                        resultsCountContainer.style.display = 'none';
+                        
+                        // Show error message
+                        publicationsContainer.innerHTML = '<div class="alert alert-danger">Error: ' + error.message + '</div>';
+                    });
+            }
+            
+            function clearSearch() {
+                console.log('Clearing search...');
+                keywordInput.value = '';
+                categorySelect.value = '';
+                
+                // Hide any loading spinner and results count
+                loadingSpinner.style.display = 'none';
+                resultsCountContainer.style.display = 'none';
+                
+                // Show loading spinner temporarily for the clear request
+                publicationsContainer.style.display = 'none';
+                loadingSpinner.style.display = 'block';
+                
+                // Make a request to get all publications (same as initial page load)
+                const clearUrl = "/forum-search/ajax";
+                console.log('Clear URL:', clearUrl);
+                
+                fetch(clearUrl)
+                    .then(response => {
+                        console.log('Clear response status:', response.status);
+                        if (!response.ok) {
+                            throw new Error(`HTTP error! status: ${response.status}`);
+                        }
+                        return response.json();
+                    })
+                    .then(data => {
+                        console.log('Clear results:', data);
+                        
+                        // Hide loading spinner
+                        loadingSpinner.style.display = 'none';
+                        publicationsContainer.style.display = 'block';
+                        
+                        if (data.success) {
+                            renderResults(data.publications);
+                        } else {
+                            publicationsContainer.innerHTML = '<div class="alert alert-danger">Error resetting results: ' + (data.error || 'Unknown error') + '</div>';
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error clearing search:', error);
+                        
+                        // Hide loading spinner
+                        loadingSpinner.style.display = 'none';
+                        publicationsContainer.style.display = 'block';
+                        
+                        publicationsContainer.innerHTML = '<div class="alert alert-danger">Error resetting results: ' + error.message + '</div>';
+                    });
+            }
+            
+            function renderResults(publications) {
+                // Clear existing publications
+                publicationsContainer.innerHTML = '';
+                
+                // Update results count
+                const resultsCount = publications.length;
+                document.getElementById('resultsCount').textContent = resultsCount;
+                document.getElementById('resultsCountContainer').style.display = 'block';
+                
+                if (publications.length === 0) {
+                    publicationsContainer.innerHTML = '<div class="alert alert-info">No publications found matching your search criteria.</div>';
+                    return;
+                }
+                
+                // Render each publication
+                publications.forEach(pub => {
+                    console.log('Processing publication:', pub);
+                    
+                    const pubElement = document.createElement('div');
+                    pubElement.className = 'card mb-4';
+                    
+                    let deleteButtonHtml = '';
+                    if (pub.isOwner) {
+                        // Fetch CSRF token for delete button
+                        fetch(`/forum/csrf-token/delete/${pub.id}`)
+                            .then(response => response.json())
+                            .then(data => {
+                                if (data.token) {
+                                    const deleteForm = pubElement.querySelector('.delete-form');
+                                    if (deleteForm) {
+                                        const tokenInput = deleteForm.querySelector('input[name="_token"]');
+                                        if (tokenInput) {
+                                            tokenInput.value = data.token;
+                                        }
+                                    }
+                                }
+                            })
+                            .catch(error => console.error('Error fetching CSRF token:', error));
+                            
+                        deleteButtonHtml = `
+                            <form class="delete-form" method="post" action="/forum/delete/${pub.id}" onsubmit="return confirm('Are you sure you want to delete this item?');">
+                                <input type="hidden" name="_token" value="">
+                                <button class="btn btn-sm btn-danger">Delete</button>
+                            </form>
+                        `;
+                    }
+                    
+                    pubElement.innerHTML = `
+                        <div class="card-header d-flex justify-content-between align-items-center">
+                            <div>
+                                <h5 class="card-title mb-0">${pub.title}</h5>
+                                <small class="text-muted">
+                                    Posted by ${pub.user} on ${pub.date} in ${pub.category}
+                                </small>
+                            </div>
+                            <div class="btn-group">
+                                <a href="/forum/show/${pub.id}" class="btn btn-sm btn-primary">View</a>
+                                ${pub.isOwner ? `<a href="/forum/edit/${pub.id}" class="btn btn-sm btn-warning">Edit</a>` : ''}
+                                ${deleteButtonHtml}
+                                <div class="dropdown ms-2">
+                                    <button class="btn btn-sm btn-secondary dropdown-toggle" type="button" id="translationDropdown${pub.id}" data-bs-toggle="dropdown" aria-expanded="false">
+                                        Translate
+                                    </button>
+                                    <ul class="dropdown-menu" aria-labelledby="translationDropdown${pub.id}">
+                                        <li><a class="dropdown-item translate-link" href="#" data-id="${pub.id}" data-lang="fr">French</a></li>
+                                        <li><a class="dropdown-item translate-link" href="#" data-id="${pub.id}" data-lang="es">Spanish</a></li>
+                                        <li><a class="dropdown-item translate-link" href="#" data-id="${pub.id}" data-lang="de">German</a></li>
+                                        <li><a class="dropdown-item translate-link" href="#" data-id="${pub.id}" data-lang="it">Italian</a></li>
+                                        <li><a class="dropdown-item translate-link" href="#" data-id="${pub.id}" data-lang="pt">Portuguese</a></li>
+                                        <li><a class="dropdown-item translate-link" href="#" data-id="${pub.id}" data-lang="ru">Russian</a></li>
+                                        <li><a class="dropdown-item translate-link" href="#" data-id="${pub.id}" data-lang="zh">Chinese</a></li>
+                                        <li><a class="dropdown-item translate-link" href="#" data-id="${pub.id}" data-lang="ja">Japanese</a></li>
+                                        <li><a class="dropdown-item translate-link" href="#" data-id="${pub.id}" data-lang="ar">Arabic</a></li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <p class="card-text">${pub.content.length > 200 ? pub.content.substring(0, 200) + '...' : pub.content}</p>
+                            <div class="translation-container-${pub.id}" style="display: none;">
+                                <div class="card mb-3 bg-light">
+                                    <div class="card-header d-flex justify-content-between align-items-center">
+                                        <h6 class="mb-0">Translation</h6>
+                                        <button type="button" class="btn-close close-translation" data-id="${pub.id}" aria-label="Close"></button>
+                                    </div>
+                                    <div class="card-body">
+                                        <h5 class="translated-title-${pub.id}"></h5>
+                                        <p class="translated-content-${pub.id}"></p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="translation-loading-${pub.id}" style="display: none;">
+                                <div class="d-flex justify-content-center">
+                                    <div class="spinner-border text-primary" role="status">
+                                        <span class="visually-hidden">Loading...</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="d-flex justify-content-between align-items-center mt-3">
+                                <a href="/forum/show/${pub.id}" class="btn btn-link p-0">Read more</a>
+                                <span class="badge bg-primary">${pub.commentCount} comments</span>
+                            </div>
+                        </div>
+                    `;
+                    
+                    publicationsContainer.appendChild(pubElement);
+                });
+                
+                // Re-attach event listeners for translation
+                document.querySelectorAll('.translate-link').forEach(link => {
+                    link.addEventListener('click', function(e) {
+                        e.preventDefault();
+                        const pubId = this.getAttribute('data-id');
+                        const targetLang = this.getAttribute('data-lang');
+                        translatePublication(pubId, targetLang);
+                    });
+                });
+                
+                document.querySelectorAll('.close-translation').forEach(button => {
+                    button.addEventListener('click', function() {
+                        const pubId = this.getAttribute('data-id');
+                        document.querySelector(`.translation-container-${pubId}`).style.display = 'none';
+                    });
+                });
+            }
+        });
+    </script>
 {% endblock %}

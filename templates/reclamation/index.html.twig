@@ -1,20 +1,102 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Hello ReclamationController!{% endblock %}
+{% block title %}Liste des Réclamations - DevSphere{% endblock %}
 
-{% block body %}
-<style>
-    .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
-    .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
-</style>
+{% block content %}
+    <div class="container-xxl py-5">
+        <div class="container">
+            <div class="text-center wow fadeInUp" data-wow-delay="0.1s">
+                <h6 class="section-title bg-white text-center text-primary px-3">Réclamations</h6>
+                <h1 class="mb-5">Liste des Réclamations</h1>
+            </div>
 
-<div class="example-wrapper">
-    <h1>Hello {{ controller_name }}! ✅</h1>
+            <div class="row g-4">
+                <div class="col-12">
+                    {% if is_granted('ROLE_ADMIN') %}
+                        <div class="mb-3">
+                            <input type="text" id="searchInput" class="form-control" placeholder="Rechercher une réclamation...">
+                        </div>
+                        <div class="mb-3">
+                            <a href="{{ path('app_reclamation_stats') }}" class="btn btn-info">
+                                <i class="fas fa-chart-pie"></i> Voir les statistiques
+                            </a>
+                        </div>
+                    {% endif %}
 
-    This friendly message is coming from:
-    <ul>
-        <li>Your controller at <code>C:/Users/sarra/pi_symfony_DevSphere/src/Controller/ReclamationController.php</code></li>
-        <li>Your template at <code>C:/Users/sarra/pi_symfony_DevSphere/templates/reclamation/index.html.twig</code></li>
-    </ul>
-</div>
+                    <div class="table-responsive">
+                        <table class="table table-striped table-hover">
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Type</th>
+                                    <th>Date</th>
+                                    <th>Réclamation</th>
+                                    {% if is_granted('ROLE_ADMIN') %}
+                                        <th>Utilisateur</th>
+                                    {% endif %}
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="reclamationsTableBody">
+                                {% include 'reclamation/_table_content.html.twig' with {'reclamations': reclamations} %}
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div class="text-center mt-4">
+                        <a href="{{ path('app_reclamation_new') }}" class="btn btn-primary">
+                            <i class="fas fa-plus"></i> Nouvelle Réclamation
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {% if is_granted('ROLE_ADMIN') %}
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                const searchInput = document.getElementById('searchInput');
+                const tableBody = document.getElementById('reclamationsTableBody');
+                let searchTimeout;
+
+                searchInput.addEventListener('input', function(e) {
+                    clearTimeout(searchTimeout);
+                    const searchQuery = e.target.value;
+                    
+                    // Attendre que l'utilisateur arrête de taper
+                    searchTimeout = setTimeout(() => {
+                        // Si le champ est vide, charger toutes les réclamations
+                        const url = searchQuery 
+                            ? `{{ path('app_reclamation_search') }}?q=${encodeURIComponent(searchQuery)}`
+                            : `{{ path('app_reclamation_search') }}`;
+
+                        fetch(url)
+                            .then(response => {
+                                if (!response.ok) {
+                                    throw new Error('Erreur réseau');
+                                }
+                                return response.text();
+                            })
+                            .then(html => {
+                                tableBody.innerHTML = html;
+                            })
+                            .catch(error => {
+                                console.error('Error:', error);
+                                // Afficher un message d'erreur à l'utilisateur
+                                tableBody.innerHTML = '<tr><td colspan="6" class="text-center text-danger">Une erreur est survenue lors de la recherche.</td></tr>';
+                            });
+                    }, 300); // Délai de 300ms
+                });
+
+                // Charger toutes les réclamations au chargement de la page
+                fetch('{{ path('app_reclamation_search') }}')
+                    .then(response => response.text())
+                    .then(html => {
+                        tableBody.innerHTML = html;
+                    })
+                    .catch(error => console.error('Error:', error));
+            });
+        </script>
+    {% endif %}
 {% endblock %}

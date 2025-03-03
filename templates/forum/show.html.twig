@@ -2,6 +2,217 @@
 
 {% block title %}{{ publication.titre }} - DevSphere Forum{% endblock %}
 
+{% block head %}
+    {{ parent() }}
+    <meta name="csrf-token" content="{{ csrf_token('reaction') }}">
+{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <style>
+        .reaction-btn {
+            cursor: pointer;
+            margin-right: 8px;
+            transition: all 0.2s ease;
+            display: inline-flex;
+            align-items: center;
+        }
+        .reaction-btn:hover {
+            transform: scale(1.2);
+        }
+        .reaction-btn.active {
+            color: #0d6efd;
+            font-weight: bold;
+        }
+        .reaction-count {
+            margin-left: 4px;
+            font-size: 0.9em;
+            font-weight: bold;
+            display: inline-block;
+            min-width: 16px;
+            text-align: center;
+        }
+        .reactions-container {
+            display: flex;
+            margin-top: 10px;
+        }
+        
+        /* Reaction Buttons Styling */
+        .reaction-buttons {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        .reaction-btn {
+            display: inline-flex;
+            align-items: center;
+            padding: 5px 10px;
+            border-radius: 20px;
+            background-color: #f0f2f5;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            border: 1px solid #ddd;
+            color: #606770;
+            margin-right: 5px;
+        }
+
+        .reaction-btn:hover {
+            background-color: #e4e6eb;
+        }
+
+        .reaction-btn.active {
+            color: #1877f2;
+            border-color: #1877f2;
+            background-color: #e7f3ff;
+        }
+
+        .reaction-emoji {
+            margin-right: 5px;
+            font-size: 16px;
+        }
+
+        .reaction-count {
+            font-size: 12px;
+            font-weight: bold;
+            margin-left: 3px;
+            display: inline-block;
+            min-width: 16px;
+            text-align: center;
+        }
+        
+        /* Animation for count changes */
+        @keyframes countChange {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.5); color: #1877f2; }
+            100% { transform: scale(1); }
+        }
+        
+        .count-changed {
+            animation: countChange 0.5s ease;
+        }
+
+        /* Reaction Types Colors */
+        .reaction-btn[data-type="like"].active {
+            background-color: #e7f3ff;
+            border-color: #1877f2;
+        }
+        
+        .reaction-btn[data-type="love"].active {
+            background-color: #ffebee;
+            border-color: #e74c3c;
+        }
+        
+        .reaction-btn[data-type="haha"].active {
+            background-color: #fffde7;
+            border-color: #f1c40f;
+        }
+        
+        .reaction-btn[data-type="wow"].active {
+            background-color: #fff8e1;
+            border-color: #f39c12;
+        }
+        
+        .reaction-btn[data-type="sad"].active {
+            background-color: #e3f2fd;
+            border-color: #3498db;
+        }
+        
+        .reaction-btn[data-type="angry"].active {
+            background-color: #ffebee;
+            border-color: #e74c3c;
+        }
+        
+        /* Emoji Preview */
+        .emoji-preview {
+            padding: 8px;
+            margin-top: 5px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            background-color: #f9f9f9;
+            min-height: 24px;
+            display: none;
+        }
+        
+        .emoji-preview-label {
+            font-size: 0.8rem;
+            margin-bottom: 5px;
+            color: #666;
+        }
+        
+        /* Translation Styles */
+        .translated-content {
+            display: none;
+            margin-top: 15px;
+            padding: 10px;
+            background-color: #f8f9fa;
+            border-left: 3px solid #0d6efd;
+            border-radius: 4px;
+            position: relative;
+        }
+        
+        .translation-language-label {
+            font-size: 0.9em;
+            color: #6c757d;
+            margin-bottom: 5px;
+        }
+        
+        .translation-language {
+            font-weight: bold;
+            color: #0d6efd;
+        }
+        
+        .translated-title {
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+        
+        .translated-body {
+            margin-top: 5px;
+        }
+        
+        .close-translation {
+            position: absolute;
+            top: 5px;
+            right: 5px;
+            cursor: pointer;
+            color: #6c757d;
+            font-size: 1.2em;
+            line-height: 1;
+        }
+        
+        .close-translation:hover {
+            color: #dc3545;
+        }
+        
+        /* Translation Styles */
+        .translation-dropdown {
+            margin-left: 10px;
+        }
+        
+        .translation-btn {
+            background-color: #f8f9fa;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            padding: 2px 8px;
+            font-size: 0.8rem;
+            color: #666;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+        }
+        
+        .translation-btn:hover {
+            background-color: #e9ecef;
+        }
+        
+        .translation-btn i {
+            margin-right: 5px;
+        }
+    </style>
+{% endblock %}
+
 {% block content %}
     <!-- Header Start -->
     <div class="container-fluid bg-primary py-5 mb-5 page-header">
@@ -12,7 +223,7 @@
                     <nav aria-label="breadcrumb">
                         <ol class="breadcrumb justify-content-center">
                             <li class="breadcrumb-item"><a class="text-white" href="{{ path('app_home') }}">Home</a></li>
-                            <li class="breadcrumb-item"><a class="text-white" href="{{ path('app_forum') }}">Forum</a></li>
+                            <li class="breadcrumb-item"><a class="text-white" href="{{ path('app_forum_index') }}">Forum</a></li>
                             <li class="breadcrumb-item text-white active" aria-current="page">Topic</li>
                         </ol>
                     </nav>
@@ -59,6 +270,80 @@
                                     </div>
                                 </div>
                             {% endif %}
+                            <div class="dropdown translation-dropdown">
+                                <button class="translation-btn dropdown-toggle" type="button" id="translationDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                                    <i class="fas fa-language"></i> Translate
+                                </button>
+                                <ul class="dropdown-menu" aria-labelledby="translationDropdown">
+                                    <li><h6 class="dropdown-header">Choose language</h6></li>
+                                    <li><a class="dropdown-item translation-option" href="#" data-lang="en" data-target="publication" data-id="{{ publication.id }}">English</a></li>
+                                    <li><a class="dropdown-item translation-option" href="#" data-lang="fr" data-target="publication" data-id="{{ publication.id }}">French</a></li>
+                                    <li><a class="dropdown-item translation-option" href="#" data-lang="es" data-target="publication" data-id="{{ publication.id }}">Spanish</a></li>
+                                    <li><a class="dropdown-item translation-option" href="#" data-lang="de" data-target="publication" data-id="{{ publication.id }}">German</a></li>
+                                    <li><a class="dropdown-item translation-option" href="#" data-lang="it" data-target="publication" data-id="{{ publication.id }}">Italian</a></li>
+                                    <li><a class="dropdown-item translation-option" href="#" data-lang="pt" data-target="publication" data-id="{{ publication.id }}">Portuguese</a></li>
+                                    <li><a class="dropdown-item translation-option" href="#" data-lang="ru" data-target="publication" data-id="{{ publication.id }}">Russian</a></li>
+                                    <li><a class="dropdown-item translation-option" href="#" data-lang="zh" data-target="publication" data-id="{{ publication.id }}">Chinese</a></li>
+                                    <li><a class="dropdown-item translation-option" href="#" data-lang="ja" data-target="publication" data-id="{{ publication.id }}">Japanese</a></li>
+                                    <li><a class="dropdown-item translation-option" href="#" data-lang="ar" data-target="publication" data-id="{{ publication.id }}">Arabic</a></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Topic Content -->
+                    <div class="bg-light rounded p-4 mb-4">
+                        <div class="topic-content">
+                            {{ publication.contenu|raw }}
+                        </div>
+                        
+                        <!-- Translated Content (initially hidden) -->
+                        <div id="translated-publication-{{ publication.id }}" class="translated-content">
+                            <div class="translation-language-label">Translated to: <span class="translation-language"></span></div>
+                            <div class="translated-title"></div>
+                            <div class="translated-body"></div>
+                            <span class="close-translation">&times;</span>
+                        </div>
+                        
+                        <!-- Publication Reactions -->
+                        <div class="reactions-container mt-3">
+                            {% set userReacted = false %}
+                            {% set userReactionType = '' %}
+                            {% if app.user %}
+                                {% for reaction in publication.reactions %}
+                                    {% if reaction.user.id == app.user.id %}
+                                        {% set userReacted = true %}
+                                        {% set userReactionType = reaction.type %}
+                                    {% endif %}
+                                {% endfor %}
+                            {% endif %}
+                            
+                            <div class="reaction-buttons" data-publication-id="{{ publication.id }}">
+                                <button class="btn btn-sm reaction-btn {% if userReactionType == 'like' %}active{% endif %}" data-type="like">
+                                    <span class="reaction-emoji" data-emoji-type="like">👍</span>
+                                    <span class="reaction-count" data-type="like">{{ publication.reactions|filter(r => r.type == 'like')|length }}</span>
+                                </button>
+                                <button class="btn btn-sm reaction-btn {% if userReactionType == 'love' %}active{% endif %}" data-type="love">
+                                    <span class="reaction-emoji" data-emoji-type="love">❤️</span>
+                                    <span class="reaction-count" data-type="love">{{ publication.reactions|filter(r => r.type == 'love')|length }}</span>
+                                </button>
+                                <button class="btn btn-sm reaction-btn {% if userReactionType == 'haha' %}active{% endif %}" data-type="haha">
+                                    <span class="reaction-emoji" data-emoji-type="haha">😂</span>
+                                    <span class="reaction-count" data-type="haha">{{ publication.reactions|filter(r => r.type == 'haha')|length }}</span>
+                                </button>
+                                <button class="btn btn-sm reaction-btn {% if userReactionType == 'wow' %}active{% endif %}" data-type="wow">
+                                    <span class="reaction-emoji" data-emoji-type="wow">😮</span>
+                                    <span class="reaction-count" data-type="wow">{{ publication.reactions|filter(r => r.type == 'wow')|length }}</span>
+                                </button>
+                                <button class="btn btn-sm reaction-btn {% if userReactionType == 'sad' %}active{% endif %}" data-type="sad">
+                                    <span class="reaction-emoji" data-emoji-type="sad">😢</span>
+                                    <span class="reaction-count" data-type="sad">{{ publication.reactions|filter(r => r.type == 'sad')|length }}</span>
+                                </button>
+                                <button class="btn btn-sm reaction-btn {% if userReactionType == 'angry' %}active{% endif %}" data-type="angry">
+                                    <span class="reaction-emoji" data-emoji-type="angry">😡</span>
+                                    <span class="reaction-count" data-type="angry">{{ publication.reactions|filter(r => r.type == 'angry')|length }}</span>
+                                </button>
+                            </div>
                         </div>
                     </div>
 
@@ -80,9 +365,70 @@
                                 <div class="flex-grow-1 bg-white p-3 rounded">
                                     <div class="d-flex justify-content-between mb-2">
                                         <h6 class="mb-0">{{ comment.user ? comment.user.email : 'Anonymous' }}</h6>
-                                        <small class="text-muted">{{ comment.date|date('d M Y H:i') }}</small>
+                                        <div class="d-flex align-items-center">
+                                            <small class="text-muted">{{ comment.date|date('d M Y H:i') }}</small>
+                                            <div class="dropdown translation-dropdown">
+                                                <button class="translation-btn dropdown-toggle" type="button" id="translationDropdown{{ comment.id }}" data-bs-toggle="dropdown" aria-expanded="false">
+                                                    <i class="fas fa-language"></i>
+                                                </button>
+                                                <ul class="dropdown-menu" aria-labelledby="translationDropdown{{ comment.id }}">
+                                                    <li><h6 class="dropdown-header">Choose language</h6></li>
+                                                    <li><a class="dropdown-item translation-option" href="#" data-lang="en" data-target="comment" data-id="{{ comment.id }}">English</a></li>
+                                                    <li><a class="dropdown-item translation-option" href="#" data-lang="fr" data-target="comment" data-id="{{ comment.id }}">French</a></li>
+                                                    <li><a class="dropdown-item translation-option" href="#" data-lang="es" data-target="comment" data-id="{{ comment.id }}">Spanish</a></li>
+                                                    <li><a class="dropdown-item translation-option" href="#" data-lang="de" data-target="comment" data-id="{{ comment.id }}">German</a></li>
+                                                    <li><a class="dropdown-item translation-option" href="#" data-lang="it" data-target="comment" data-id="{{ comment.id }}">Italian</a></li>
+                                                    <li><a class="dropdown-item translation-option" href="#" data-lang="pt" data-target="comment" data-id="{{ comment.id }}">Portuguese</a></li>
+                                                    <li><a class="dropdown-item translation-option" href="#" data-lang="ru" data-target="comment" data-id="{{ comment.id }}">Russian</a></li>
+                                                    <li><a class="dropdown-item translation-option" href="#" data-lang="zh" data-target="comment" data-id="{{ comment.id }}">Chinese</a></li>
+                                                    <li><a class="dropdown-item translation-option" href="#" data-lang="ja" data-target="comment" data-id="{{ comment.id }}">Japanese</a></li>
+                                                    <li><a class="dropdown-item translation-option" href="#" data-lang="ar" data-target="comment" data-id="{{ comment.id }}">Arabic</a></li>
+                                                </ul>
+                                            </div>
+                                        </div>
                                     </div>
-                                    <p class="mb-0">{{ comment.contenu }}</p>
+                                    <p>{{ comment.contenu }}</p>
+                                    
+                                    <!-- Translated Comment Content (initially hidden) -->
+                                    <div id="translated-comment-{{ comment.id }}" class="translated-content">
+                                    </div>
+                                    
+                                    {% set userReactionType = null %}
+                                    {% if app.user and comment.reactions is not empty %}
+                                        {% for reaction in comment.reactions %}
+                                            {% if reaction.user == app.user %}
+                                                {% set userReactionType = reaction.type %}
+                                            {% endif %}
+                                        {% endfor %}
+                                    {% endif %}
+                                    
+                                    <div class="reaction-buttons mt-2" data-comment-id="{{ comment.id }}">
+                                        <button class="btn btn-sm reaction-btn {% if userReactionType == 'like' %}active{% endif %}" data-type="like">
+                                            <span class="reaction-emoji" data-emoji-type="like">👍</span>
+                                            <span class="reaction-count" data-type="like">{{ comment.reactions|filter(r => r.type == 'like')|length }}</span>
+                                        </button>
+                                        <button class="btn btn-sm reaction-btn {% if userReactionType == 'love' %}active{% endif %}" data-type="love">
+                                            <span class="reaction-emoji" data-emoji-type="love">❤️</span>
+                                            <span class="reaction-count" data-type="love">{{ comment.reactions|filter(r => r.type == 'love')|length }}</span>
+                                        </button>
+                                        <button class="btn btn-sm reaction-btn {% if userReactionType == 'haha' %}active{% endif %}" data-type="haha">
+                                            <span class="reaction-emoji" data-emoji-type="haha">😂</span>
+                                            <span class="reaction-count" data-type="haha">{{ comment.reactions|filter(r => r.type == 'haha')|length }}</span>
+                                        </button>
+                                        <button class="btn btn-sm reaction-btn {% if userReactionType == 'wow' %}active{% endif %}" data-type="wow">
+                                            <span class="reaction-emoji" data-emoji-type="wow">😮</span>
+                                            <span class="reaction-count" data-type="wow">{{ comment.reactions|filter(r => r.type == 'wow')|length }}</span>
+                                        </button>
+                                        <button class="btn btn-sm reaction-btn {% if userReactionType == 'sad' %}active{% endif %}" data-type="sad">
+                                            <span class="reaction-emoji" data-emoji-type="sad">😢</span>
+                                            <span class="reaction-count" data-type="sad">{{ comment.reactions|filter(r => r.type == 'sad')|length }}</span>
+                                        </button>
+                                        <button class="btn btn-sm reaction-btn {% if userReactionType == 'angry' %}active{% endif %}" data-type="angry">
+                                            <span class="reaction-emoji" data-emoji-type="angry">😡</span>
+                                            <span class="reaction-count" data-type="angry">{{ comment.reactions|filter(r => r.type == 'angry')|length }}</span>
+                                        </button>
+                                    </div>
+                                    
                                     {% if app.user == comment.user %}
                                         <div class="mt-2">
                                             <form action="{{ path('app_forum_comment_delete', {'id': comment.id}) }}" method="post" style="display: inline-block">
@@ -100,7 +446,7 @@
 
                     <!-- Actions -->
                     <div class="text-center mb-4">
-                        <a href="{{ path('app_forum') }}" class="btn btn-secondary me-2">
+                        <a href="{{ path('app_forum_index') }}" class="btn btn-secondary me-2">
                             <i class="fas fa-arrow-left me-2"></i>Back to Forum
                         </a>
                         {% if app.user == publication.user %}
@@ -114,4 +460,583 @@
         </div>
     </div>
     <!-- Topic Content End -->
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('Reaction script loaded');
+            
+            // Load emojis from API
+            loadEmojis();
+            
+            // Load emoji map for text conversion
+            loadEmojiMap();
+            
+            // Setup translation functionality
+            function setupTranslation() {
+                console.log('Setting up translation functionality');
+                
+                // Debug: List all translation containers
+                const allTranslationContainers = document.querySelectorAll('.translated-content');
+                console.log('All translation containers found:', allTranslationContainers.length);
+                allTranslationContainers.forEach((container, index) => {
+                    console.log(`Container ${index+1} ID:`, container.id);
+                });
+                
+                // Add click event to all translation options using event delegation
+                document.addEventListener('click', function(e) {
+                    if (e.target && e.target.classList.contains('translation-option')) {
+                        e.preventDefault();
+                        
+                        const lang = e.target.getAttribute('data-lang');
+                        const target = e.target.getAttribute('data-target');
+                        const id = e.target.getAttribute('data-id');
+                        
+                        console.log(`Translating ${target} ${id} to ${lang}`);
+                        console.log('Translation option clicked:', e.target);
+                        
+                        // Show loading indicator
+                        let translatedContainer;
+                        if (target === 'publication') {
+                            translatedContainer = document.getElementById(`translated-publication-${id}`);
+                        } else if (target === 'comment') {
+                            translatedContainer = document.getElementById(`translated-comment-${id}`);
+                        } else {
+                            console.error(`Invalid target type: ${target}`);
+                            return;
+                        }
+                        
+                        if (!translatedContainer) {
+                            console.error(`Container for translated-${target}-${id} not found`);
+                            console.log('All IDs in the document:', Array.from(document.querySelectorAll('[id]')).map(el => el.id).join(', '));
+                            return;
+                        }
+                        
+                        console.log('Found translation container:', translatedContainer);
+                        translatedContainer.style.display = 'block';
+                        translatedContainer.innerHTML = '<div class="d-flex align-items-center"><div class="spinner-border spinner-border-sm me-2" role="status"></div> Translating...</div>';
+                        
+                        // Call translation API
+                        translateContent(target, id, lang);
+                    }
+                });
+                
+                // Use event delegation for close buttons to handle dynamically created elements
+                document.addEventListener('click', function(e) {
+                    if (e.target && e.target.classList.contains('close-translation')) {
+                        console.log('Close translation button clicked');
+                        const container = e.target.closest('.translated-content');
+                        if (container) {
+                            console.log('Closing container:', container.id);
+                            container.style.display = 'none';
+                        }
+                    }
+                });
+            }
+            
+            // Set up translation buttons
+            setupTranslation();
+            
+            // Handle publication reactions
+            const publicationButtons = document.querySelectorAll('.reaction-buttons[data-publication-id]');
+            console.log('Publication buttons found:', publicationButtons.length);
+            publicationButtons.forEach(container => {
+                const publicationId = container.dataset.publicationId;
+                console.log('Setting up reactions for publication:', publicationId);
+                container.querySelectorAll('.reaction-btn').forEach(button => {
+                    button.addEventListener('click', function() {
+                        const reactionType = this.dataset.type;
+                        console.log('Reaction button clicked:', reactionType);
+                        handleReaction('publication', publicationId, reactionType, this);
+                    });
+                });
+            });
+            
+            // Handle comment reactions
+            const commentButtons = document.querySelectorAll('.reaction-buttons[data-comment-id]');
+            console.log('Comment buttons found:', commentButtons.length);
+            commentButtons.forEach(container => {
+                const commentId = container.dataset.commentId;
+                console.log('Setting up reactions for comment:', commentId);
+                container.querySelectorAll('.reaction-btn').forEach(button => {
+                    button.addEventListener('click', function() {
+                        const reactionType = this.dataset.type;
+                        console.log('Reaction button clicked:', reactionType);
+                        handleReaction('comment', commentId, reactionType, this);
+                    });
+                });
+            });
+            
+            // Set up emoji conversion for comment forms
+            setupEmojiConversion();
+            
+            // Load emojis from API
+            function loadEmojis() {
+                fetch('/api/emoji', {
+                    method: 'GET',
+                    headers: {
+                        'X-Requested-With': 'XMLHttpRequest',
+                        'Accept': 'application/json'
+                    }
+                })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error(`HTTP error! status: ${response.status}`);
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    console.log('Emoji data loaded:', data);
+                    
+                    if (data.success && data.emojis) {
+                        // Update all emoji elements with the loaded emojis
+                        document.querySelectorAll('.reaction-emoji').forEach(element => {
+                            const type = element.getAttribute('data-emoji-type');
+                            if (type && data.emojis[type]) {
+                                element.textContent = data.emojis[type].emoji;
+                            }
+                        });
+                        
+                        // Update button colors based on emoji data
+                        document.querySelectorAll('.reaction-btn').forEach(button => {
+                            const type = button.getAttribute('data-type');
+                            if (type && data.emojis[type]) {
+                                // Set custom properties for active state
+                                button.style.setProperty('--active-bg-color', data.emojis[type].color + '20');
+                                button.style.setProperty('--active-border-color', data.emojis[type].color);
+                                button.style.setProperty('--active-text-color', data.emojis[type].color);
+                            }
+                        });
+                    }
+                })
+                .catch(error => {
+                    console.error('Error loading emojis:', error);
+                });
+            }
+            
+            // Global variable to store emoji map
+            let emojiMap = {};
+            
+            // Load emoji map for text conversion
+            function loadEmojiMap() {
+                fetch('/api/emoji/map', {
+                    method: 'GET',
+                    headers: {
+                        'X-Requested-With': 'XMLHttpRequest',
+                        'Accept': 'application/json'
+                    }
+                })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error(`HTTP error! status: ${response.status}`);
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    console.log('Emoji map loaded');
+                    
+                    if (data.success && data.emojiMap) {
+                        emojiMap = data.emojiMap;
+                        
+                        // Setup preview for existing textareas
+                        setupEmojiConversion();
+                    }
+                })
+                .catch(error => {
+                    console.error('Error loading emoji map:', error);
+                });
+            }
+            
+            // Setup emoji conversion for textareas
+            function setupEmojiConversion() {
+                // Find all textareas and comment input fields
+                const textInputs = document.querySelectorAll('textarea, input[type="text"]');
+                
+                textInputs.forEach(input => {
+                    // Create a preview element if it doesn't exist
+                    let previewId = input.id + '-emoji-preview';
+                    let preview = document.getElementById(previewId);
+                    
+                    if (!preview) {
+                        preview = document.createElement('div');
+                        preview.id = previewId;
+                        preview.className = 'emoji-preview';
+                        preview.style.padding = '8px';
+                        preview.style.marginTop = '5px';
+                        preview.style.border = '1px solid #ddd';
+                        preview.style.borderRadius = '4px';
+                        preview.style.backgroundColor = '#f9f9f9';
+                        preview.style.minHeight = '24px';
+                        preview.style.display = 'none';
+                        
+                        // Add a label for the preview
+                        const label = document.createElement('div');
+                        label.className = 'emoji-preview-label';
+                        label.textContent = 'Preview with emojis:';
+                        label.style.fontSize = '0.8rem';
+                        label.style.marginBottom = '5px';
+                        label.style.color = '#666';
+                        
+                        // Insert the preview after the input
+                        input.parentNode.insertBefore(label, input.nextSibling);
+                        input.parentNode.insertBefore(preview, label.nextSibling);
+                    }
+                    
+                    // Add input event listener
+                    input.addEventListener('input', function() {
+                        updateEmojiPreview(this, preview);
+                    });
+                    
+                    // Initial update
+                    updateEmojiPreview(input, preview);
+                });
+            }
+            
+            // Update emoji preview for an input
+            function updateEmojiPreview(input, preview) {
+                const text = input.value;
+                
+                if (text.trim() === '') {
+                    preview.style.display = 'none';
+                    return;
+                }
+                
+                // Show the preview
+                preview.style.display = 'block';
+                
+                // Convert text to emojis client-side for preview
+                let convertedText = text;
+                for (const [emoticon, emoji] of Object.entries(emojiMap)) {
+                    // Simple replacement for preview
+                    convertedText = convertedText.replace(new RegExp(escapeRegExp(emoticon), 'g'), emoji);
+                }
+                
+                // Update preview content
+                preview.textContent = convertedText;
+            }
+            
+            // Helper function to escape special characters in regex
+            function escapeRegExp(string) {
+                return string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+            }
+            
+            // Translate content using the API
+            function translateContent(target, id, targetLang) {
+                // Adjust URL to match controller routes
+                let url;
+                if (target === 'publication') {
+                    url = `/forum/translate/publication/${id}/${targetLang}`;
+                } else if (target === 'comment') {
+                    url = `/forum/translate/comment/${id}/${targetLang}`;
+                } else {
+                    console.error('Invalid translation target:', target);
+                    return;
+                }
+                
+                console.log(`Translating ${target} ${id} to ${targetLang}`);
+                console.log('Translation URL:', url);
+                
+                // Get the container for the translated content
+                const translatedContainer = document.getElementById(`translated-${target}-${id}`);
+                
+                // Show loading indicator
+                translatedContainer.style.display = 'block';
+                translatedContainer.innerHTML = '<div class="text-center"><div class="spinner-border text-primary" role="status"><span class="sr-only">Loading...</span></div><p>Translating...</p></div>';
+                
+                // Make the API call
+                fetch(url)
+                .then(response => {
+                    console.log('Response status:', response.status);
+                    if (!response.ok) {
+                        throw new Error(`HTTP error! status: ${response.status}`);
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    console.log('Response data:', data);
+                    
+                    if (data.success) {
+                        console.log('Translation successful:', data.message);
+                        
+                        // Clear any previous content
+                        translatedContainer.innerHTML = '';
+                        
+                        // Create and append language label
+                        const languageLabelDiv = document.createElement('div');
+                        languageLabelDiv.className = 'translation-language-label';
+                        languageLabelDiv.textContent = 'Translated to: ';
+                        
+                        const languageSpan = document.createElement('span');
+                        languageSpan.className = 'translation-language';
+                        languageSpan.textContent = getLanguageName(targetLang);
+                        
+                        languageLabelDiv.appendChild(languageSpan);
+                        translatedContainer.appendChild(languageLabelDiv);
+                        
+                        // Update content based on target type
+                        if (target === 'publication') {
+                            console.log('Updating publication translation');
+                            // Check if we have the expected data structure
+                            if (!data.publication || !data.publication.translated) {
+                                console.error('Unexpected data structure for publication translation', data);
+                                translatedContainer.innerHTML = '<div class="alert alert-danger">Invalid translation data received</div>';
+                                return;
+                            }
+                            
+                            // Create and append title
+                            if (data.publication.translated.title) {
+                                const titleElement = document.createElement('div');
+                                titleElement.className = 'translated-title';
+                                titleElement.textContent = data.publication.translated.title;
+                                translatedContainer.appendChild(titleElement);
+                            }
+                            
+                            // Create and append body
+                            if (data.publication.translated.content) {
+                                const bodyElement = document.createElement('div');
+                                bodyElement.className = 'translated-body';
+                                bodyElement.textContent = data.publication.translated.content;
+                                translatedContainer.appendChild(bodyElement);
+                            }
+                        } else if (target === 'comment') {
+                            console.log('Updating comment translation');
+                            // Check if we have the expected data structure
+                            if (!data.comment || !data.comment.translated) {
+                                console.error('Unexpected data structure for comment translation', data);
+                                translatedContainer.innerHTML = '<div class="alert alert-danger">Invalid translation data received</div>';
+                                return;
+                            }
+                            
+                            // Create and append body
+                            if (data.comment.translated.content) {
+                                const bodyElement = document.createElement('div');
+                                bodyElement.className = 'translated-body';
+                                bodyElement.textContent = data.comment.translated.content;
+                                translatedContainer.appendChild(bodyElement);
+                            }
+                        }
+                        
+                        // Add close button
+                        const closeButton = document.createElement('span');
+                        closeButton.className = 'close-translation';
+                        closeButton.innerHTML = '&times;';
+                        translatedContainer.appendChild(closeButton);
+                        
+                        // Show the translated content
+                        translatedContainer.style.display = 'block';
+                    } else {
+                        console.error('Translation failed:', data.error || 'Unknown error');
+                        
+                        // Show error message
+                        translatedContainer.innerHTML = '<div class="alert alert-danger">Translation failed: ' + (data.error || 'Unknown error') + '</div>';
+                        
+                        // Add retry button
+                        const retryButton = document.createElement('button');
+                        retryButton.className = 'btn btn-sm btn-primary mt-2';
+                        retryButton.textContent = 'Retry';
+                        retryButton.addEventListener('click', function() {
+                            translateContent(target, id, targetLang);
+                        });
+                        translatedContainer.appendChild(retryButton);
+                        
+                        // Add close button
+                        const closeButton = document.createElement('span');
+                        closeButton.className = 'close-translation';
+                        closeButton.innerHTML = '&times;';
+                        translatedContainer.appendChild(closeButton);
+                    }
+                })
+                .catch(error => {
+                    console.error('Translation error:', error);
+                    
+                    // Show error message
+                    if (translatedContainer) {
+                        translatedContainer.innerHTML = '<div class="alert alert-danger">Translation error: ' + error.message + 
+                            '<br><small>This could be due to API rate limits or connectivity issues.</small></div>';
+                        
+                        // Add retry button
+                        const retryButton = document.createElement('button');
+                        retryButton.className = 'btn btn-sm btn-primary mt-2';
+                        retryButton.textContent = 'Retry';
+                        retryButton.addEventListener('click', function() {
+                            translateContent(target, id, targetLang);
+                        });
+                        translatedContainer.appendChild(retryButton);
+                        
+                        // Add close button
+                        const closeButton = document.createElement('span');
+                        closeButton.className = 'close-translation';
+                        closeButton.innerHTML = '&times;';
+                        translatedContainer.appendChild(closeButton);
+                    }
+                });
+            }
+            
+            // Get language name from code
+            function getLanguageName(langCode) {
+                const languages = {
+                    'en': 'English',
+                    'fr': 'French',
+                    'es': 'Spanish',
+                    'de': 'German',
+                    'it': 'Italian',
+                    'pt': 'Portuguese',
+                    'ru': 'Russian',
+                    'zh': 'Chinese',
+                    'ja': 'Japanese',
+                    'ar': 'Arabic'
+                };
+                
+                return languages[langCode] || langCode;
+            }
+            
+            function handleReaction(targetType, targetId, reactionType, button) {
+                console.log(`Handling reaction: ${targetType} ${targetId} ${reactionType}`);
+                
+                // Check if user is logged in
+                {% if not app.user %}
+                    window.location.href = '{{ path('app_login') }}';
+                    return;
+                {% endif %}
+                
+                const container = button.closest('.reaction-buttons');
+                const token = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+                
+                // Disable all buttons during processing
+                container.querySelectorAll('.reaction-btn').forEach(btn => {
+                    btn.disabled = true;
+                    btn.style.opacity = '0.7';
+                });
+                
+                // Show loading spinner
+                const originalText = button.innerHTML;
+                button.innerHTML = '<div class="spinner-border spinner-border-sm" role="status"><span class="visually-hidden">Loading...</span></div>';
+                
+                // Adjust targetType for the API endpoint
+                let apiTargetType = targetType;
+                if (targetType === 'comment') {
+                    apiTargetType = 'commentaire';
+                }
+                
+                // Log the URL we're about to fetch
+                const url = `/api/reaction/${apiTargetType}/${targetId}/${reactionType}`;
+                console.log('Fetching URL:', url);
+                
+                fetch(url, {
+                    method: 'GET', 
+                    headers: {
+                        'X-Requested-With': 'XMLHttpRequest',
+                        'X-CSRF-TOKEN': token,
+                        'Accept': 'application/json'
+                    }
+                })
+                .then(response => {
+                    console.log('Response status:', response.status);
+                    if (!response.ok) {
+                        throw new Error(`HTTP error! status: ${response.status}`);
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    console.log('Response data:', JSON.stringify(data));
+                    
+                    if (data.success) {
+                        console.log('Reaction successful:', data.message);
+                        
+                        // Reset all buttons to inactive state
+                        container.querySelectorAll('.reaction-btn').forEach(btn => {
+                            btn.classList.remove('active');
+                        });
+                        
+                        // If we added a reaction, set the button to active
+                        if (data.userReaction) {
+                            const activeButton = container.querySelector(`.reaction-btn[data-type="${data.userReaction}"]`);
+                            if (activeButton) {
+                                activeButton.classList.add('active');
+                                // Add a subtle animation to the button
+                                activeButton.animate([
+                                    { transform: 'scale(1)' },
+                                    { transform: 'scale(1.2)' },
+                                    { transform: 'scale(1)' }
+                                ], {
+                                    duration: 300,
+                                    easing: 'ease-in-out'
+                                });
+                            }
+                        }
+                        
+                        // Update all reaction counts
+                        // Check if we have reactionCounts (from ReactionController) or counts (from ForumController)
+                        const counts = data.reactionCounts || data.counts;
+                        console.log('Reaction counts from response:', counts);
+                        
+                        if (counts) {
+                            console.log('Updating reaction counts with:', counts);
+                            // Update each reaction type count
+                            Object.keys(counts).forEach(type => {
+                                const countElement = container.querySelector(`.reaction-count[data-type="${type}"]`);
+                                if (countElement) {
+                                    const currentCount = countElement.textContent.trim();
+                                    const newCount = counts[type];
+                                    console.log(`Updating count for ${type} from ${currentCount} to ${newCount}`);
+                                    
+                                    // Only animate if the count has changed
+                                    if (parseInt(currentCount) !== parseInt(newCount)) {
+                                        countElement.textContent = newCount;
+                                        
+                                        // Add animation class
+                                        countElement.classList.add('count-changed');
+                                        
+                                        // Remove animation class after animation completes
+                                        setTimeout(() => {
+                                            countElement.classList.remove('count-changed');
+                                        }, 500);
+                                    } else {
+                                        countElement.textContent = newCount;
+                                    }
+                                } else {
+                                    console.warn(`Count element for type ${type} not found`);
+                                }
+                            });
+                        } else {
+                            console.error('No reaction counts found in response!');
+                            console.log('Full response data:', data);
+                        }
+                    } else {
+                        console.error('Reaction failed:', data.error || 'Unknown error');
+                    }
+                    
+                    // Reset button icon
+                    button.innerHTML = originalText;
+                    
+                    // Re-enable all buttons
+                    container.querySelectorAll('.reaction-btn').forEach(btn => {
+                        btn.disabled = false;
+                        btn.style.opacity = '1';
+                    });
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    console.error('Error details:', error.message);
+                    // Try to get more details if it's a network error
+                    if (error instanceof TypeError) {
+                        console.error('Network error - check if the server is running and the endpoint exists');
+                    }
+                    // Reset button icon
+                    button.innerHTML = originalText;
+                    
+                    // Re-enable all buttons
+                    container.querySelectorAll('.reaction-btn').forEach(btn => {
+                        btn.disabled = false;
+                        btn.style.opacity = '1';
+                    });
+                    
+                    // Show error message to user
+                    alert('Error processing reaction: ' + error.message);
+                });
+            }
+        });
+    </script>
 {% endblock %}

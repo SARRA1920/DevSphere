@@ -41,6 +41,8 @@ security:
         - { path: ^/assets, roles: PUBLIC_ACCESS }
         - { path: ^/uploads, roles: PUBLIC_ACCESS }
         - { path: ^/admin, roles: ROLE_ADMIN }
+        - { path: ^/register, roles: PUBLIC_ACCESS }
+        - { path: ^/translation/test, roles: PUBLIC_ACCESS }
         - { path: ^/, roles: IS_AUTHENTICATED_REMEMBERED }
 
 when@test:

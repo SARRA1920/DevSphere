@@ -1,0 +1,200 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Translation Test{% endblock %}
+
+{% block body %}
+<div class="container mt-5">
+    <h1>Translation Test</h1>
+    <p>Current locale: <strong>{{ locale }}</strong></p>
+    
+    <div class="mb-3">
+        <h4>Change Locale:</h4>
+        <div class="btn-group">
+            {% for code, name in supportedLanguages %}
+                <a href="{{ path('app_translation_test', {'locale': code}) }}" class="btn btn-outline-primary {% if locale == code %}active{% endif %}">
+                    {{ name }}
+                </a>
+            {% endfor %}
+        </div>
+    </div>
+    
+    <div class="card mb-4">
+        <div class="card-header">
+            <h2>Symfony Translation Component Test</h2>
+        </div>
+        <div class="card-body">
+            <p><strong>Welcome message ({{ locale }}):</strong> {{ translatedWelcome }}</p>
+            <p><strong>Forum title ({{ locale }}):</strong> {{ translatedForumTitle }}</p>
+            
+            <h4 class="mt-4">Test Words:</h4>
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>Key</th>
+                        <th>Translation</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for key, translation in testWords %}
+                        <tr>
+                            <td><code>{{ key }}</code></td>
+                            <td>{{ translation }}</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+    
+    <div class="card mb-4">
+        <div class="card-header">
+            <h2>Translation Service Test</h2>
+        </div>
+        <div class="card-body">
+            <p><strong>Original Text:</strong> {{ originalText }}</p>
+            <p><strong>Translated Text ({{ locale }}):</strong> {{ translatedCustomText }}</p>
+            
+            <h4 class="mt-4">Direct Translation Test:</h4>
+            <div class="input-group mb-3">
+                <input type="text" id="directTestText" class="form-control" placeholder="Enter text to translate" value="welcome">
+                <select id="directTestLang" class="form-select" style="max-width: 150px;">
+                    {% for code, name in supportedLanguages %}
+                        <option value="{{ code }}" {% if code == locale %}selected{% endif %}>{{ name }}</option>
+                    {% endfor %}
+                </select>
+                <button id="directTestButton" class="btn btn-primary">Translate</button>
+            </div>
+            <div id="directTestResult" class="p-3 bg-light border rounded" style="display: none;"></div>
+        </div>
+    </div>
+    
+    <div class="card mb-4">
+        <div class="card-header">
+            <h2>Supported Languages</h2>
+        </div>
+        <div class="card-body">
+            <h4>Configured Languages in TranslationService:</h4>
+            <ul class="list-group mb-4">
+                {% for code, name in supportedLanguages %}
+                    <li class="list-group-item">{{ code }} - {{ name }}</li>
+                {% endfor %}
+            </ul>
+            
+            <h4>Available Locales in Symfony Translator:</h4>
+            <ul class="list-group">
+                {% if availableLocales is empty %}
+                    <li class="list-group-item text-danger">No locales found in the translator</li>
+                {% else %}
+                    {% for locale in availableLocales %}
+                        <li class="list-group-item">{{ locale }}</li>
+                    {% endfor %}
+                {% endif %}
+            </ul>
+        </div>
+    </div>
+    
+    <div class="card mb-4">
+        <div class="card-header">
+            <h2>Try Translation</h2>
+        </div>
+        <div class="card-body">
+            <form id="translationForm" class="mb-3">
+                <div class="mb-3">
+                    <label for="textToTranslate" class="form-label">Text to translate:</label>
+                    <textarea id="textToTranslate" class="form-control" rows="3"></textarea>
+                </div>
+                <div class="mb-3">
+                    <label for="targetLanguage" class="form-label">Target language:</label>
+                    <select id="targetLanguage" class="form-select">
+                        {% for code, name in supportedLanguages %}
+                            <option value="{{ code }}" {% if code == locale %}selected{% endif %}>{{ name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <button type="submit" class="btn btn-primary">Translate</button>
+            </form>
+            
+            <div id="translationResult" class="mt-3" style="display: none;">
+                <h3>Translation Result:</h3>
+                <div id="translatedText" class="p-3 bg-light border rounded"></div>
+            </div>
+            
+            <div id="translationError" class="mt-3 alert alert-danger" style="display: none;"></div>
+        </div>
+    </div>
+</div>
+
+<script>
+document.getElementById('translationForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+    
+    const text = document.getElementById('textToTranslate').value;
+    const targetLang = document.getElementById('targetLanguage').value;
+    
+    if (!text) {
+        document.getElementById('translationError').textContent = 'Please enter text to translate';
+        document.getElementById('translationError').style.display = 'block';
+        document.getElementById('translationResult').style.display = 'none';
+        return;
+    }
+    
+    document.getElementById('translationError').style.display = 'none';
+    document.getElementById('translatedText').innerHTML = '<div class="spinner-border spinner-border-sm" role="status"></div> Translating...';
+    document.getElementById('translationResult').style.display = 'block';
+    
+    fetch('/api/translation/translate', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json'
+        },
+        body: JSON.stringify({
+            text: text,
+            targetLang: targetLang,
+            sourceLang: 'auto'
+        })
+    })
+    .then(response => {
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        return response.json();
+    })
+    .then(data => {
+        if (data.success) {
+            document.getElementById('translatedText').textContent = data.translated;
+        } else {
+            throw new Error(data.error || 'Unknown error');
+        }
+    })
+    .catch(error => {
+        document.getElementById('translationError').textContent = `Translation error: ${error.message}`;
+        document.getElementById('translationError').style.display = 'block';
+        document.getElementById('translationResult').style.display = 'none';
+    });
+});
+
+// Direct test
+document.getElementById('directTestButton').addEventListener('click', function() {
+    const text = document.getElementById('directTestText').value;
+    const lang = document.getElementById('directTestLang').value;
+    
+    if (!text) return;
+    
+    document.getElementById('directTestResult').innerHTML = '<div class="spinner-border spinner-border-sm" role="status"></div> Translating...';
+    document.getElementById('directTestResult').style.display = 'block';
+    
+    fetch(`/translation/test/direct?text=${encodeURIComponent(text)}&lang=${encodeURIComponent(lang)}`)
+        .then(response => response.json())
+        .then(data => {
+            document.getElementById('directTestResult').innerHTML = `
+                <p><strong>Original:</strong> ${data.original}</p>
+                <p><strong>Translated (${data.targetLang}):</strong> ${data.translated}</p>
+            `;
+        })
+        .catch(error => {
+            document.getElementById('directTestResult').innerHTML = `<p class="text-danger">Error: ${error.message}</p>`;
+        });
+});
+</script>
+{% endblock %}

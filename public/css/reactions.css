@@ -1,0 +1,63 @@
+/* Reaction Buttons Styling */
+.reaction-buttons {
+    display: flex;
+    gap: 10px;
+    margin-top: 10px;
+}
+
+.reaction-btn {
+    display: inline-flex;
+    align-items: center;
+    padding: 5px 10px;
+    border-radius: 20px;
+    background-color: #f0f2f5;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    border: 1px solid transparent;
+    color: #606770;
+}
+
+.reaction-btn:hover {
+    background-color: #e4e6eb;
+}
+
+.reaction-btn.active {
+    color: #1877f2;
+    border-color: #1877f2;
+    background-color: #e7f3ff;
+}
+
+.reaction-btn i {
+    margin-right: 5px;
+    font-size: 16px;
+}
+
+.reaction-count {
+    font-size: 12px;
+    font-weight: bold;
+}
+
+/* Reaction Types Colors */
+.reaction-btn[data-type="like"].active i {
+    color: #1877f2;
+}
+
+.reaction-btn[data-type="love"].active i {
+    color: #e74c3c;
+}
+
+.reaction-btn[data-type="haha"].active i {
+    color: #f1c40f;
+}
+
+.reaction-btn[data-type="wow"].active i {
+    color: #f39c12;
+}
+
+.reaction-btn[data-type="sad"].active i {
+    color: #3498db;
+}
+
+.reaction-btn[data-type="angry"].active i {
+    color: #e74c3c;
+}

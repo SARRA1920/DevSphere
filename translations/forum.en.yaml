@@ -1,0 +1,39 @@
+forum:
+  title: Forum
+  post: Post
+  comment_label: Comment
+  translate: Translate
+  translate_to: Translate to
+  original_content: Original content
+  translated_content: Translated content
+  translation_error: Translation error
+  retry: Retry
+  close: Close
+  
+  # Common forum phrases
+  welcome_message: Welcome to our forum!
+  recent_posts: Recent posts
+  popular_topics: Popular topics
+  post_reply: Post a reply
+  search_forum: Search in forum
+  
+  # Publication related
+  publication:
+    title: Title
+    content: Content
+    author: Author
+    date: Date
+    comments: Comments
+    share: Share
+    report: Report
+    edit: Edit
+    delete: Delete
+    
+  # Comment related
+  comment:
+    author: Author
+    date: Date
+    reply: Reply
+    edit: Edit
+    delete: Delete
+    report: Report
