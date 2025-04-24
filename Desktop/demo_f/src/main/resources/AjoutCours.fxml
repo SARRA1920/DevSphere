@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.collections.FXCollections?>
+<?import java.lang.String?>
+
+<VBox spacing="10" xmlns:fx="http://javafx.com/fxml" fx:controller="com.user.demo.controller.CoursFormController">
+    <padding>
+        <Insets top="20" right="20" bottom="20" left="20"/>
+    </padding>
+
+    <Label text="Titre:" />
+    <TextField fx:id="titreField" />
+
+    <Label text="Description:" />
+    <TextArea fx:id="descriptionField" wrapText="true" prefRowCount="3" />
+
+    <Label text="Durée:" />
+    <TextField fx:id="dureeField" />
+
+    <Label text="Niveau:" />
+    <ComboBox fx:id="niveauComboBox" prefWidth="200">
+        <items>
+            <FXCollections fx:factory="observableArrayList">
+                <String fx:value="Beginner"/>
+                <String fx:value="Intermediate"/>
+                <String fx:value="Advanced"/>
+                <String fx:value="Expert"/>
+            </FXCollections>
+        </items>
+    </ComboBox>
+
+    <Label text="Catégorie:" />
+    <ComboBox fx:id="categorieComboBox" prefWidth="200" />
+
+    <Label text="Instructeur:" />
+    <TextField fx:id="instructeurField" />
+
+    <HBox spacing="10">
+        <TextField fx:id="imageField" HBox.hgrow="ALWAYS" promptText="Image..." />
+        <Button text="Parcourir..." onAction="#handleSelectImage" />
+    </HBox>
+
+    <HBox spacing="10">
+        <TextField fx:id="pdfField" HBox.hgrow="ALWAYS" promptText="PDF..." />
+        <Button text="Parcourir..." onAction="#handleSelectPdf" />
+    </HBox>
+
+    <HBox spacing="10" alignment="CENTER_RIGHT">
+        <Button fx:id="saveButton" text="Enregistrer" onAction="#handleSave" />
+        <Button fx:id="cancelButton" text="Annuler" onAction="#handleCancel" />
+    </HBox>
+</VBox> 

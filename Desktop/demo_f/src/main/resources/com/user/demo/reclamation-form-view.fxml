@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.text.Font?>
+<?import de.jensd.fx.glyphs.fontawesome.*?>
+<?import javafx.collections.FXCollections?>
+<?import java.lang.String?>
+
+<VBox xmlns="http://javafx.com/javafx"
+      xmlns:fx="http://javafx.com/fxml"
+      fx:controller="com.user.demo.controller.ReclamationFormController"
+      spacing="15" styleClass="content-panel">
+    
+    <padding>
+        <Insets top="20" right="20" bottom="20" left="20" />
+    </padding>
+    
+    <HBox alignment="CENTER_LEFT" spacing="10">
+        <Button fx:id="btnBack" text="Back to List" styleClass="form-button" onAction="#handleBackToList">
+            <graphic>
+                <FontAwesomeIconView glyphName="ARROW_LEFT" size="14" styleClass="button-icon" />
+            </graphic>
+        </Button>
+        
+        <Label text="New Reclamation" fx:id="lblTitle" styleClass="view-title">
+            <font>
+                <Font name="System Bold" size="24.0" />
+            </font>
+        </Label>
+    </HBox>
+    
+    <GridPane hgap="15" vgap="15">
+        <padding>
+            <Insets top="20" right="20" bottom="20" left="20" />
+        </padding>
+        
+        <Label text="Type:" GridPane.rowIndex="0" GridPane.columnIndex="0" />
+        <ComboBox fx:id="cmbType" prefWidth="300" GridPane.rowIndex="0" GridPane.columnIndex="1">
+            <items>
+                <FXCollections fx:factory="observableArrayList">
+                    <String fx:value="Technical Issue" />
+                    <String fx:value="Billing Problem" />
+                    <String fx:value="Feature Request" />
+                    <String fx:value="Bug Report" />
+                    <String fx:value="Other" />
+                </FXCollections>
+            </items>
+        </ComboBox>
+        
+        <Label text="User ID:" GridPane.rowIndex="1" GridPane.columnIndex="0" />
+        <TextField fx:id="txtUserId" promptText="Enter user ID" GridPane.rowIndex="1" GridPane.columnIndex="1" />
+        
+        <Label text="Description:" GridPane.rowIndex="2" GridPane.columnIndex="0" 
+               GridPane.valignment="TOP" GridPane.vgrow="ALWAYS" />
+               
+        <TextArea fx:id="txtDescription" promptText="Enter your reclamation description..." 
+                 prefHeight="200" wrapText="true"
+                 GridPane.rowIndex="2" GridPane.columnIndex="1" />
+    </GridPane>
+    
+    <HBox alignment="CENTER_RIGHT" spacing="15">
+        <Button fx:id="btnCancel" text="Cancel" styleClass="form-button, cancel-button" onAction="#handleCancel">
+            <graphic>
+                <FontAwesomeIconView glyphName="TIMES" size="14" styleClass="button-icon" />
+            </graphic>
+        </Button>
+        
+        <Button fx:id="btnSave" text="Save" styleClass="form-button" onAction="#handleSave">
+            <graphic>
+                <FontAwesomeIconView glyphName="CHECK" size="14" styleClass="button-icon" />
+            </graphic>
+        </Button>
+    </HBox>
+</VBox>

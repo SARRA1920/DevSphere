@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.effect.DropShadow?>
+<?import javafx.scene.paint.Color?>
+<?import de.jensd.fx.glyphs.fontawesome.*?>
+
+<StackPane xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml"
+            fx:controller="com.user.demo.controller.SignupController"
+            prefHeight="700.0" prefWidth="900.0"
+            stylesheets="@styles.css" styleClass="auth-background">
+    
+    <HBox>
+        <!-- Left Side - Brand Section -->
+        <VBox styleClass="brand-panel" alignment="CENTER">
+            <VBox alignment="CENTER" spacing="15" maxWidth="400">
+                <FontAwesomeIconView glyphName="CODE" size="80" styleClass="brand-icon"/>
+                <Label text="DevSphere" styleClass="brand-title">
+                    <font>
+                        <Font name="System Bold" size="42.0" />
+                    </font>
+                </Label>
+                <Label text="Join Our Developer Community" styleClass="brand-subtitle" wrapText="true" textAlignment="CENTER">
+                    <font>
+                        <Font size="18.0" />
+                    </font>
+                </Label>
+                
+                <VBox styleClass="features-container" spacing="15" maxWidth="350" alignment="CENTER_LEFT">
+                    <HBox spacing="10" alignment="CENTER_LEFT" styleClass="feature-item">
+                        <FontAwesomeIconView glyphName="USERS" size="16" styleClass="feature-icon"/>
+                        <Label text="Join a community of developers" styleClass="feature-text" wrapText="true"/>
+                    </HBox>
+                    <HBox spacing="10" alignment="CENTER_LEFT" styleClass="feature-item">
+                        <FontAwesomeIconView glyphName="ROCKET" size="16" styleClass="feature-icon"/>
+                        <Label text="Get started with your projects instantly" styleClass="feature-text" wrapText="true"/>
+                    </HBox>
+                    <HBox spacing="10" alignment="CENTER_LEFT" styleClass="feature-item">
+                        <FontAwesomeIconView glyphName="SHIELD" size="16" styleClass="feature-icon"/>
+                        <Label text="Secure platform for all your needs" styleClass="feature-text" wrapText="true"/>
+                    </HBox>
+                </VBox>
+            </VBox>
+        </VBox>
+        
+        <!-- Right Side - Signup Form -->
+        <ScrollPane fitToWidth="true" styleClass="transparent-bg" HBox.hgrow="ALWAYS">
+            <VBox styleClass="login-panel" alignment="CENTER">
+                <padding>
+                    <Insets top="30" right="50" bottom="30" left="50" />
+                </padding>
+                
+                <VBox spacing="15" maxWidth="450" alignment="CENTER">
+                    <VBox alignment="CENTER" spacing="5">
+                        <Label text="Create Account" styleClass="login-title">
+                            <font>
+                                <Font name="System Bold" size="28.0" />
+                            </font>
+                        </Label>
+                        <Label text="Fill in your details to get started" styleClass="login-subtitle"/>
+                    </VBox>
+                    
+                    <Label fx:id="errorLabel" text="Please fill all required fields correctly." 
+                           styleClass="error-label" visible="false" managed="false" />
+                        
+                    <VBox spacing="15" styleClass="signup-form">
+                        <HBox alignment="CENTER_LEFT" styleClass="input-container">
+                            <FontAwesomeIconView glyphName="USER" size="16" styleClass="input-icon"/>
+                            <TextField fx:id="nameField" promptText="Full Name" styleClass="auth-input-field"/>
+                        </HBox>
+                        
+                        <HBox alignment="CENTER_LEFT" styleClass="input-container">
+                            <FontAwesomeIconView glyphName="ENVELOPE" size="16" styleClass="input-icon"/>
+                            <TextField fx:id="emailField" promptText="Email address" styleClass="auth-input-field"/>
+                        </HBox>
+                        
+                        <HBox alignment="CENTER_LEFT" styleClass="input-container">
+                            <FontAwesomeIconView glyphName="LOCK" size="16" styleClass="input-icon"/>
+                            <PasswordField fx:id="passwordField" promptText="Password" styleClass="auth-input-field"/>
+                        </HBox>
+                        
+                        <HBox alignment="CENTER_LEFT" styleClass="input-container">
+                            <FontAwesomeIconView glyphName="CHECK_CIRCLE" size="16" styleClass="input-icon"/>
+                            <PasswordField fx:id="confirmPasswordField" promptText="Confirm Password" styleClass="auth-input-field"/>
+                        </HBox>
+                        
+                        <HBox alignment="CENTER_LEFT" styleClass="input-container">
+                            <FontAwesomeIconView glyphName="PHONE" size="16" styleClass="input-icon"/>
+                            <TextField fx:id="phoneField" promptText="Phone Number" styleClass="auth-input-field"/>
+                        </HBox>
+                        
+                        <HBox alignment="CENTER_LEFT" styleClass="input-container">
+                            <FontAwesomeIconView glyphName="ID_CARD" size="16" styleClass="input-icon"/>
+                            <TextField fx:id="cinField" promptText="CIN" styleClass="auth-input-field"/>
+                        </HBox>
+                        
+                        <VBox spacing="5">
+                            <Label text="Profile Image" styleClass="input-label"/>
+                            <HBox spacing="10" alignment="CENTER_LEFT" styleClass="file-input-container">
+                                <TextField fx:id="imagePathField" promptText="No file selected" 
+                                          styleClass="auth-input-field" HBox.hgrow="ALWAYS" editable="false"/>
+                                <Button fx:id="browseButton" text="Browse" onAction="#handleBrowseImage" styleClass="browse-button">
+                                    <graphic>
+                                        <FontAwesomeIconView glyphName="FOLDER_OPEN" size="14" styleClass="button-icon" />
+                                    </graphic>
+                                </Button>
+                            </HBox>
+                        </VBox>
+                        
+                        <Button fx:id="signupButton" text="Create Account" styleClass="auth-button" onAction="#handleSignup"
+                                maxWidth="Infinity">
+                                <graphic>
+                                    <FontAwesomeIconView glyphName="USER_PLUS" size="16" styleClass="button-icon" />
+                                </graphic>
+                        </Button>
+                        
+                        <HBox alignment="CENTER" spacing="5">
+                            <Label text="Already have an account?" styleClass="text-muted" />
+                            <Hyperlink fx:id="loginLink" text="Login" onAction="#goToLogin" styleClass="accent-link" />
+                        </HBox>
+                    </VBox>
+                </VBox>
+            </VBox>
+        </ScrollPane>
+    </HBox>
+</StackPane>

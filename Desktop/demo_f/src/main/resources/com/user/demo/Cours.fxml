@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox spacing="10" alignment="CENTER" xmlns="http://javafx.com/javafx/17.0.9" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.user.demo.controller.CoursController">
+    <padding>
+        <Insets bottom="20" left="20" right="20" top="20"/>
+    </padding>
+
+    <Label text="Liste des Cours" style="-fx-font-size: 20px; -fx-font-weight: bold;"/>
+
+    <HBox spacing="10" alignment="CENTER">
+        <TextField fx:id="searchField" promptText="Rechercher par titre..." HBox.hgrow="ALWAYS"/>
+        <ToggleButton fx:id="sortButton" text="Trier par titre ↓" onAction="#handleSort"/>
+        <Button text="Ajouter un cours" onAction="#handleOpenAjoutForm"/>
+    </HBox>
+
+    <TableView fx:id="coursTable" VBox.vgrow="ALWAYS">
+        <columns>
+            <TableColumn fx:id="titreColumn" text="Titre"/>
+            <TableColumn fx:id="descriptionColumn" text="Description"/>
+            <TableColumn fx:id="dureeColumn" text="Durée"/>
+            <TableColumn fx:id="niveauColumn" text="Niveau"/>
+            <TableColumn fx:id="categorieColumn" text="Catégorie"/>
+            <TableColumn fx:id="instructeurColumn" text="Instructeur"/>
+            <TableColumn fx:id="imageColumn" text="Image"/>
+            <TableColumn fx:id="pdfColumn" text="PDF"/>
+        </columns>
+    </TableView>
+    
+    <HBox spacing="10" alignment="CENTER">
+        <Button text="Modifier" onAction="#handleOpenModifierForm"/>
+        <Button text="Supprimer" onAction="#handleSupprimer"/>
+    </HBox>
+</VBox>

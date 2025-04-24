@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.Font?>
+<?import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView?>
+<?import java.net.URL?>
+
+<VBox spacing="20" xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml" 
+      fx:controller="com.user.demo.controller.AdminCoursController"
+      styleClass="content-view">
+      
+    <stylesheets>
+        <URL value="@admin-styles.css"/>
+    </stylesheets>
+    
+    <padding>
+        <Insets top="20" right="20" bottom="20" left="20"/>
+    </padding>
+    
+    <!-- Header Section -->
+    <HBox alignment="CENTER_LEFT" spacing="15">
+        <FontAwesomeIconView glyphName="GRADUATION_CAP" size="24" fill="#3498db"/>
+        <Label text="Gestion des Cours" styleClass="section-title">
+            <font>
+                <Font name="System Bold" size="20.0" />
+            </font>
+        </Label>
+        <Region HBox.hgrow="ALWAYS" />
+        <Button fx:id="addCoursButton" text="+ AJOUTER UN COURS" onAction="#handleAddCours" 
+                style="-fx-background-color: #2ecc71; -fx-text-fill: white; -fx-font-weight: bold; 
+                       -fx-padding: 12 20; -fx-background-radius: 4; -fx-font-size: 14px;
+                       -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.2), 5, 0, 0, 2);">
+            <graphic>
+                <FontAwesomeIconView glyphName="PLUS_CIRCLE" size="18" fill="white"/>
+            </graphic>
+        </Button>
+    </HBox>
+    
+    <!-- Filter & Search Section -->
+    <HBox spacing="10" alignment="CENTER_LEFT">
+        <TextField fx:id="searchField" promptText="Rechercher des cours..." HBox.hgrow="ALWAYS"
+                   onKeyReleased="#handleSearch"/>
+        <ComboBox fx:id="categoryFilter" promptText="Catégorie" prefWidth="150"
+                  onAction="#handleCategoryFilter"/>
+        <ComboBox fx:id="niveauFilter" promptText="Niveau" prefWidth="120"
+                  onAction="#handleNiveauFilter"/>
+        <Button fx:id="clearFiltersButton" text="Effacer" onAction="#handleClearFilters">
+            <graphic>
+                <FontAwesomeIconView glyphName="TIMES" size="14"/>
+            </graphic>
+        </Button>
+    </HBox>
+    
+    <!-- Table Section -->
+    <TableView fx:id="coursTable" VBox.vgrow="ALWAYS">
+        <columns>
+            <TableColumn fx:id="idColumn" text="ID" prefWidth="60"/>
+            <TableColumn fx:id="titreColumn" text="Titre" prefWidth="200"/>
+            <TableColumn fx:id="categorieColumn" text="Catégorie" prefWidth="150"/>
+            <TableColumn fx:id="instructeurColumn" text="Instructeur" prefWidth="150"/>
+            <TableColumn fx:id="niveauColumn" text="Niveau" prefWidth="100"/>
+            <TableColumn fx:id="dureeColumn" text="Durée" prefWidth="80"/>
+            <TableColumn fx:id="actionsColumn" text="Actions" prefWidth="150"/>
+        </columns>
+        <placeholder>
+            <Label text="Aucun cours trouvé"/>
+        </placeholder>
+    </TableView>
+    
+    <!-- Status Bar -->
+    <HBox spacing="10" alignment="CENTER_RIGHT" styleClass="status-bar">
+        <Label fx:id="statusLabel" text="Total: 0 cours"/>
+    </HBox>
+</VBox> 

@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.Text?>
+
+<VBox xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml" 
+      fx:controller="com.user.demo.controller.TentativesController"
+      spacing="20" styleClass="content-panel"
+      stylesheets="@../styles/tentatives.css">
+    
+    <padding>
+        <Insets top="20" right="20" bottom="20" left="20"/>
+    </padding>
+
+    <!-- En-tête -->
+    <HBox alignment="CENTER_LEFT" spacing="20">
+        <Label text="Liste des Tentatives" styleClass="view-title"/>
+        <Region HBox.hgrow="ALWAYS"/>
+        <Label fx:id="totalLabel" styleClass="status-label"/>
+    </HBox>
+    
+    <!-- Barre de recherche et filtres -->
+    <HBox spacing="15" alignment="CENTER_LEFT">
+        <TextField fx:id="searchField" promptText="Rechercher des tentatives..." prefWidth="300" styleClass="search-field"/>
+        <ComboBox fx:id="filterStatusComboBox" promptText="Tous les statuts" prefWidth="200"/>
+        <Button text="Effacer les filtres" onAction="#handleClearFilters" styleClass="btn-secondary"/>
+    </HBox>
+
+    <!-- Carte des tentatives -->
+    <ScrollPane fitToWidth="true" styleClass="transparent-scroll-pane" VBox.vgrow="ALWAYS">
+        <FlowPane fx:id="tentativesCards" hgap="20" vgap="20">
+            <padding>
+                <Insets top="10" right="10" bottom="10" left="10"/>
+            </padding>
+        </FlowPane>
+    </ScrollPane>
+    
+    <!-- État vide -->
+    <VBox fx:id="emptyState" alignment="CENTER" spacing="10" visible="false">
+        <padding>
+            <Insets top="50" bottom="50"/>
+        </padding>
+        <Label text="Aucune tentative trouvée" styleClass="empty-state-title"/>
+        <Label text="Les tentatives apparaîtront ici une fois que les étudiants auront commencé les exercices." 
+               styleClass="empty-state-message" wrapText="true" textAlignment="CENTER"/>
+    </VBox>
+    
+    <!-- État de chargement -->
+    <StackPane fx:id="loadingPane" visible="false">
+        <ProgressIndicator />
+    </StackPane>
+</VBox> 

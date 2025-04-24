@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+
+<VBox alignment="CENTER" spacing="20.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.user.demo.controller.ExerciceStartController" stylesheets="@../styles/exercice.css">
+    <padding>
+        <Insets top="20.0" right="20.0" bottom="20.0" left="20.0"/>
+    </padding>
+
+    <Label fx:id="titleLabel" text="Titre de l'exercice" styleClass="title-label"/>
+
+    <HBox spacing="10.0" alignment="CENTER">
+        <Label fx:id="typeLabel" text="Type: Quiz" styleClass="info-label"/>
+        <Label fx:id="levelLabel" text="Niveau: Débutant" styleClass="info-label"/>
+        <Button fx:id="pdfButton" text="Voir le PDF" onAction="#handleViewPdf" styleClass="button-secondary"/>
+    </HBox>
+
+    <TextArea fx:id="descriptionArea" wrapText="true" editable="false" prefRowCount="4" styleClass="description-area"/>
+    
+    <Label text="Votre réponse :" styleClass="section-label"/>
+    <TextArea fx:id="reponseArea" wrapText="true" prefRowCount="6" styleClass="reponse-area" promptText="Écrivez votre réponse ici..."/>
+
+    <Button text="Soumettre la réponse" onAction="#handleCommencer" styleClass="button-primary"/>
+</VBox> 

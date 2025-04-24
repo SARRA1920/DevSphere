@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.Font?>
+
+<VBox xmlns="http://javafx.com/javafx"
+      xmlns:fx="http://javafx.com/fxml"
+      fx:controller="com.user.demo.controller.AdminCategoryController"
+      prefHeight="600.0" prefWidth="900.0" spacing="15.0">
+
+    <padding>
+        <Insets bottom="20.0" left="20.0" right="20.0" top="20.0"/>
+    </padding>
+
+    <HBox alignment="CENTER_LEFT" spacing="10.0">
+        <Button text="Ajouter une catégorie" onAction="#handleAddCategory" styleClass="button-primary"/>
+        <Region HBox.hgrow="ALWAYS"/>
+        <TextField fx:id="searchField" promptText="Rechercher une catégorie..." prefWidth="300.0"/>
+        <Button text="Rechercher" onAction="#handleSearch" styleClass="button-secondary"/>
+        <Button text="Rafraîchir" onAction="#handleRefresh" styleClass="button-info"/>
+    </HBox>
+
+    <!-- ScrollPane qui contient la GridPane des cards -->
+    <ScrollPane fitToWidth="true" VBox.vgrow="ALWAYS" styleClass="edge-to-edge">
+        <GridPane fx:id="categoriesGrid" hgap="15.0" vgap="15.0">
+            <padding>
+                <Insets top="10.0" right="10.0" bottom="10.0" left="10.0"/>
+            </padding>
+            <!-- Les cards seront ajoutées ici dynamiquement -->
+        </GridPane>
+    </ScrollPane>
+
+    <HBox alignment="CENTER_RIGHT">
+        <Label fx:id="statusLabel" text="Total: 0 catégories"/>
+    </HBox>
+
+</VBox> 

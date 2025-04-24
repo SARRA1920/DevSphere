@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.Font?>
+<?import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView?>
+<?import java.net.URL?>
+
+<VBox spacing="20" xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml" 
+      fx:controller="com.user.demo.controller.AdminCategoryController"
+      styleClass="content-view">
+      
+    <stylesheets>
+        <URL value="@admin-styles.css"/>
+    </stylesheets>
+    
+    <padding>
+        <Insets top="20" right="20" bottom="20" left="20"/>
+    </padding>
+    
+    <!-- Header Section -->
+    <HBox alignment="CENTER_LEFT" spacing="15">
+        <FontAwesomeIconView glyphName="LIST" size="24" fill="#3498db"/>
+        <Label text="Gestion des Catégories de Cours" styleClass="section-title">
+            <font>
+                <Font name="System Bold" size="20.0" />
+            </font>
+        </Label>
+        <Region HBox.hgrow="ALWAYS" />
+        <Button fx:id="addCategoryButton" text="Ajouter une Catégorie" onAction="#handleAddCategory" styleClass="button-primary">
+            <graphic>
+                <FontAwesomeIconView glyphName="PLUS_CIRCLE" size="16" fill="white"/>
+            </graphic>
+            <padding>
+                <Insets top="10" right="15" bottom="10" left="15"/>
+            </padding>
+            <font>
+                <Font name="System Bold" size="14.0" />
+            </font>
+        </Button>
+    </HBox>
+    
+    <!-- Filter & Search Section -->
+    <HBox spacing="10" alignment="CENTER_LEFT">
+        <TextField fx:id="searchField" promptText="Rechercher des catégories..." HBox.hgrow="ALWAYS"
+                   onKeyReleased="#handleSearch"/>
+        <Button fx:id="refreshButton" text="Actualiser" onAction="#handleRefresh">
+            <graphic>
+                <FontAwesomeIconView glyphName="REFRESH" size="14"/>
+            </graphic>
+        </Button>
+    </HBox>
+    
+    <!-- Table Section -->
+    <TableView fx:id="categoriesTable" VBox.vgrow="ALWAYS" styleClass="custom-table" fixedCellSize="50">
+        <columns>
+            <TableColumn fx:id="idColumn" text="ID" prefWidth="60"/>
+            <TableColumn fx:id="nomColumn" text="Nom" prefWidth="220"/>
+            <TableColumn fx:id="descriptionColumn" text="Description" prefWidth="320"/>
+            <TableColumn fx:id="actionsColumn" text="Actions" prefWidth="160"/>
+        </columns>
+        <placeholder>
+            <Label text="Aucune catégorie trouvée"/>
+        </placeholder>
+        <VBox.margin>
+            <Insets top="20" bottom="20"/>
+        </VBox.margin>
+        <padding>
+            <Insets top="10" right="10" bottom="10" left="10"/>
+        </padding>
+    </TableView>
+    
+    <!-- Status Bar -->
+    <HBox spacing="10" alignment="CENTER_RIGHT" styleClass="status-bar">
+        <Label fx:id="statusLabel" text="Total: 0 catégories"/>
+    </HBox>
+</VBox> 

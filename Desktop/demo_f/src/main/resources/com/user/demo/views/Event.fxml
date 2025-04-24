@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import de.jensd.fx.glyphs.fontawesome.*?>
+
+<AnchorPane styleClass="exercice-card" prefHeight="184.0" prefWidth="516.0"
+            style="-fx-border-color: black; -fx-border-width: 5px; -fx-border-style: solid;"
+            xmlns="http://javafx.com/javafx/23.0.1"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="com.user.demo.controller.EventC">
+
+   <children>
+
+      <!-- Update Button -->
+      <Button fx:id="update" layoutX="328.0" layoutY="23.0" mnemonicParsing="false"
+              styleClass="button-modifier, button-small" onAction="#update"
+              prefHeight="26.0" prefWidth="170.0" text="Update">
+         <graphic>
+            <FontAwesomeIconView glyphName="EDIT" glyphSize="12" fill="WHITE"/>
+         </graphic>
+      </Button>
+
+      <!-- Delete Button -->
+      <Button fx:id="delete" layoutX="328.0" layoutY="57.0" mnemonicParsing="false"
+              styleClass="button-supprimer, button-small" onAction="#delete"
+              prefHeight="26.0" prefWidth="170.0" text="Delete">
+         <graphic>
+            <FontAwesomeIconView glyphName="TRASH" glyphSize="12" fill="WHITE"/>
+         </graphic>
+      </Button>
+
+      <!-- Participate Button -->
+      <Button fx:id="participate" layoutX="328.0" layoutY="105.0" mnemonicParsing="false"
+              onAction="#participate" prefHeight="26.0" prefWidth="170.0" text="Participate"/>
+
+      <!-- Delete Participation Button -->
+      <Button fx:id="deletep" layoutX="328.0" layoutY="142.0" mnemonicParsing="false"
+              onAction="#dparticipate" prefHeight="26.0" prefWidth="170.0" text="Delete participation">
+         <graphic>
+            <FontAwesomeIconView glyphName="TRASH" glyphSize="12" fill="WHITE"/>
+         </graphic>
+      </Button>
+
+      <!-- Labels -->
+      <Label fx:id="titre" layoutX="18.0" layoutY="23.0" prefHeight="26.0" prefWidth="244.0"
+             text="Titre" styleClass="card-title"/>
+      <Label fx:id="type" layoutX="18.0" layoutY="57.0" prefHeight="26.0" prefWidth="244.0"
+             text="Type" styleClass="card-type"/>
+      <Label fx:id="capacity" layoutX="18.0" layoutY="92.0" prefHeight="26.0" prefWidth="244.0"
+             text="Capacity" styleClass="card-type"/>
+      <Label fx:id="date" layoutX="18.0" layoutY="121.0" prefHeight="26.0" prefWidth="244.0"
+             text="Date"/>
+      <Label fx:id="locationLabel" layoutX="18.0" layoutY="147.0" prefHeight="26.0" prefWidth="244.0"
+             text="Location" styleClass="card-type"/>
+
+      <!-- Input Fields -->
+      <TextField fx:id="tf_titre" layoutX="14.0" layoutY="23.0" prefHeight="26.0" prefWidth="267.0"/>
+      <TextField fx:id="tf_type" layoutX="14.0" layoutY="57.0" prefHeight="26.0" prefWidth="267.0"/>
+      <TextField fx:id="tf_capacity" layoutX="14.0" layoutY="92.0" prefHeight="26.0" prefWidth="267.0"/>
+      <DatePicker fx:id="tf_date" layoutX="14.0" layoutY="121.0" prefHeight="26.0" prefWidth="267.0"/>
+      <TextField fx:id="tf_location" layoutX="12.0" layoutY="153.0" prefHeight="26.0" prefWidth="267.0"/>
+
+   </children>
+</AnchorPane>
+

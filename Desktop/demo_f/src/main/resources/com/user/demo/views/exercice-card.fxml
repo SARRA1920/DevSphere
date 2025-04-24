@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import de.jensd.fx.glyphs.fontawesome.*?>
+
+<VBox xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml"
+      fx:controller="com.user.demo.controller.ExerciceCardController"
+      fx:id="exerciceCard" styleClass="exercice-card" spacing="10">
+    
+    <padding>
+        <Insets top="15" right="15" bottom="15" left="15"/>
+    </padding>
+    
+    <Label fx:id="titleLabel" styleClass="card-title"/>
+    <Label fx:id="typeLabel" styleClass="card-type"/>
+    <Label fx:id="difficultyLabel" styleClass="card-difficulty"/>
+    
+    <HBox fx:id="buttonsContainer" alignment="CENTER" spacing="10">
+        <!-- Boutons pour le mode admin -->
+        <Button fx:id="updateBtn" text="Update" styleClass="button-modifier, button-small" prefWidth="100">
+            <graphic>
+                <FontAwesomeIconView glyphName="EDIT" glyphSize="12" fill="WHITE"/>
+            </graphic>
+        </Button>
+        
+        <Button fx:id="supprimerBtn" text="Supprimer" styleClass="button-supprimer, button-small" prefWidth="100">
+            <graphic>
+                <FontAwesomeIconView glyphName="TRASH" glyphSize="12" fill="WHITE"/>
+            </graphic>
+        </Button>
+        
+        <!-- Bouton pour le mode étudiant, hidden par défaut -->
+        <Button fx:id="commencerBtn" text="Commencer l'exercice" styleClass="button-primary, button-small" 
+                maxWidth="Infinity" visible="false" managed="false"/>
+    </HBox>
+</VBox> 

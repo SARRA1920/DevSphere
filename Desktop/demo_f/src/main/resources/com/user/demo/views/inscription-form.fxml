@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<HBox xmlns="http://javafx.com/javafx"
+      xmlns:fx="http://javafx.com/fxml"
+      fx:controller="com.user.demo.controller.InscriptionFormController"
+      stylesheets="@../styles/cours.css">
+
+    <!-- Sidebar à gauche -->
+    <VBox spacing="10" styleClass="sidebar" style="-fx-background-color: #f0f0f0; -fx-padding: 20;">
+        <Button text="Inscription"
+                styleClass="sidebar-button"
+                maxWidth="Infinity"
+                style="-fx-min-width: 150; -fx-background-color: #4CAF50; -fx-text-fill: white;"/>
+        <Button text="Catégorie Cours"
+                styleClass="sidebar-button"
+                maxWidth="Infinity"
+                style="-fx-min-width: 150; -fx-background-color: #2196F3; -fx-text-fill: white;"/>
+        <Button text="Cours"
+                styleClass="sidebar-button"
+                maxWidth="Infinity"
+                style="-fx-min-width: 150; -fx-background-color: #FF9800; -fx-text-fill: white;"/>
+    </VBox>
+
+    <!-- Formulaire d'inscription à droite -->
+    <VBox spacing="15" styleClass="inscription-form">
+        <padding>
+            <Insets top="20" right="20" bottom="20" left="20"/>
+        </padding>
+
+        <!-- En-tête avec titre et bouton PDF -->
+        <HBox spacing="10" alignment="CENTER">
+            <Label fx:id="formTitleLabel" text="Inscription au cours" styleClass="form-title" HBox.hgrow="ALWAYS"/>
+            <Button fx:id="voirPdfButton" 
+                    text="Voir le PDF du cours" 
+                    onAction="#handleVoirPdf"
+                    visible="false"
+                    style="-fx-background-color: #2196F3; -fx-text-fill: white;"/>
+        </HBox>
+        
+        <GridPane styleClass="grid-pane" vgap="10" hgap="10">
+            <Label text="Nom :" 
+                   styleClass="form-label"
+                   GridPane.columnIndex="0" 
+                   GridPane.rowIndex="0"/>
+            <TextField fx:id="nomField" 
+                      promptText="Votre nom"
+                      styleClass="form-field"
+                      GridPane.columnIndex="1" 
+                      GridPane.rowIndex="0"/>
+
+            <Label text="Email :" 
+                   styleClass="form-label"
+                   GridPane.columnIndex="0" 
+                   GridPane.rowIndex="1"/>
+            <TextField fx:id="emailField" 
+                      promptText="votre@email.com"
+                      styleClass="form-field"
+                      GridPane.columnIndex="1" 
+                      GridPane.rowIndex="1"/>
+
+            <Label text="Téléphone :" 
+                   styleClass="form-label"
+                   GridPane.columnIndex="0" 
+                   GridPane.rowIndex="2"/>
+            <TextField fx:id="telephoneField" 
+                      promptText="Votre numéro"
+                      styleClass="form-field"
+                      GridPane.columnIndex="1" 
+                      GridPane.rowIndex="2"/>
+
+            <Label text="Cours :" 
+                   styleClass="form-label"
+                   GridPane.columnIndex="0" 
+                   GridPane.rowIndex="3"/>
+            <ComboBox fx:id="coursComboBox"
+                      styleClass="form-field"
+                      GridPane.columnIndex="1" 
+                      GridPane.rowIndex="3"/>
+
+            <Label text="Statut :" 
+                   styleClass="form-label"
+                   GridPane.columnIndex="0" 
+                   GridPane.rowIndex="4"/>
+            <ComboBox fx:id="statutComboBox"
+                      styleClass="form-field"
+                      GridPane.columnIndex="1" 
+                      GridPane.rowIndex="4"/>
+
+            <Label text="Date d'inscription :" 
+                   styleClass="form-label"
+                   GridPane.columnIndex="0" 
+                   GridPane.rowIndex="5"/>
+            <DatePicker fx:id="dateInscriptionPicker"
+                        styleClass="form-field"
+                        GridPane.columnIndex="1" 
+                        GridPane.rowIndex="5"/>
+        </GridPane>
+
+        <HBox spacing="10" alignment="CENTER_RIGHT" styleClass="button-container">
+            <Button text="Annuler" 
+                    onAction="#handleCancel"
+                    styleClass="button-secondary"/>
+            <Button fx:id="actionButton"
+                    text="S'inscrire" 
+                    onAction="#handleAction"
+                    styleClass="button-primary"
+                    defaultButton="true"/>
+        </HBox>
+    </VBox>
+</HBox> 

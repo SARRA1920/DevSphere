@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.Font?>
+<?import de.jensd.fx.glyphs.fontawesome.*?>
+
+<VBox xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml"
+      fx:controller="com.user.demo.controller.AdminResponseController"
+      spacing="20" styleClass="content-panel">
+    
+    <padding>
+        <Insets top="30" right="30" bottom="30" left="30" />
+    </padding>
+    
+    <!-- Enhanced Header Section -->
+    <HBox alignment="CENTER_LEFT" spacing="20">
+        <HBox alignment="CENTER_LEFT" styleClass="title-container">
+            <Pane styleClass="title-accent" prefWidth="5" prefHeight="30"/>
+            <Label text="Response Management" styleClass="view-title">
+                <font>
+                    <Font name="System Bold" size="28.0" />
+                </font>
+                <padding>
+                    <Insets left="15" />
+                </padding>
+            </Label>
+        </HBox>
+        <Region HBox.hgrow="ALWAYS" />
+        <Button styleClass="refresh-button" onAction="#refreshData">
+            <graphic>
+                <FontAwesomeIconView glyphName="REFRESH" size="16" styleClass="button-icon" />
+            </graphic>
+            <tooltip>
+                <Tooltip text="Refresh Data" />
+            </tooltip>
+        </Button>
+    </HBox>
+    
+    <!-- Enhanced Search and Filter Section -->
+    <HBox spacing="15" alignment="CENTER_LEFT" styleClass="search-container">
+        <padding>
+            <Insets top="18" right="25" bottom="18" left="25" />
+        </padding>
+        <HBox HBox.hgrow="ALWAYS" alignment="CENTER_LEFT" spacing="12" styleClass="search-field-container">
+            <FontAwesomeIconView glyphName="SEARCH" size="16" styleClass="search-icon" />
+            <TextField fx:id="searchField" promptText="Search responses..." HBox.hgrow="ALWAYS" styleClass="search-field" />
+        </HBox>
+        <Separator orientation="VERTICAL" styleClass="filter-separator"/>
+        <HBox alignment="CENTER" spacing="10">
+            <FontAwesomeIconView glyphName="FILTER" size="16" styleClass="filter-icon" />
+            <ComboBox fx:id="statusFilter" promptText="Status" styleClass="filter-combo" />
+        </HBox>
+        <Button text="Search" onAction="#handleSearch" styleClass="search-button">
+            <graphic>
+                <FontAwesomeIconView glyphName="SEARCH" size="16" />
+            </graphic>
+        </Button>
+        <Button text="Clear" onAction="#handleClearFilters" styleClass="clear-button">
+            <graphic>
+                <FontAwesomeIconView glyphName="TIMES" size="16" />
+            </graphic>
+        </Button>
+    </HBox>
+    
+    <!-- Cards Container -->
+    <StackPane VBox.vgrow="ALWAYS" styleClass="cards-stack-container">
+        <ScrollPane fitToWidth="true" styleClass="cards-scroll-pane">
+            <FlowPane fx:id="responseCards" hgap="25" vgap="25" styleClass="cards-container">
+                <padding>
+                    <Insets top="20" right="20" bottom="20" left="20" />
+                </padding>
+            </FlowPane>
+        </ScrollPane>
+        
+        <!-- Empty State -->
+        <VBox fx:id="emptyState" alignment="CENTER" spacing="15" styleClass="empty-state-container" visible="false" managed="false">
+            <FontAwesomeIconView glyphName="INBOX" size="48" styleClass="empty-state-icon"/>
+            <Label text="No responses found" styleClass="empty-state-text"/>
+            <Label text="Try adjusting your search filters" styleClass="empty-state-subtext"/>
+            <Button text="Clear Filters" onAction="#handleClearFilters" styleClass="empty-state-button">
+                <graphic>
+                    <FontAwesomeIconView glyphName="REFRESH" size="14"/>
+                </graphic>
+            </Button>
+        </VBox>
+        
+        <!-- Loading indicator -->
+        <StackPane fx:id="loadingPane" visible="false" managed="false" styleClass="loading-pane">
+            <VBox alignment="CENTER" spacing="15">
+                <ProgressIndicator styleClass="loading-indicator" />
+                <Label text="Loading responses..." styleClass="loading-text" />
+            </VBox>
+        </StackPane>
+    </StackPane>
+    
+    <!-- Footer with Item Count -->
+    <HBox alignment="CENTER_LEFT">
+        <Label fx:id="totalItemsLabel" text="Showing 0 of 0 responses" styleClass="items-count-label" />
+    </HBox>
+</VBox>

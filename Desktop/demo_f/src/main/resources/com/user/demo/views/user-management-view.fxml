@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.text.*?>
+<?import de.jensd.fx.glyphs.fontawesome.*?>
+
+<VBox xmlns="http://javafx.com/javafx"
+      xmlns:fx="http://javafx.com/fxml"
+      fx:controller="com.user.demo.controller.UserManagementController"
+      spacing="20" styleClass="content-panel">
+
+    <padding>
+        <Insets top="30" right="30" bottom="30" left="30" />
+    </padding>
+
+    <!-- Header Section with Title and Stats -->
+    <HBox alignment="CENTER_LEFT" spacing="20">
+        <HBox alignment="CENTER_LEFT" styleClass="title-container">
+            <Pane styleClass="title-accent" prefWidth="5" prefHeight="30"/>
+            <Label text="User Management" styleClass="view-title">
+                <font>
+                    <Font name="System Bold" size="28.0" />
+                </font>
+                <padding>
+                    <Insets left="15" />
+                </padding>
+            </Label>
+        </HBox>
+        <Region HBox.hgrow="ALWAYS" />
+        <HBox alignment="CENTER" styleClass="stats-pill">
+            <padding>
+                <Insets top="8" right="18" bottom="8" left="18" />
+            </padding>
+            <FontAwesomeIconView glyphName="USERS" size="18" styleClass="stats-icon" />
+            <Label fx:id="totalUsersLabel" text="Total: 0 users" styleClass="total-records">
+                <padding>
+                    <Insets left="10" />
+                </padding>
+            </Label>
+        </HBox>
+        <Button fx:id="addUserButton" onAction="#showAddUserForm" styleClass="add-button">
+            <graphic>
+                <FontAwesomeIconView glyphName="PLUS" size="16" styleClass="button-icon"/>
+            </graphic>
+            <tooltip>
+                <Tooltip text="Add new user"/>
+            </tooltip>
+        </Button>
+    </HBox>
+
+    <!-- Search and Filter Section -->
+    <VBox spacing="15" styleClass="search-section">
+        <HBox spacing="15" alignment="CENTER_LEFT" styleClass="search-container">
+            <padding>
+                <Insets top="18" right="25" bottom="18" left="25" />
+            </padding>
+            <HBox HBox.hgrow="ALWAYS" alignment="CENTER_LEFT" spacing="12" styleClass="search-field-container">
+                <FontAwesomeIconView glyphName="SEARCH" size="16" styleClass="search-icon" />
+                <TextField fx:id="searchField" promptText="Search users by name, email, or role..." HBox.hgrow="ALWAYS" styleClass="search-field" />
+            </HBox>
+            <Separator orientation="VERTICAL" styleClass="filter-separator"/>
+            <HBox alignment="CENTER" spacing="10">
+                <FontAwesomeIconView glyphName="FILTER" size="16" styleClass="filter-icon" />
+                <ComboBox fx:id="roleFilter" promptText="Role" styleClass="filter-combo" />
+            </HBox>
+            <Button text="Search" onAction="#handleSearch" styleClass="search-button">
+                <graphic>
+                    <FontAwesomeIconView glyphName="SEARCH" size="16" />
+                </graphic>
+            </Button>
+            <Button text="Clear" onAction="#handleClearFilters" styleClass="clear-button">
+                <graphic>
+                    <FontAwesomeIconView glyphName="TIMES" size="16" />
+                </graphic>
+            </Button>
+        </HBox>
+    </VBox>
+
+    <!-- Users Cards Container -->
+    <StackPane VBox.vgrow="ALWAYS" styleClass="cards-stack-container">
+        <ScrollPane fitToWidth="true" styleClass="cards-scroll-pane">
+            <FlowPane fx:id="userCards" hgap="25" vgap="25" styleClass="user-cards-container">
+                <padding>
+                    <Insets top="20" right="20" bottom="20" left="20" />
+                </padding>
+            </FlowPane>
+        </ScrollPane>
+        
+        <!-- Empty State -->
+        <VBox fx:id="emptyState" alignment="CENTER" spacing="15" styleClass="empty-state-container" visible="false" managed="false">
+            <FontAwesomeIconView glyphName="USERS" size="48" styleClass="empty-state-icon"/>
+            <Label text="No users found" styleClass="empty-state-text"/>
+            <Label text="Try adjusting your search filters" styleClass="empty-state-subtext"/>
+            <Button text="Clear Filters" onAction="#handleClearFilters" styleClass="empty-state-button">
+                <graphic>
+                    <FontAwesomeIconView glyphName="REFRESH" size="14"/>
+                </graphic>
+            </Button>
+        </VBox>
+        
+        <!-- Loading Indicator -->
+        <StackPane fx:id="loadingPane" styleClass="loading-pane" visible="false" managed="false">
+            <VBox alignment="CENTER" spacing="15">
+                <ProgressIndicator styleClass="loading-indicator"/>
+                <Label text="Loading users..." styleClass="loading-text"/>
+            </VBox>
+        </StackPane>
+    </StackPane>
+
+    <!-- Footer with Item Count -->
+    <HBox alignment="CENTER_RIGHT" spacing="20">
+        <Label fx:id="itemCountLabel" text="Showing 0 of 0 users" styleClass="items-count-label"/>
+    </HBox>
+</VBox>

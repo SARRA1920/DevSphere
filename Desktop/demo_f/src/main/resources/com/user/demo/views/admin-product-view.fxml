@@ -1,0 +1,205 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.Font?>
+<?import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView?>
+
+<AnchorPane id="mainContainer" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.user.demo.controller.AdminProductController">
+    <children>
+        <VBox spacing="20.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+            <children>
+                <!-- Header Section with Title and Stats -->
+                <HBox styleClass="content-container" alignment="CENTER_LEFT" spacing="15.0">
+                    <children>
+                        <!-- Title with accent -->
+                        <VBox styleClass="title-container">
+                            <children>
+                                <HBox alignment="CENTER_LEFT" spacing="10">
+                                    <children>
+                                        <FontAwesomeIconView glyphName="SHOPPING_CART" size="24" styleClass="stats-icon" fill="#3498db" />
+                                        <Label styleClass="page-title" text="Gestion des Produits">
+                                            <font>
+                                                <Font name="System Bold" size="24.0" />
+                                            </font>
+                                        </Label>
+                                    </children>
+                                </HBox>
+                                <Pane styleClass="title-accent" prefHeight="3.0" prefWidth="100.0" />
+                            </children>
+                        </VBox>
+                        
+                        <!-- Stats -->
+                        <HBox styleClass="stats-pill" alignment="CENTER" spacing="10" prefHeight="40">
+                            <padding>
+                                <Insets left="15" right="15" />
+                            </padding>
+                            <children>
+                                <FontAwesomeIconView glyphName="CUBES" styleClass="stats-icon" />
+                                <Label fx:id="productCountLabel" styleClass="total-records" text="0 produits" />
+                            </children>
+                        </HBox>
+                        
+                        <Pane HBox.hgrow="ALWAYS" />
+                        
+                        <!-- Search and Control Buttons -->
+                        <HBox styleClass="search-container" alignment="CENTER" spacing="10">
+                            <padding>
+                                <Insets left="15" right="15" top="5" bottom="5" />
+                            </padding>
+                            <children>
+                                <HBox styleClass="search-field-container">
+                                    <children>
+                                        <FontAwesomeIconView glyphName="SEARCH" styleClass="search-icon" />
+                                        <TextField fx:id="searchField" prefWidth="250.0" styleClass="search-field" promptText="Rechercher un produit..." />
+                                    </children>
+                                </HBox>
+                                
+                                <Separator orientation="VERTICAL" styleClass="filter-separator" />
+                                
+                                <Button fx:id="searchButton" styleClass="search-button" mnemonicParsing="false" text="Rechercher">
+                                    <graphic>
+                                        <FontAwesomeIconView glyphName="SEARCH" />
+                                    </graphic>
+                                </Button>
+                                
+                                <Button fx:id="clearButton" styleClass="clear-button" mnemonicParsing="false" text="Effacer">
+                                    <graphic>
+                                        <FontAwesomeIconView glyphName="TIMES" />
+                                    </graphic>
+                                </Button>
+                                
+                                <Button fx:id="addButton" styleClass="form-button" mnemonicParsing="false" text="Ajouter un produit">
+                                    <graphic>
+                                        <FontAwesomeIconView glyphName="PLUS" />
+                                    </graphic>
+                                </Button>
+                            </children>
+                        </HBox>
+                    </children>
+                    <padding>
+                        <Insets bottom="10.0" left="20.0" right="20.0" top="20.0" />
+                    </padding>
+                </HBox>
+
+                <!-- Status Label -->
+                <Label fx:id="statusLabel" text="" styleClass="status-label">
+                    <padding>
+                        <Insets left="20.0" right="20.0" />
+                    </padding>
+                </Label>
+
+                <!-- Main Content Section -->
+                <StackPane VBox.vgrow="ALWAYS">
+                    <children>
+                        <!-- Empty State - Shown when no products -->
+                        <VBox fx:id="emptyStateContainer" styleClass="empty-state-container" alignment="CENTER" visible="false" managed="false">
+                            <children>
+                                <FontAwesomeIconView glyphName="CUBES" size="80" styleClass="empty-state-icon" />
+                                <Label styleClass="empty-state-text" text="Aucun produit trouvé" />
+                                <Label styleClass="empty-state-subtext" text="Vous n'avez pas encore ajouté de produits à votre catalogue." />
+                                <Button fx:id="emptyStateAddButton" styleClass="empty-state-button" text="Ajouter un produit">
+                                    <graphic>
+                                        <FontAwesomeIconView glyphName="PLUS" />
+                                    </graphic>
+                                    <VBox.margin>
+                                        <Insets top="15.0" />
+                                    </VBox.margin>
+                                </Button>
+                            </children>
+                        </VBox>
+                        
+                        <!-- Products Card View -->
+                        <ScrollPane fx:id="scrollPane" fitToWidth="true" styleClass="cards-scroll-pane">
+                            <content>
+                                <VBox>
+                                    <children>
+                                        <FlowPane fx:id="productsContainer" styleClass="cards-container" hgap="20" vgap="20">
+                                            <padding>
+                                                <Insets left="20.0" right="20.0" top="10.0" bottom="20.0" />
+                                            </padding>
+                                        </FlowPane>
+                                    </children>
+                                </VBox>
+                            </content>
+                        </ScrollPane>
+                        
+                        <!-- Product Form Section -->
+                        <VBox fx:id="formContainer" spacing="15.0" styleClass="form-container" visible="false" managed="false">
+                            <children>
+                                <HBox alignment="CENTER_LEFT" spacing="10">
+                                    <children>
+                                        <Label fx:id="formTitle" styleClass="form-title" text="Ajouter un produit">
+                                            <font>
+                                                <Font name="System Bold" size="18.0" />
+                                            </font>
+                                        </Label>
+                                        <Pane HBox.hgrow="ALWAYS" />
+                                        <Button fx:id="closeFormButton" styleClass="cancel-button" mnemonicParsing="false">
+                                            <graphic>
+                                                <FontAwesomeIconView glyphName="TIMES" fill="WHITE" />
+                                            </graphic>
+                                        </Button>
+                                    </children>
+                                </HBox>
+
+                                <Label styleClass="form-label" text="Titre" />
+                                <TextField fx:id="titreField" promptText="Entrer le titre du produit" />
+
+                                <Label styleClass="form-label" text="Description" />
+                                <TextArea fx:id="descriptionField" prefHeight="100.0" wrapText="true" promptText="Entrer la description du produit" />
+
+                                <HBox spacing="15">
+                                    <children>
+                                        <VBox spacing="5" HBox.hgrow="ALWAYS">
+                                            <children>
+                                                <Label styleClass="form-label" text="Prix" />
+                                                <TextField fx:id="prixField" promptText="Entrer le prix du produit" />
+                                            </children>
+                                        </VBox>
+                                        <VBox spacing="5" HBox.hgrow="ALWAYS">
+                                            <children>
+                                                <Label styleClass="form-label" text="Quantité" />
+                                                <TextField fx:id="quantiteField" promptText="Entrer la quantité disponible" />
+                                            </children>
+                                        </VBox>
+                                    </children>
+                                </HBox>
+
+                                <HBox alignment="CENTER_RIGHT" spacing="10.0">
+                                    <children>
+                                        <Button fx:id="deleteButton" styleClass="form-button, delete-button" mnemonicParsing="false" text="Supprimer">
+                                            <graphic>
+                                                <FontAwesomeIconView glyphName="TRASH" fill="WHITE" />
+                                            </graphic>
+                                        </Button>
+                                        <Button fx:id="updateButton" styleClass="form-button" mnemonicParsing="false" text="Modifier">
+                                            <graphic>
+                                                <FontAwesomeIconView glyphName="EDIT" fill="WHITE" />
+                                            </graphic>
+                                        </Button>
+                                        <Button fx:id="saveButton" styleClass="form-button" defaultButton="true" mnemonicParsing="false" text="Enregistrer">
+                                            <graphic>
+                                                <FontAwesomeIconView glyphName="SAVE" fill="WHITE" />
+                                            </graphic>
+                                        </Button>
+                                    </children>
+                                    <VBox.margin>
+                                        <Insets top="10.0" />
+                                    </VBox.margin>
+                                </HBox>
+                            </children>
+                            <padding>
+                                <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+                            </padding>
+                            <StackPane.margin>
+                                <Insets bottom="20.0" left="20.0" right="20.0" top="5.0" />
+                            </StackPane.margin>
+                        </VBox>
+                    </children>
+                </StackPane>
+            </children>
+        </VBox>
+    </children>
+</AnchorPane>

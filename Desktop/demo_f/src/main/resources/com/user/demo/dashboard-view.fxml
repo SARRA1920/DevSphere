@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.effect.DropShadow?>
+<?import javafx.scene.paint.Color?>
+<?import de.jensd.fx.glyphs.fontawesome.*?>
+
+<BorderPane xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml"
+            fx:controller="com.user.demo.controller.DashboardController"
+            prefHeight="800.0" prefWidth="1200.0"
+            stylesheets="@styles.css">
+    
+    <!-- Left sidebar -->
+    <left>
+        <VBox spacing="10" styleClass="sidebar">
+            <padding>
+                <Insets top="20" right="10" bottom="20" left="10" />
+            </padding>
+            
+            <HBox alignment="CENTER" styleClass="logo-container">
+                <Label text="DevSphere" styleClass="logo-text">
+                    <font>
+                        <Font name="System Bold" size="22.0" />
+                    </font>
+                </Label>
+            </HBox>
+            
+            <VBox alignment="CENTER" spacing="5" styleClass="user-info">
+                <Label text="Welcome" styleClass="welcome-text" />
+                <Label fx:id="currentUserLabel" text="User" styleClass="user-name">
+                    <font>
+                        <Font name="System Bold" size="14.0" />
+                    </font>
+                </Label>
+            </VBox>
+            
+            <Separator />
+            
+            <Button fx:id="btnDashboard" text="Dashboard" styleClass="sidebar-button" onAction="#showDashboard">
+                <graphic>
+                    <FontAwesomeIconView glyphName="HOME" size="16" styleClass="sidebar-icon" />
+                </graphic>
+            </Button>
+
+            <Button fx:id="btnProducts" text="Products" styleClass="sidebar-button" onAction="#showProducts">
+                <graphic>
+                    <FontAwesomeIconView glyphName="SHOPPING_CART" size="16" styleClass="sidebar-icon" />
+                </graphic>
+            </Button>
+            
+            <Button fx:id="btnInscription" text="Cours" styleClass="sidebar-button" onAction="#showInscription">
+                <graphic>
+                    <FontAwesomeIconView glyphName="BOOK" size="16" styleClass="sidebar-icon" />
+                </graphic>
+            </Button>
+            
+            <Button fx:id="btnExercices" text="Exercices" styleClass="sidebar-button" onAction="#showExercices">
+                <graphic>
+                    <FontAwesomeIconView glyphName="CODE" size="16" styleClass="sidebar-icon" />
+                </graphic>
+            </Button>
+            
+            <Button fx:id="btnReclamations" text="Reclamations" styleClass="sidebar-button" onAction="#showReclamations">
+                <graphic>
+                    <FontAwesomeIconView glyphName="LIST_ALT" size="16" styleClass="sidebar-icon" />
+                </graphic>
+            </Button>
+            
+            <Button fx:id="btnNewReclamation" text="New Reclamation" styleClass="sidebar-button" onAction="#showNewReclamation">
+                <graphic>
+                    <FontAwesomeIconView glyphName="PLUS_CIRCLE" size="16" styleClass="sidebar-icon" />
+                </graphic>
+            </Button>
+            
+            <Button fx:id="btnReponses" text="Reponses" styleClass="sidebar-button" onAction="#showResponses">
+                <graphic>
+                    <FontAwesomeIconView glyphName="REPLY_ALL" size="16" styleClass="sidebar-icon" />
+                </graphic>
+            </Button>
+            
+            <Button fx:id="btnProfile" text="Profile" styleClass="sidebar-button" onAction="#showProfile">
+                <graphic>
+                    <FontAwesomeIconView glyphName="USER" size="16" styleClass="sidebar-icon" />
+                </graphic>
+            </Button>
+            
+            <Region VBox.vgrow="ALWAYS" />
+            
+            <Button fx:id="btnSettings" text="Settings" styleClass="sidebar-button" onAction="#showSettings">
+                <graphic>
+                    <FontAwesomeIconView glyphName="COG" size="16" styleClass="sidebar-icon" />
+                </graphic>
+            </Button>
+            
+            <Button fx:id="btnLogout" text="Logout" styleClass="sidebar-button, logout-button" onAction="#handleLogout">
+                <graphic>
+                    <FontAwesomeIconView glyphName="SIGN_OUT" size="16" styleClass="sidebar-icon" />
+                </graphic>
+            </Button>
+        </VBox>
+    </left>
+    
+    <!-- Main content area -->
+    <center>
+        <StackPane fx:id="contentArea" styleClass="content-area">
+            <!-- This is where different views will be loaded -->
+            
+            <!-- Default welcome screen -->
+            <VBox alignment="CENTER" spacing="20" styleClass="welcome-screen">
+                <Label text="Welcome to DevSphere" styleClass="welcome-title">
+                    <font>
+                        <Font name="System Bold" size="32.0" />
+                    </font>
+                </Label>
+                
+                <Label text="Learning Management System" styleClass="welcome-subtitle">
+                    <font>
+                        <Font size="18.0" />
+                    </font>
+                </Label>
+            </VBox>
+        </StackPane>
+    </center>
+</BorderPane>

@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.text.Font?>
+<?import de.jensd.fx.glyphs.fontawesome.*?>
+
+<VBox xmlns="http://javafx.com/javafx"
+      xmlns:fx="http://javafx.com/fxml"
+      fx:controller="com.user.demo.controller.ReponseListController"
+      spacing="15" styleClass="content-panel">
+    
+    <padding>
+        <Insets top="20" right="20" bottom="20" left="20" />
+    </padding>
+    
+    <HBox alignment="CENTER_LEFT" spacing="10">
+        <Label text="Reponses" styleClass="view-title">
+            <font>
+                <Font name="System Bold" size="24.0" />
+            </font>
+        </Label>
+        
+        <Region HBox.hgrow="ALWAYS" />
+        
+        <Button fx:id="btnAddReponse" text="Add Reponse" styleClass="form-button" onAction="#handleAddReponse">
+            <graphic>
+                <FontAwesomeIconView glyphName="PLUS" size="14" styleClass="button-icon" />
+            </graphic>
+        </Button>
+        
+        <Button fx:id="btnRefresh" text="Refresh" styleClass="form-button" onAction="#handleRefresh">
+            <graphic>
+                <FontAwesomeIconView glyphName="REFRESH" size="14" styleClass="button-icon" />
+            </graphic>
+        </Button>
+    </HBox>
+    
+    <HBox spacing="10" alignment="CENTER_LEFT">
+        <TextField fx:id="txtSearch" promptText="Search reponses..." prefWidth="300" />
+        
+        <Button fx:id="btnClearSearch" text="Clear" onAction="#handleClearSearch">
+            <graphic>
+                <FontAwesomeIconView glyphName="TIMES" size="14" styleClass="button-icon" />
+            </graphic>
+        </Button>
+    </HBox>
+    
+    <!-- Replace TableView with a ScrollPane containing a FlowPane for cards -->
+    <ScrollPane VBox.vgrow="ALWAYS" fitToWidth="true" styleClass="edge-to-edge">
+        <FlowPane fx:id="responsesContainer" styleClass="cards-container" hgap="15" vgap="15" />
+    </ScrollPane>
+    
+    <HBox alignment="CENTER_RIGHT" spacing="10">
+        <Label fx:id="lblTotalRecords" text="Total: 0 records" />
+    </HBox>
+</VBox>

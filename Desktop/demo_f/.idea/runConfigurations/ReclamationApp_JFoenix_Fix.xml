@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="RunManager">
+    <configuration name="ReclamationApp (JFoenix Fix)" type="Application" factoryName="Application">
+      <option name="MAIN_CLASS_NAME" value="com.user.demo.JFoenixCompatLauncher" />
+      <module name="demo" />
+      <option name="VM_PARAMETERS" value="--module-path &quot;C:\Users\Baha Ayadi\Desktop\javafx-sdk-23.0.2\lib&quot; --add-modules javafx.controls,javafx.fxml,java.sql" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+  </component>
+</project>

@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox xmlns="http://javafx.com/javafx"
+      xmlns:fx="http://javafx.com/fxml"
+      fx:controller="com.user.demo.controller.ListeTentativesController"
+      spacing="10"
+      stylesheets="@../styles/styles.css">
+
+    <padding>
+        <Insets top="20" right="20" bottom="20" left="20"/>
+    </padding>
+
+    <!-- En-tête -->
+    <HBox spacing="10" alignment="CENTER_LEFT">
+        <Label text="Liste des Tentatives" styleClass="title-label"/>
+        <Region HBox.hgrow="ALWAYS"/>
+        <TextField fx:id="searchField" promptText="Rechercher..." styleClass="search-field"/>
+    </HBox>
+
+    <!-- TableView des tentatives -->
+    <TableView fx:id="tentativeTable" VBox.vgrow="ALWAYS">
+        <columnResizePolicy>
+            <TableView fx:constant="CONSTRAINED_RESIZE_POLICY"/>
+        </columnResizePolicy>
+        <columns>
+            <TableColumn fx:id="exerciceColumn" text="Exercice" minWidth="150">
+                <style>
+                    -fx-alignment: CENTER-LEFT;
+                </style>
+            </TableColumn>
+            <TableColumn fx:id="dateColumn" text="Date" minWidth="120">
+                <style>
+                    -fx-alignment: CENTER;
+                </style>
+            </TableColumn>
+            <TableColumn fx:id="noteColumn" text="Note" minWidth="80">
+                <style>
+                    -fx-alignment: CENTER;
+                </style>
+            </TableColumn>
+            <TableColumn fx:id="statutColumn" text="Statut" minWidth="100">
+                <style>
+                    -fx-alignment: CENTER;
+                </style>
+            </TableColumn>
+            <TableColumn fx:id="actionsColumn" text="Actions" minWidth="150">
+                <style>
+                    -fx-alignment: CENTER;
+                </style>
+            </TableColumn>
+        </columns>
+        <placeholder>
+            <Label text="Aucune tentative trouvée"/>
+        </placeholder>
+    </TableView>
+
+    <!-- Barre de statut -->
+    <HBox spacing="10" alignment="CENTER_LEFT">
+        <Label fx:id="statusLabel" styleClass="status-label"/>
+        <Region HBox.hgrow="ALWAYS"/>
+        <Button text="Actualiser" onAction="#handleRefresh" styleClass="button-primary"/>
+    </HBox>
+
+</VBox> 
