@@ -1,0 +1,75 @@
+/* Action button colors */
+.action-button-success {
+    -fx-background-color: #2ecc71;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-padding: 6 10 6 10;
+    -fx-background-radius: 4px;
+    -fx-min-width: 32px;
+    -fx-min-height: 32px;
+    -fx-cursor: hand;
+    -fx-effect: dropshadow(gaussian, rgba(46, 204, 113, 0.3), 3, 0, 0, 1);
+}
+
+.action-button-success:hover {
+    -fx-background-color: #27ae60;
+    -fx-effect: dropshadow(gaussian, rgba(46, 204, 113, 0.5), 5, 0, 0, 2);
+    -fx-translate-y: -1px;
+}
+
+.action-button-success:pressed {
+    -fx-background-color: #219653;
+    -fx-effect: dropshadow(gaussian, rgba(46, 204, 113, 0.2), 2, 0, 0, 0);
+    -fx-translate-y: 1px;
+}
+
+/* Styles pour les tableaux */
+.custom-table {
+    -fx-background-color: white;
+    -fx-border-color: #e0e0e0;
+    -fx-border-radius: 4px;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.1), 5, 0, 0, 1);
+}
+
+.custom-table .table-row-cell {
+    -fx-min-height: 40px;
+    -fx-padding: 5 0 5 0;
+}
+
+.custom-table .table-row-cell:odd {
+    -fx-background-color: #f9f9f9;
+}
+
+.custom-table .table-row-cell:selected {
+    -fx-background-color: derive(#3498db, 50%);
+}
+
+.custom-table .table-column {
+    -fx-padding: 5 10 5 10;
+    -fx-alignment: CENTER-LEFT;
+    -fx-border-color: transparent transparent #e0e0e0 transparent;
+}
+
+.custom-table .column-header {
+    -fx-background-color: #3498db;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-padding: 8 5 8 5;
+}
+
+.custom-table .column-header .label {
+    -fx-text-fill: white;
+    -fx-alignment: CENTER-LEFT;
+    -fx-font-weight: bold;
+}
+
+/* Style pour la colonne de statut */
+.status-cell-active {
+    -fx-text-fill: #27ae60;
+    -fx-font-weight: bold;
+}
+
+.status-cell-inactive {
+    -fx-text-fill: #e74c3c;
+    -fx-font-weight: bold;
+} 

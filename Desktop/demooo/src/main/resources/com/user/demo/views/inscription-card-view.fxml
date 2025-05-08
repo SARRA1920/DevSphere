@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.Font?>
+<?import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView?>
+
+<VBox spacing="20" xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml" 
+      fx:controller="com.user.demo.controller.InscriptionCardViewController"
+      styleClass="content-view">
+    
+    <padding>
+        <Insets top="20" right="20" bottom="20" left="20"/>
+    </padding>
+    
+    <!-- Header Section -->
+    <HBox alignment="CENTER_LEFT" spacing="15">
+        <FontAwesomeIconView glyphName="LIST_ALT" size="24" fill="#3498db"/>
+        <Label text="Gestion des Inscriptions" styleClass="section-title">
+            <font>
+                <Font name="System Bold" size="20.0" />
+            </font>
+        </Label>
+        <Region HBox.hgrow="ALWAYS" />
+        <Button fx:id="addInscriptionButton" text="+ AJOUTER UNE INSCRIPTION" onAction="#handleAddInscription" 
+                style="-fx-background-color: #2ecc71; -fx-text-fill: white; -fx-font-weight: bold; 
+                       -fx-padding: 12 20; -fx-background-radius: 4; -fx-font-size: 14px;
+                       -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.2), 5, 0, 0, 2);">
+            <graphic>
+                <FontAwesomeIconView glyphName="PLUS_CIRCLE" size="18" fill="white"/>
+            </graphic>
+        </Button>
+    </HBox>
+    
+    <!-- Filter & Search Section -->
+    <HBox spacing="10" alignment="CENTER_LEFT">
+        <TextField fx:id="searchField" promptText="Rechercher des inscriptions..." HBox.hgrow="ALWAYS"
+                   onKeyReleased="#handleSearch"/>
+        <ComboBox fx:id="statusFilter" promptText="Statut" prefWidth="150"
+                  onAction="#handleStatusFilter"/>
+        <ComboBox fx:id="courseFilter" promptText="Cours" prefWidth="200"
+                  onAction="#handleCourseFilter"/>
+        <Button fx:id="clearFiltersButton" text="Effacer" onAction="#handleClearFilters">
+            <graphic>
+                <FontAwesomeIconView glyphName="TIMES" size="14"/>
+            </graphic>
+        </Button>
+    </HBox>
+    
+    <!-- Cards Section -->
+    <ScrollPane fitToWidth="true" VBox.vgrow="ALWAYS" styleClass="transparent-scroll-pane">
+        <FlowPane fx:id="inscriptionsContainer" hgap="20" vgap="20">
+            <padding>
+                <Insets top="10" right="10" bottom="10" left="10"/>
+            </padding>
+        </FlowPane>
+    </ScrollPane>
+    
+    <!-- Status Bar -->
+    <HBox spacing="10" alignment="CENTER_RIGHT" styleClass="status-bar">
+        <Label fx:id="statusLabel" text="Total: 0 inscriptions"/>
+    </HBox>
+</VBox> 

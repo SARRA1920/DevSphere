@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.text.Font?>
+
+<VBox spacing="20" alignment="TOP_CENTER" styleClass="content-view"
+      xmlns="http://javafx.com/javafx"
+      xmlns:fx="http://javafx.com/fxml"
+      fx:controller="com.user.demo.controller.InscriptionController">
+
+    <padding>
+        <Insets top="30" right="30" bottom="30" left="30"/>
+    </padding>
+
+    <!-- En-tête avec titre et filtres -->
+    <VBox spacing="15">
+        <Label text="Inscription aux Cours" styleClass="view-title">
+            <font>
+                <Font name="System Bold" size="24.0"/>
+            </font>
+        </Label>
+
+        <!-- Barre de recherche et filtres -->
+        <HBox spacing="10" alignment="CENTER">
+            <TextField fx:id="searchField" promptText="Rechercher un cours..." HBox.hgrow="ALWAYS"/>
+            <ComboBox fx:id="categoryFilter" promptText="Catégorie"/>
+            <ComboBox fx:id="statusFilter" promptText="Statut"/>
+            <Button text="Réinitialiser" onAction="#handleClearFilters"/>
+        </HBox>
+    </VBox>
+
+    <!-- Conteneur des cartes de cours -->
+    <ScrollPane fitToWidth="true" VBox.vgrow="ALWAYS" styleClass="edge-to-edge">
+        <FlowPane fx:id="coursContainer" hgap="20" vgap="20">
+            <padding>
+                <Insets top="10" right="10" bottom="10" left="10"/>
+            </padding>
+        </FlowPane>
+    </ScrollPane>
+
+</VBox> 

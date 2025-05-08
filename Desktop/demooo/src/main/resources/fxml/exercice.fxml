@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+<?import com.jfoenix.controls.JFXButton?>
+<?import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView?>
+<?import java.net.URL?>
+
+<VBox fx:id="exerciceContainer" spacing="10" padding="20"
+      xmlns:fx="http://javafx.com/fxml"
+      fx:controller="controllers.ExerciceController">
+    
+    <stylesheets>
+        <URL value="@../styles/exercice.css"/>
+    </stylesheets>
+
+    <Label text="Évaluation d'exercice" styleClass="title"/>
+
+    <VBox spacing="5">
+        <Label text="Votre réponse :"/>
+        <TextField fx:id="reponseTextField" promptText="Entrez votre réponse ici"/>
+    </VBox>
+
+    <HBox spacing="10" alignment="CENTER_RIGHT">
+        <JFXButton fx:id="helpButton" 
+                   text="Besoin d'aide ?"
+                   styleClass="help-button"
+                   style="-fx-background-color: #4CAF50; -fx-text-fill: white;">
+            <graphic>
+                <FontAwesomeIconView glyphName="QUESTION_CIRCLE" fill="white"/>
+            </graphic>
+        </JFXButton>
+
+    <Button fx:id="soumettreButton" text="Soumettre" 
+            styleClass="submit-button"/>
+    </HBox>
+
+    <Label fx:id="resultLabel" styleClass="result-label" 
+           wrapText="true"/>
+
+    <VBox spacing="5">
+        <Label text="Détails de l'évaluation :"/>
+        <ListView fx:id="questionListView" VBox.vgrow="ALWAYS"
+                  styleClass="detail-list"/>
+    </VBox>
+
+</VBox> 

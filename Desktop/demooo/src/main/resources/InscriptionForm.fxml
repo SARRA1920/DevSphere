@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox spacing="15" xmlns:fx="http://javafx.com/fxml" fx:controller="com.user.demo.controller.InscriptionFormController">
+    <padding>
+        <Insets top="20" right="20" bottom="20" left="20"/>
+    </padding>
+
+    <Label fx:id="formTitleLabel" styleClass="form-title" />
+
+    <Label text="Nom:" />
+    <TextField fx:id="nomField" />
+
+    <Label text="Email:" />
+    <TextField fx:id="emailField" />
+
+    <Label text="Téléphone:" />
+    <TextField fx:id="telephoneField" />
+
+    <Label text="Cours:" />
+    <ComboBox fx:id="coursComboBox" disable="true" />
+
+    <Label text="Date d'inscription:" />
+    <DatePicker fx:id="dateInscriptionPicker" />
+
+    <Label text="Statut:" />
+    <ComboBox fx:id="statutComboBox" />
+
+    <HBox spacing="10" alignment="CENTER_RIGHT">
+        <Button fx:id="actionButton" text="S'inscrire" onAction="#handleAction" defaultButton="true" />
+        <Button fx:id="cancelButton" text="Annuler" onAction="#handleCancel" cancelButton="true" />
+    </HBox>
+
+    <stylesheets>
+        <URL value="@styles.css" />
+    </stylesheets>
+</VBox> 

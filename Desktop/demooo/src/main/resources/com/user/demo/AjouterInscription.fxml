@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox spacing="10" alignment="CENTER" xmlns="http://javafx.com/javafx/20.0.2" xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="com.esprit.controller.Inscription.AjouterInscriptionControler">
+    <padding>
+        <Insets bottom="20" left="20" right="20" top="20"/>
+    </padding>
+
+    <Label text="Nouvelle Inscription" style="-fx-font-size: 20px; -fx-font-weight: bold;"/>
+
+    <GridPane hgap="10" vgap="10">
+        <Label text="Nom:" GridPane.columnIndex="0" GridPane.rowIndex="0"/>
+        <TextField fx:id="nomField" GridPane.columnIndex="1" GridPane.rowIndex="0"/>
+
+        <Label text="Email:" GridPane.columnIndex="0" GridPane.rowIndex="1"/>
+        <TextField fx:id="emailField" GridPane.columnIndex="1" GridPane.rowIndex="1"/>
+
+        <Label text="Téléphone:" GridPane.columnIndex="0" GridPane.rowIndex="2"/>
+        <TextField fx:id="telephoneField" GridPane.columnIndex="1" GridPane.rowIndex="2"/>
+
+        <Label text="Cours:" GridPane.columnIndex="0" GridPane.rowIndex="3"/>
+        <ComboBox fx:id="coursComboBox" GridPane.columnIndex="1" GridPane.rowIndex="3"/>
+
+        <Label text="Date d'inscription:" GridPane.columnIndex="0" GridPane.rowIndex="4"/>
+        <DatePicker fx:id="dateInscriptionPicker" GridPane.columnIndex="1" GridPane.rowIndex="4"/>
+
+        <Label text="Statut:" GridPane.columnIndex="0" GridPane.rowIndex="5"/>
+        <ComboBox fx:id="statutComboBox" GridPane.columnIndex="1" GridPane.rowIndex="5"/>
+    </GridPane>
+
+    <HBox spacing="10" alignment="CENTER">
+        <Button text="Ajouter" onAction="#handleAjouter"/>
+        <Button text="Effacer" onAction="#clearFields"/>
+    </HBox>
+</VBox> 

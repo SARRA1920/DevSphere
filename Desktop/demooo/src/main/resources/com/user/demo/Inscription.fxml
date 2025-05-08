@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.collections.FXCollections?>
+<?import java.lang.String?>
+
+<VBox spacing="10" alignment="CENTER" xmlns="http://javafx.com/javafx/17.0.9" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.user.demo.controller.InscriptionController">
+    <padding>
+        <Insets bottom="20" left="20" right="20" top="20"/>
+    </padding>
+
+    <Label text="Gestion des Inscriptions" style="-fx-font-size: 20px; -fx-font-weight: bold;"/>
+
+    <HBox spacing="10" alignment="CENTER_RIGHT">
+        <TextField fx:id="searchField" promptText="Rechercher par nom..." HBox.hgrow="ALWAYS" />
+        <ToggleButton fx:id="sortButton" text="Trier par nom ↑" onAction="#handleSort"/>
+        <Button text="Ajouter une inscription" onAction="#handleOpenAjoutForm"/>
+    </HBox>
+
+    <TableView fx:id="inscriptionsTable" VBox.vgrow="ALWAYS">
+        <columns>
+            <TableColumn fx:id="idColumn" text="ID"/>
+            <TableColumn fx:id="nomColumn" text="Nom"/>
+            <TableColumn fx:id="emailColumn" text="Email"/>
+            <TableColumn fx:id="telephoneColumn" text="Téléphone"/>
+            <TableColumn fx:id="coursColumn" text="Cours"/>
+            <TableColumn fx:id="dateInscriptionColumn" text="Date d'inscription"/>
+            <TableColumn fx:id="statutColumn" text="Statut"/>
+        </columns>
+    </TableView>
+    
+    <HBox spacing="10" alignment="CENTER">
+        <Button text="Modifier" onAction="#handleOpenModifierForm"/>
+        <Button text="Supprimer" onAction="#handleSupprimer"/>
+    </HBox>
+</VBox>

@@ -1,0 +1,479 @@
+/* Styles généraux */
+.root {
+    -fx-font-family: 'Segoe UI', Arial, sans-serif;
+    -fx-background-color: #f0f2f5;
+}
+
+/* Variables de couleurs */
+* {
+    -primary-color: #4361ee;
+    -primary-dark: #3046b1;
+    -primary-light: #e9ecff;
+    -secondary-color: #ff4081;
+    -secondary-dark: #c51162;
+    -success-color: #4caf50;
+    -warning-color: #ff9800;
+    -error-color: #f44336;
+    -gray-light: #f8f9fa;
+    -gray-medium: #e9ecef;
+    -text-primary: #2c3e50;
+    -text-secondary: #546e7a;
+}
+
+/* Bouton d'ajout de cours */
+.button-primary {
+    -fx-background-color: linear-gradient(to right, #4361ee, #3a56e3);
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-padding: 10 20 10 20;
+    -fx-background-radius: 20px;
+    -fx-border-radius: 20px;
+    -fx-font-size: 14px;
+    -fx-cursor: hand;
+    -fx-effect: dropshadow(gaussian, rgba(67, 97, 238, 0.3), 8, 0, 0, 2);
+}
+
+.button-primary:hover {
+    -fx-background-color: linear-gradient(to right, #3a56e3, #304bd6);
+    -fx-effect: dropshadow(gaussian, rgba(67, 97, 238, 0.5), 10, 0, 0, 3);
+    -fx-translate-y: -1px;
+    -fx-scale-x: 1.03;
+    -fx-scale-y: 1.03;
+}
+
+.button-primary:pressed {
+    -fx-background-color: linear-gradient(to right, #304bd6, #3a56e3);
+    -fx-effect: dropshadow(gaussian, rgba(67, 97, 238, 0.2), 4, 0, 0, 1);
+    -fx-translate-y: 1px;
+    -fx-scale-x: 0.97;
+    -fx-scale-y: 0.97;
+}
+
+/* Barre de recherche et filtres */
+#searchField {
+    -fx-background-color: white;
+    -fx-background-radius: 25px;
+    -fx-border-radius: 25px;
+    -fx-border-color: -gray-medium;
+    -fx-padding: 10 20 10 20;
+    -fx-font-size: 14px;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 5, 0, 0, 1);
+}
+
+#searchField:focused {
+    -fx-border-color: -primary-color;
+    -fx-effect: dropshadow(gaussian, rgba(33,150,243,0.3), 10, 0, 0, 0);
+}
+
+.category-filter {
+    -fx-background-color: white;
+    -fx-background-radius: 20px;
+    -fx-border-radius: 20px;
+    -fx-border-color: -gray-medium;
+    -fx-padding: 8 15 8 15;
+    -fx-font-size: 14px;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 5, 0, 0, 1);
+}
+
+.category-filter:hover {
+    -fx-border-color: -primary-color;
+}
+
+.button-secondary {
+    -fx-background-color: white;
+    -fx-text-fill: #FF4081;
+    -fx-border-color: #FF4081;
+    -fx-border-width: 2px;
+    -fx-border-radius: 20px;
+    -fx-background-radius: 20px;
+    -fx-padding: 8 20 8 20;
+    -fx-font-size: 13px;
+    -fx-font-weight: bold;
+    -fx-cursor: hand;
+    -fx-effect: dropshadow(gaussian, rgba(255,64,129,0.1), 4, 0, 0, 1);
+}
+
+.button-secondary:hover {
+    -fx-background-color: #FFF5F8;
+    -fx-effect: dropshadow(gaussian, rgba(255,64,129,0.2), 6, 0, 0, 2);
+    -fx-translate-y: -1px;
+    -fx-scale-x: 1.03;
+    -fx-scale-y: 1.03;
+}
+
+.button-secondary:pressed {
+    -fx-background-color: #FFE0EB;
+    -fx-effect: dropshadow(gaussian, rgba(255,64,129,0.1), 2, 0, 0, 0);
+    -fx-translate-y: 1px;
+    -fx-scale-x: 0.97;
+    -fx-scale-y: 0.97;
+}
+
+/* Cartes de cours */
+.course-card {
+    -fx-background-color: white;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.2), 10, 0, 0, 1);
+    -fx-background-radius: 6px;
+    -fx-border-radius: 6px;
+    -fx-min-width: 300px;
+    -fx-max-width: 300px;
+    -fx-transition: all 0.3s ease;
+}
+
+.card-hover:hover {
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.3), 15, 0, 0, 3);
+    -fx-translate-y: -3px;
+}
+
+.course-image-container {
+    -fx-background-color: #f0f0f0;
+    -fx-background-radius: 6px 6px 0 0;
+    -fx-border-radius: 6px 6px 0 0;
+}
+
+.course-image {
+    -fx-background-radius: 6px 6px 0 0;
+    -fx-border-radius: 6px 6px 0 0;
+    -fx-effect: innershadow(gaussian, rgba(0,0,0,0.1), 10, 0, 0, 3);
+}
+
+.card-content {
+    -fx-spacing: 10px;
+    -fx-padding: 15px;
+}
+
+.card-number {
+    -fx-text-fill: #7f8c8d;
+    -fx-font-size: 12px;
+    -fx-font-weight: bold;
+}
+
+.card-title {
+    -fx-font-size: 18px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #2c3e50;
+    -fx-wrap-text: true;
+    -fx-max-width: 270px;
+}
+
+.category-badge {
+    -fx-background-color: #3498db;
+    -fx-text-fill: white;
+    -fx-padding: 5px 12px;
+    -fx-background-radius: 30px;
+    -fx-font-size: 12px;
+    -fx-font-weight: bold;
+    -fx-max-width: 150px;
+    -fx-alignment: center;
+}
+
+.card-details {
+    -fx-background-color: #f9f9f9;
+    -fx-background-radius: 4px;
+    -fx-spacing: 8px;
+    -fx-padding: 10px;
+    -fx-margin: 5px 0;
+}
+
+.card-details Label {
+    -fx-text-fill: -text-secondary;
+    -fx-font-size: 14px;
+}
+
+.niveau-badge {
+    -fx-padding: 5px 10px;
+    -fx-background-radius: 4px;
+    -fx-font-weight: bold;
+    -fx-font-size: 12px;
+    -fx-text-fill: white;
+    -fx-alignment: center-left;
+}
+
+.niveau-beginner {
+    -fx-background-color: #27ae60;
+}
+
+.niveau-intermediate {
+    -fx-background-color: #f39c12;
+}
+
+.niveau-advanced {
+    -fx-background-color: #e74c3c;
+}
+
+.niveau-expert {
+    -fx-background-color: #8e44ad;
+}
+
+.course-detail {
+    -fx-font-size: 13px;
+    -fx-text-fill: #34495e;
+}
+
+.duree-icon, .instructeur-icon {
+    -fx-fill: -primary-color;
+    -fx-font-size: 16px;
+}
+
+/* Style du bouton S'inscrire dans les cartes de cours */
+.btn-inscrire {
+    -fx-background-color: linear-gradient(to right, #27ae60, #2ecc71);
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-padding: 12px 30px;
+    -fx-background-radius: 25px;
+    -fx-cursor: hand;
+    -fx-font-size: 14px;
+    -fx-effect: dropshadow(gaussian, rgba(46,204,113,0.3), 10, 0, 0, 2);
+    -fx-min-width: 150px;
+    -fx-alignment: center;
+    -fx-max-width: 200px;
+    -fx-transition: all 0.3s ease;
+}
+
+/* Pour s'assurer que les styles sont bien appliqués */
+.button.btn-inscrire {
+    -fx-background-color: linear-gradient(to right, #2ecc71, #27ae60) !important;
+}
+
+.button.btn-inscrire:hover {
+    -fx-background-color: linear-gradient(to right, #3498db, #2980b9) !important;
+}
+
+.button.btn-inscrire:pressed {
+    -fx-background-color: linear-gradient(to right, #2980b9, #3498db) !important;
+}
+
+/* Animation des boutons */
+.button, .btn-inscrire {
+    -fx-transition-duration: 0.3s;
+    -fx-transition-property: -fx-background-color, -fx-effect, -fx-translate-y, -fx-scale-x, -fx-scale-y;
+}
+
+/* Animation de transition pour les cartes */
+.course-card {
+    -fx-transition: all 0.3s ease-in-out;
+}
+
+/* Container des cours */
+#coursContainer {
+    -fx-background-color: transparent;
+    -fx-padding: 20;
+    -fx-hgap: 25;
+    -fx-vgap: 25;
+}
+
+/* ScrollPane personnalisé */
+.scroll-pane {
+    -fx-background-color: transparent;
+    -fx-padding: 0;
+}
+
+.scroll-pane > .viewport {
+    -fx-background-color: transparent;
+}
+
+.scroll-bar:vertical {
+    -fx-background-color: transparent;
+    -fx-padding: 0 0 0 1;
+}
+
+.scroll-bar:vertical .thumb {
+    -fx-background-color: #90a4ae;
+    -fx-background-radius: 5px;
+}
+
+.scroll-bar:vertical .thumb:hover {
+    -fx-background-color: #607d8b;
+}
+
+/* Style du formulaire d'inscription */
+.inscription-form {
+    -fx-background-color: white;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 10, 0, 0, 2);
+    -fx-background-radius: 8px;
+    -fx-padding: 25px;
+    -fx-max-width: 500px;
+}
+
+/* Titre du formulaire */
+.form-title {
+    -fx-font-size: 24px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #2c3e50;
+    -fx-padding: 0 0 20px 0;
+}
+
+/* Labels */
+.label {
+    -fx-font-size: 14px;
+    -fx-text-fill: #34495e;
+    -fx-font-weight: bold;
+}
+
+/* Champs de texte */
+.text-field {
+    -fx-pref-height: 35px;
+    -fx-background-color: #f8f9fa;
+    -fx-border-color: #e9ecef;
+    -fx-border-radius: 4px;
+    -fx-background-radius: 4px;
+    -fx-padding: 5px 10px;
+    -fx-font-size: 14px;
+}
+
+.text-field:focused {
+    -fx-background-color: white;
+    -fx-border-color: #3498db;
+    -fx-effect: dropshadow(gaussian, rgba(52,152,219,0.2), 5, 0, 0, 0);
+}
+
+/* ComboBox */
+.combo-box {
+    -fx-pref-height: 35px;
+    -fx-background-color: #f8f9fa;
+    -fx-border-color: #e9ecef;
+    -fx-border-radius: 4px;
+    -fx-background-radius: 4px;
+}
+
+.combo-box:focused {
+    -fx-background-color: white;
+    -fx-border-color: #3498db;
+}
+
+.combo-box .list-cell {
+    -fx-padding: 5px 10px;
+    -fx-text-fill: #2c3e50;
+}
+
+.combo-box .arrow-button {
+    -fx-background-color: transparent;
+}
+
+/* DatePicker */
+.date-picker {
+    -fx-pref-height: 35px;
+}
+
+.date-picker .text-field {
+    -fx-background-color: #f8f9fa;
+    -fx-border-color: #e9ecef;
+}
+
+.date-picker:focused .text-field {
+    -fx-background-color: white;
+    -fx-border-color: #3498db;
+}
+
+/* Boutons */
+.button {
+    -fx-pref-height: 35px;
+    -fx-min-width: 100px;
+    -fx-background-radius: 4px;
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+    -fx-cursor: hand;
+    -fx-padding: 8px 16px;
+}
+
+/* Messages d'erreur */
+.error-label {
+    -fx-text-fill: #e74c3c;
+    -fx-font-size: 12px;
+    -fx-padding: 5px 0 0 0;
+}
+
+/* Tooltip d'erreur */
+.tooltip {
+    -fx-background-color: #e74c3c;
+    -fx-text-fill: white;
+    -fx-font-size: 12px;
+    -fx-padding: 5px 10px;
+}
+
+/* GridPane */
+.grid-pane {
+    -fx-hgap: 15;
+    -fx-vgap: 15;
+}
+
+/* Style pour les champs invalides */
+.invalid-field {
+    -fx-border-color: #e74c3c !important;
+    -fx-effect: dropshadow(gaussian, rgba(231,76,60,0.2), 5, 0, 0, 0);
+}
+
+/* Style pour les champs valides */
+.valid-field {
+    -fx-border-color: #2ecc71 !important;
+}
+
+/* Style pour le bouton Effacer les filtres */
+#clearFiltersButton {
+    -fx-background-color: white;
+    -fx-text-fill: #757575;
+    -fx-border-color: #BDBDBD;
+    -fx-border-width: 1px;
+    -fx-border-radius: 20px;
+    -fx-background-radius: 20px;
+    -fx-padding: 8 20 8 20;
+    -fx-font-size: 13px;
+    -fx-font-weight: normal;
+    -fx-cursor: hand;
+}
+
+#clearFiltersButton:hover {
+    -fx-background-color: #F5F5F5;
+    -fx-border-color: #757575;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 4, 0, 0, 1);
+}
+
+#clearFiltersButton:pressed {
+    -fx-background-color: #EEEEEE;
+    -fx-translate-y: 1px;
+}
+
+/* FlowPane styling */
+.flow-pane {
+    -fx-background-color: transparent;
+    -fx-padding: 20px;
+    -fx-hgap: 20px;
+    -fx-vgap: 20px;
+    -fx-alignment: center;
+}
+
+/* Search and filter styles */
+.search-container {
+    -fx-spacing: 10px;
+    -fx-padding: 15px;
+    -fx-background-color: #f5f5f5;
+    -fx-background-radius: 6px;
+}
+
+.search-field {
+    -fx-background-color: white;
+    -fx-background-radius: 20px;
+    -fx-padding: 8px 15px;
+    -fx-border-color: #e0e0e0;
+    -fx-border-radius: 20px;
+    -fx-prompt-text-fill: #95a5a6;
+}
+
+.filter-box {
+    -fx-spacing: 10px;
+    -fx-alignment: center-left;
+}
+
+.filter-label {
+    -fx-font-weight: bold;
+    -fx-text-fill: #2c3e50;
+}
+
+.filter-combo {
+    -fx-background-color: white;
+    -fx-background-radius: 4px;
+    -fx-border-color: #e0e0e0;
+    -fx-border-radius: 4px;
+    -fx-padding: 5px;
+} 

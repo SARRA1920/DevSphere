@@ -1,0 +1,68 @@
+.title-label {
+    -fx-font-size: 24px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #2c3e50;
+}
+
+.info-label {
+    -fx-font-size: 14px;
+    -fx-text-fill: #7f8c8d;
+    -fx-padding: 5px 10px;
+    -fx-background-color: #ecf0f1;
+    -fx-background-radius: 4px;
+}
+
+.description-area {
+    -fx-font-size: 14px;
+    -fx-background-color: #f8f9fa;
+    -fx-border-color: #dee2e6;
+    -fx-border-radius: 4px;
+    -fx-background-radius: 4px;
+    -fx-padding: 10px;
+}
+
+.description-area .content {
+    -fx-background-color: transparent;
+}
+
+.button-primary {
+    -fx-background-color: #3498db;
+    -fx-text-fill: white;
+    -fx-font-size: 14px;
+    -fx-padding: 10px 20px;
+    -fx-background-radius: 4px;
+    -fx-cursor: hand;
+}
+
+.button-primary:hover {
+    -fx-background-color: #2980b9;
+}
+
+.button-primary:pressed {
+    -fx-background-color: #2472a4;
+}
+
+.button-help {
+    -fx-background-color: #4CAF50;
+    -fx-text-fill: white;
+    -fx-font-size: 14px;
+    -fx-padding: 10px 20px;
+    -fx-background-radius: 4px;
+    -fx-cursor: hand;
+}
+
+.button-help:hover {
+    -fx-background-color: #388E3C;
+}
+
+.button-help:pressed {
+    -fx-background-color: #2E7D32;
+}
+
+.button-small {
+    -fx-padding: 4px 8px;
+    -fx-font-size: 12px;
+    -fx-min-height: 25px;
+    -fx-max-height: 25px;
+    -fx-pref-width: 150px;
+} 

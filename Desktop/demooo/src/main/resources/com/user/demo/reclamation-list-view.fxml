@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.text.Font?>
+<?import de.jensd.fx.glyphs.fontawesome.*?>
+
+<VBox xmlns="http://javafx.com/javafx"
+      xmlns:fx="http://javafx.com/fxml"
+      fx:controller="com.user.demo.controller.ReclamationListController"
+      spacing="15" styleClass="content-panel">
+    
+    <padding>
+        <Insets top="20" right="20" bottom="20" left="20" />
+    </padding>
+    
+    <HBox alignment="CENTER_LEFT" spacing="10">
+        <Label text="Reclamations" styleClass="view-title">
+            <font>
+                <Font name="System Bold" size="24.0" />
+            </font>
+        </Label>
+        
+        <Region HBox.hgrow="ALWAYS" />
+        
+        <Button fx:id="btnNewReclamation" text="New Reclamation" styleClass="form-button" onAction="#handleNewReclamation">
+            <graphic>
+                <FontAwesomeIconView glyphName="PLUS" size="14" styleClass="button-icon" />
+            </graphic>
+        </Button>
+        
+        <Button fx:id="btnRefresh" text="Refresh" styleClass="form-button" onAction="#handleRefresh">
+            <graphic>
+                <FontAwesomeIconView glyphName="REFRESH" size="14" styleClass="button-icon" />
+            </graphic>
+        </Button>
+    </HBox>
+    
+    <HBox spacing="10" alignment="CENTER_LEFT">
+        <TextField fx:id="txtSearch" promptText="Search reclamations..." prefWidth="300" />
+        
+        <ComboBox fx:id="cmbFilterType" promptText="Filter by type" />
+        
+        <ComboBox fx:id="cmbFilterStatus" promptText="Filter by status" />
+        
+        <Button fx:id="btnClearFilters" text="Clear Filters" onAction="#handleClearFilters">
+            <graphic>
+                <FontAwesomeIconView glyphName="TIMES" size="14" styleClass="button-icon" />
+            </graphic>
+        </Button>
+    </HBox>
+    
+    <ScrollPane VBox.vgrow="ALWAYS" fitToWidth="true" styleClass="edge-to-edge">
+        <FlowPane fx:id="reclamationsContainer" styleClass="cards-container" hgap="15" vgap="15" />
+    </ScrollPane>
+    
+    <Pagination fx:id="pagination" />
+    
+    <HBox alignment="CENTER_RIGHT" spacing="10">
+        <Label fx:id="lblTotalRecords" text="Total: 0 records" />
+    </HBox>
+</VBox>

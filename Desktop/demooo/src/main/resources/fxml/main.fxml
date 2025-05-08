@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.*?>
+<?import com.jfoenix.controls.*?>
+<?import javafx.geometry.Insets?>
+<?import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView?>
+
+<VBox xmlns:fx="http://javafx.com/fxml"
+      fx:controller="controllers.MainController"
+      style="-fx-background-color: white;">
+
+    <!-- En-tête -->
+    <HBox alignment="CENTER_LEFT" style="-fx-padding: 10 20; -fx-background-color: #f8f9fa;">
+        <Label text="Gestion des Exercices" style="-fx-font-size: 20;"/>
+        <Region HBox.hgrow="ALWAYS"/>
+        <Label text="Total des exercices: 6" style="-fx-text-fill: #666;"/>
+        <JFXButton text="Exporter" style="-fx-background-color: #6c757d; -fx-text-fill: white;">
+            <graphic>
+                <FontAwesomeIconView glyphName="DOWNLOAD" fill="white"/>
+            </graphic>
+        </JFXButton>
+        <JFXButton text="Importer" style="-fx-background-color: #495057; -fx-text-fill: white;">
+            <graphic>
+                <FontAwesomeIconView glyphName="UPLOAD" fill="white"/>
+            </graphic>
+        </JFXButton>
+    </HBox>
+
+    <!-- Barre de recherche -->
+    <HBox style="-fx-padding: 10 20;">
+        <TextField promptText="Rechercher des exercices..." HBox.hgrow="ALWAYS"/>
+    </HBox>
+
+    <!-- Zone des cartes d'exercices -->
+    <FlowPane hgap="20" vgap="20" style="-fx-padding: 20;">
+        <!-- Exercice en sarra -->
+        <VBox styleClass="exercise-card" style="-fx-background-color: white; -fx-border-color: #e0e0e0; -fx-border-radius: 5; -fx-padding: 15; -fx-pref-width: 300;">
+            <Label text="Exercice en sarra" style="-fx-font-size: 18; -fx-font-weight: bold; -fx-text-fill: #2196F3;"/>
+            <Label text="pratique" style="-fx-text-fill: #666;"/>
+            <Label text="Niveau: moyen" style="-fx-text-fill: #666;"/>
+            <JFXButton text="Commencer l'exercice" 
+                      onAction="#startExercise"
+                      style="-fx-background-color: #2196F3; -fx-text-fill: white; -fx-padding: 10 15;"/>
+        </VBox>
+
+        <!-- Exercice JavaScript -->
+        <VBox styleClass="exercise-card" style="-fx-background-color: white; -fx-border-color: #e0e0e0; -fx-border-radius: 5; -fx-padding: 15; -fx-pref-width: 300;">
+            <Label text="Exercice JavaScript" style="-fx-font-size: 18; -fx-font-weight: bold; -fx-text-fill: #2196F3;"/>
+            <Label text="Exercice pratique" style="-fx-text-fill: #666;"/>
+            <Label text="Niveau: Débutant" style="-fx-text-fill: #666;"/>
+            <JFXButton text="Commencer l'exercice"
+                      onAction="#startExercise"
+                      style="-fx-background-color: #2196F3; -fx-text-fill: white; -fx-padding: 10 15;"/>
+        </VBox>
+
+        <!-- CSS -->
+        <VBox styleClass="exercise-card" style="-fx-background-color: white; -fx-border-color: #e0e0e0; -fx-border-radius: 5; -fx-padding: 15; -fx-pref-width: 300;">
+            <Label text="CSS" style="-fx-font-size: 18; -fx-font-weight: bold; -fx-text-fill: #2196F3;"/>
+            <Label text="Projet" style="-fx-text-fill: #666;"/>
+            <Label text="Niveau: Débutant" style="-fx-text-fill: #666;"/>
+            <JFXButton text="Commencer l'exercice"
+                      onAction="#startExercise"
+                      style="-fx-background-color: #2196F3; -fx-text-fill: white; -fx-padding: 10 15;"/>
+        </VBox>
+    <!-- Liste des exercices -->
+    <ScrollPane fitToWidth="true" VBox.vgrow="ALWAYS">
+        <VBox spacing="15">
+            <!-- Exercice JavaScript -->
+            <VBox styleClass="exercise-card" style="-fx-background-color: #f8f9fa; -fx-padding: 15; -fx-background-radius: 5;">
+                <HBox spacing="10" alignment="CENTER_LEFT">
+                    <Label text="Exercice JavaScript" style="-fx-font-size: 18; -fx-font-weight: bold"/>
+                    <Label text="Niveau: facile" style="-fx-text-fill: #28a745"/>
+                </HBox>
+                
+                <Label text="Type: devoir" style="-fx-text-fill: #666;"/>
+                
+                <Label text="Créez une page HTML avec un bouton. Lorsqu'on clique dessus, un script JavaScript génère un nombre aléatoire entre 1 et 100 et l'affiche à l'écran."
+                       wrapText="true" 
+                       style="-fx-padding: 10 0;"/>
+                
+                <HBox spacing="10" alignment="CENTER_RIGHT">
+                    <JFXButton text="Voir le PDF" 
+                              style="-fx-background-color: #6c757d; -fx-text-fill: white;"/>
+                    <JFXButton fx:id="startExerciseButton"
+                              text="Commencer l'exercice"
+                              onAction="#startExercise"
+                              style="-fx-background-color: #007bff; -fx-text-fill: white;">
+                        <graphic>
+                            <FontAwesomeIconView glyphName="PLAY" fill="white"/>
+                        </graphic>
+                    </JFXButton>
+                </HBox>
+            </VBox>
+            
+            <!-- Ajoutez d'autres exercices ici -->
+            
+        </VBox>
+    </ScrollPane>
+
+</VBox> 

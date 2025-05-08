@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import de.jensd.fx.glyphs.fontawesome.*?>
+
+<VBox xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml"
+      fx:controller="com.user.demo.controller.ExerciceCardUserController"
+      fx:id="exerciceCard" styleClass="exercice-card" spacing="10">
+    
+    <padding>
+        <Insets top="15" right="15" bottom="15" left="15"/>
+    </padding>
+    
+    <Label fx:id="titleLabel" styleClass="card-title"/>
+    <Label fx:id="typeLabel" styleClass="card-type"/>
+    <Label fx:id="difficultyLabel" styleClass="card-difficulty"/>
+    
+    <HBox fx:id="buttonsContainer" alignment="CENTER" spacing="10">
+        <!-- Seulement le bouton commencer pour l'utilisateur -->
+        <Button fx:id="commencerBtn" text="Commencer l'exercice" styleClass="button-primary, button-small" 
+                maxWidth="Infinity"/>
+    </HBox>
+</VBox> 

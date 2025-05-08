@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.text.Font?>
+<?import de.jensd.fx.glyphs.fontawesome.*?>
+
+<VBox xmlns="http://javafx.com/javafx"
+      xmlns:fx="http://javafx.com/fxml"
+      fx:controller="com.user.demo.controller.UserProductViewController"
+      spacing="20.0" styleClass="content-panel">
+
+    <padding>
+        <Insets top="30" right="30" bottom="30" left="30" />
+    </padding>
+
+    <!-- Header Section -->
+    <HBox styleClass="content-container" alignment="CENTER_LEFT" spacing="15.0">
+        <VBox styleClass="title-container">
+            <HBox alignment="CENTER_LEFT" spacing="10">
+                <FontAwesomeIconView glyphName="SHOPPING_CART" size="24" styleClass="stats-icon" fill="#3498db" />
+                <Label text="Products" styleClass="page-title">
+                    <font>
+                        <Font name="System Bold" size="24.0" />
+                    </font>
+                </Label>
+            </HBox>
+            <Pane styleClass="title-accent" prefHeight="3.0" prefWidth="100.0" />
+        </VBox>
+
+        <!-- Cart Info -->
+        <Region HBox.hgrow="ALWAYS" />
+        <HBox styleClass="stats-pill" alignment="CENTER" spacing="10">
+            <padding>
+                <Insets left="15" right="15" />
+            </padding>
+            <FontAwesomeIconView glyphName="SHOPPING_BASKET" styleClass="stats-icon" />
+            <Label fx:id="cartCountLabel" styleClass="total-records" text="Cart: 0 items" />
+        </HBox>
+        
+        <Button fx:id="viewCartButton" styleClass="form-button" onAction="#showCart">
+            <graphic>
+                <FontAwesomeIconView glyphName="SHOPPING_BASKET" />
+            </graphic>
+            <tooltip>
+                <Tooltip text="View Cart"/>
+            </tooltip>
+        </Button>
+    </HBox>
+
+    <!-- Main Content Area -->
+    <StackPane VBox.vgrow="ALWAYS">
+        <!-- Empty State -->
+        <VBox fx:id="emptyStateContainer" styleClass="empty-state-container" alignment="CENTER" visible="false" managed="false">
+            <FontAwesomeIconView glyphName="SHOPPING_CART" size="48" styleClass="empty-state-icon"/>
+            <Label text="No products available" styleClass="empty-state-text"/>
+            <Label text="Check back later for new products" styleClass="empty-state-subtext"/>
+        </VBox>
+        
+        <!-- Products Display -->
+        <ScrollPane fx:id="scrollPane" fitToWidth="true" styleClass="cards-scroll-pane">
+            <FlowPane fx:id="productsContainer" styleClass="cards-container" hgap="20" vgap="20">
+                <padding>
+                    <Insets top="10" right="20" bottom="20" left="20"/>
+                </padding>
+            </FlowPane>
+        </ScrollPane>
+    </StackPane>
+</VBox>

@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.Font?>
+<?import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView?>
+<?import java.net.URL?>
+
+<VBox spacing="20" xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml" 
+      fx:controller="com.user.demo.controller.AdminInscriptionController"
+      styleClass="content-view">
+      
+    <stylesheets>
+        <URL value="@admin-styles.css"/>
+    </stylesheets>
+    
+    <padding>
+        <Insets top="20" right="20" bottom="20" left="20"/>
+    </padding>
+    
+    <!-- Header Section -->
+    <HBox alignment="CENTER_LEFT" spacing="15">
+        <FontAwesomeIconView glyphName="PENCIL_SQUARE" size="24" fill="#3498db"/>
+        <Label text="Gestion des Inscriptions" styleClass="section-title">
+            <font>
+                <Font name="System Bold" size="20.0" />
+            </font>
+        </Label>
+        <Region HBox.hgrow="ALWAYS" />
+        <Button fx:id="addInscriptionButton" text="Ajouter une Inscription" onAction="#handleAddInscription" styleClass="action-button">
+            <graphic>
+                <FontAwesomeIconView glyphName="PLUS" size="14"/>
+            </graphic>
+        </Button>
+    </HBox>
+    
+    <!-- Filter & Search Section -->
+    <HBox spacing="10" alignment="CENTER_LEFT">
+        <TextField fx:id="searchField" promptText="Rechercher des inscriptions..." HBox.hgrow="ALWAYS"
+                   onKeyReleased="#handleSearch"/>
+        <ComboBox fx:id="statusFilter" promptText="Statut" prefWidth="150"
+                  onAction="#handleStatusFilter"/>
+        <ComboBox fx:id="coursFilter" promptText="Cours" prefWidth="200"
+                  onAction="#handleCoursFilter"/>
+        <DatePicker fx:id="dateFilter" promptText="Date" prefWidth="150"
+                    onAction="#handleDateFilter"/>
+        <Button fx:id="clearFiltersButton" text="Effacer" onAction="#handleClearFilters">
+            <graphic>
+                <FontAwesomeIconView glyphName="TIMES" size="14"/>
+            </graphic>
+        </Button>
+    </HBox>
+    
+    <!-- Table Section -->
+    <TableView fx:id="inscriptionsTable" VBox.vgrow="ALWAYS">
+        <columns>
+            <TableColumn fx:id="idColumn" text="ID" prefWidth="60"/>
+            <TableColumn fx:id="nomColumn" text="Nom" prefWidth="150"/>
+            <TableColumn fx:id="emailColumn" text="Email" prefWidth="200"/>
+            <TableColumn fx:id="telephoneColumn" text="Téléphone" prefWidth="120"/>
+            <TableColumn fx:id="coursColumn" text="Cours" prefWidth="200"/>
+            <TableColumn fx:id="statutColumn" text="Statut" prefWidth="100"/>
+            <TableColumn fx:id="dateInscriptionColumn" text="Date d'inscription" prefWidth="150"/>
+            <TableColumn fx:id="actionsColumn" text="Actions" prefWidth="150"/>
+        </columns>
+        <placeholder>
+            <Label text="Aucune inscription trouvée"/>
+        </placeholder>
+    </TableView>
+    
+    <!-- Status Bar -->
+    <HBox spacing="10" alignment="CENTER_RIGHT" styleClass="status-bar">
+        <Label fx:id="statusLabel" text="Total: 0 inscriptions"/>
+        <Separator orientation="VERTICAL"/>
+        <Label fx:id="pendingLabel" text="En attente: 0"/>
+        <Label fx:id="confirmedLabel" text="Confirmées: 0"/>
+        <Label fx:id="cancelledLabel" text="Annulées: 0"/>
+    </HBox>
+</VBox> 

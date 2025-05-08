@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.Text?>
+<?import de.jensd.fx.glyphs.fontawesome.*?>
+
+<VBox xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml" 
+      fx:controller="com.user.demo.controller.ExerciceController"
+      spacing="20" styleClass="content-panel"
+      stylesheets="@../styles/styles.css">
+    
+    <padding>
+        <Insets top="30" right="30" bottom="30" left="30"/>
+    </padding>
+
+    <!-- Header with Title -->
+    <HBox alignment="CENTER_LEFT" spacing="20">
+        <Text text="Gestion des Exercices" styleClass="view-title"/>
+        <Region HBox.hgrow="ALWAYS"/>
+        <Label fx:id="statusLabel" styleClass="status-label"/>
+        
+        <!-- Boutons d'import/export -->
+        <Button fx:id="exportButton" text="Exporter" styleClass="btn-secondary">
+            <graphic>
+                <FontAwesomeIconView glyphName="DOWNLOAD" size="14"/>
+            </graphic>
+        </Button>
+        <Button fx:id="importButton" text="Importer" styleClass="btn-secondary">
+            <graphic>
+                <FontAwesomeIconView glyphName="UPLOAD" size="14"/>
+            </graphic>
+        </Button>
+        
+        <Button text="Tentatives" onAction="#handleTentatives" styleClass="btn-secondary"/>
+        <Button text="+ Ajouter un exercice" onAction="#showAddDialog" styleClass="btn-primary"/>
+    </HBox>
+
+    <!-- Search and Filter Bar -->
+    <HBox spacing="15" alignment="CENTER_LEFT">
+        <TextField fx:id="searchField" promptText="Rechercher des exercices..." prefWidth="300" styleClass="search-field"/>
+        <ComboBox fx:id="filterComboBox" promptText="Toutes les catégories" prefWidth="200"/>
+        <Button text="Effacer les filtres" onAction="#handleClearFilters" styleClass="btn-secondary"/>
+        <Region HBox.hgrow="ALWAYS"/>
+        <Button text="+ Nouveau Cours" onAction="#showAddDialog" styleClass="btn-success"/>
+    </HBox>
+
+    <!-- Main Content Area - Exercise Cards -->
+    <ScrollPane fitToWidth="true" styleClass="transparent-scroll-pane" VBox.vgrow="ALWAYS">
+        <FlowPane fx:id="exerciceCards" hgap="20" vgap="20">
+            <padding>
+                <Insets top="10" right="10" bottom="10" left="10"/>
+            </padding>
+        </FlowPane>
+    </ScrollPane>
+
+    <!-- Empty State -->
+    <VBox fx:id="emptyState" alignment="CENTER" spacing="15" visible="false" managed="false">
+        <FontAwesomeIconView glyphName="BOOK" size="48" styleClass="empty-state-icon"/>
+        <Label text="Aucun exercice trouvé" styleClass="empty-state-text"/>
+        <Label text="Ajoutez un nouvel exercice ou modifiez vos filtres" styleClass="empty-state-subtext"/>
+    </VBox>
+
+    <!-- Loading State -->
+    <StackPane fx:id="loadingPane" visible="false" managed="false">
+        <ProgressIndicator/>
+    </StackPane>
+</VBox> 

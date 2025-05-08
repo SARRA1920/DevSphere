@@ -1,0 +1,74 @@
+.title {
+    -fx-font-size: 24px;
+    -fx-font-weight: bold;
+    -fx-padding: 0 0 20 0;
+}
+
+.help-button {
+    -fx-background-color: #4CAF50;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-padding: 10 20;
+    -fx-cursor: hand;
+}
+
+.help-button:hover {
+    -fx-background-color: #388E3C;
+}
+
+.submit-button {
+    -fx-background-color: #3498db;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-padding: 10 20;
+    -fx-cursor: hand;
+}
+
+.submit-button:hover {
+    -fx-background-color: #2980b9;
+}
+
+.submit-button:disabled {
+    -fx-background-color: #bdc3c7;
+}
+
+.result-label {
+    -fx-padding: 10;
+    -fx-background-color: #f8f9fa;
+    -fx-background-radius: 5;
+}
+
+.detail-list {
+    -fx-background-radius: 5;
+    -fx-border-radius: 5;
+    -fx-border-color: #dee2e6;
+}
+
+.detail-list .list-cell {
+    -fx-padding: 8;
+}
+
+.detail-list .list-cell:filled:selected {
+    -fx-background-color: #e3f2fd;
+}
+
+/* Style pour les réponses correctes/incorrectes */
+.correct {
+    -fx-text-fill: #27ae60;
+}
+
+.incorrect {
+    -fx-text-fill: #c0392b;
+}
+
+/* Style pour le TextField */
+.text-field {
+    -fx-padding: 8;
+    -fx-border-color: #dee2e6;
+    -fx-border-radius: 5;
+    -fx-background-radius: 5;
+}
+
+.text-field:focused {
+    -fx-border-color: #3498db;
+} 

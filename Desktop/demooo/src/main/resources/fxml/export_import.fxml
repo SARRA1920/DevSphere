@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+<?import com.jfoenix.controls.*?>
+
+<VBox spacing="20" alignment="CENTER" stylesheets="@../styles/export_import.css"
+      xmlns:fx="http://javafx.com/fxml"
+      fx:controller="controllers.ExportImportController">
+
+    <padding>
+        <Insets top="20" right="20" bottom="20" left="20"/>
+    </padding>
+
+    <Label text="Gestion des Exercices et Tentatives" styleClass="title"/>
+
+    <VBox spacing="10" styleClass="button-container">
+        <JFXButton fx:id="exportExercicesButton" 
+                   text="Exporter les Exercices"
+                   styleClass="export-button"/>
+                   
+        <JFXButton fx:id="importExercicesButton" 
+                   text="Importer les Exercices"
+                   styleClass="import-button"/>
+                   
+        <JFXButton fx:id="exportTentativesButton" 
+                   text="Exporter les Tentatives"
+                   styleClass="export-button"/>
+    </VBox>
+
+    <Label fx:id="statusLabel" styleClass="status-label" 
+           wrapText="true"/>
+
+</VBox> 

@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
+
+<HBox xmlns="http://javafx.com/javafx"
+      xmlns:fx="http://javafx.com/fxml"
+      fx:controller="com.user.demo.controller.LoginController"
+      prefHeight="500.0" prefWidth="800.0"
+      stylesheets="@../styles/login.css">
+    
+    <!-- Partie gauche (bleue) -->
+    <VBox styleClass="left-panel" HBox.hgrow="ALWAYS" alignment="CENTER" spacing="20">
+        <padding>
+            <Insets top="30" right="30" bottom="30" left="30"/>
+        </padding>
+        
+        <!-- Logo (représenté par du texte) -->
+        <Label text="&lt;/&gt;" styleClass="logo-symbol"/>
+        
+        <Label text="DevSphere" styleClass="logo-text">
+            <font>
+                <Font name="System Bold" size="44"/>
+            </font>
+        </Label>
+        
+        <Label text="Your Development Workspace" styleClass="tagline">
+            <font>
+                <Font size="18"/>
+            </font>
+        </Label>
+        
+        <Region VBox.vgrow="ALWAYS" />
+        
+        <!-- Points de fonctionnalité -->
+        <HBox styleClass="feature" alignment="CENTER_LEFT" spacing="10">
+            <Label text="✓" styleClass="feature-check" />
+            <Label text="Manage development reclamations efficiently" styleClass="feature-text" wrapText="true" />
+        </HBox>
+        
+        <HBox styleClass="feature" alignment="CENTER_LEFT" spacing="10">
+            <Label text="✓" styleClass="feature-check" />
+            <Label text="Track responses and resolutions" styleClass="feature-text" wrapText="true" />
+        </HBox>
+        
+        <HBox styleClass="feature" alignment="CENTER_LEFT" spacing="10">
+            <Label text="✓" styleClass="feature-check" />
+            <Label text="Collaborate with your team seamlessly" styleClass="feature-text" wrapText="true" />
+        </HBox>
+    </VBox>
+    
+    <!-- Partie droite (blanche) -->
+    <VBox styleClass="right-panel" HBox.hgrow="ALWAYS" alignment="CENTER" spacing="20">
+        <padding>
+            <Insets top="40" right="40" bottom="40" left="40"/>
+        </padding>
+        
+        <Label text="Welcome Back" styleClass="welcome-text">
+            <font>
+                <Font name="System Bold" size="30"/>
+            </font>
+        </Label>
+        
+        <Label text="Sign in to continue to your account" styleClass="subtitle-text" />
+        
+        <!-- Message d'erreur -->
+        <Label fx:id="errorLabel" text="Error loading dashboard. Please try again later." 
+               styleClass="error-message" visible="false" managed="false" />
+        
+        <!-- Formulaire de connexion -->
+        <HBox styleClass="input-container" alignment="CENTER_LEFT">
+            <Label text="✉" styleClass="input-icon" />
+            <TextField fx:id="emailField" promptText="arfaoui.sarra@esprit.tn" styleClass="input-field" />
+        </HBox>
+        
+        <HBox styleClass="input-container" alignment="CENTER_LEFT">
+            <Label text="🔒" styleClass="input-icon" />
+            <PasswordField fx:id="passwordField" promptText="Password" styleClass="input-field" />
+        </HBox>
+        
+        <Button text="Sign In" onAction="#handleLogin" styleClass="login-button" defaultButton="true" />
+        
+        <HBox alignment="CENTER" spacing="5">
+            <Label text="Don't have an account?" styleClass="prompt-text" />
+            <Hyperlink text="Sign up" onAction="#handleSignUp" styleClass="signup-link" />
+        </HBox>
+    </VBox>
+</HBox> 

@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import java.net.URL?>
+
+<VBox xmlns="http://javafx.com/javafx"
+      xmlns:fx="http://javafx.com/fxml"
+      fx:controller="com.user.demo.controller.CoursFormController"
+      spacing="15"
+      minWidth="600"
+      minHeight="500"
+      style="-fx-background-color: white;">
+
+    <stylesheets>
+        <URL value="@/com/user/demo/styles/cours.css"/>
+    </stylesheets>
+
+    <padding>
+        <Insets top="20" right="30" bottom="20" left="30"/>
+    </padding>
+
+    <Label text="Ajouter un nouveau cours" 
+           style="-fx-font-size: 24px; -fx-font-weight: bold;"/>
+
+    <GridPane hgap="15" vgap="15">
+        <columnConstraints>
+            <ColumnConstraints minWidth="100" prefWidth="150" />
+            <ColumnConstraints hgrow="ALWAYS" minWidth="300" />
+        </columnConstraints>
+
+        <!-- Titre -->
+        <Label text="Titre :" 
+               GridPane.rowIndex="0" GridPane.columnIndex="0" />
+        <TextField fx:id="titreField" 
+                  promptText="Titre du cours"
+                  GridPane.rowIndex="0" GridPane.columnIndex="1" />
+
+        <!-- Description -->
+        <Label text="Description :" 
+               GridPane.rowIndex="1" GridPane.columnIndex="0" 
+               GridPane.valignment="TOP" />
+        <TextArea fx:id="descriptionField" 
+                 promptText="Description du cours"
+                 wrapText="true"
+                 prefRowCount="4"
+                 GridPane.rowIndex="1" GridPane.columnIndex="1" />
+
+        <!-- Catégorie -->
+        <Label text="Catégorie :" 
+               GridPane.rowIndex="2" GridPane.columnIndex="0" />
+        <ComboBox fx:id="categorieComboBox" 
+                 prefWidth="300"
+                 GridPane.rowIndex="2" GridPane.columnIndex="1" />
+
+        <!-- Niveau -->
+        <Label text="Niveau :" 
+               GridPane.rowIndex="3" GridPane.columnIndex="0" />
+        <ComboBox fx:id="niveauComboBox" 
+                 prefWidth="300"
+                 GridPane.rowIndex="3" GridPane.columnIndex="1" />
+
+        <!-- Durée -->
+        <Label text="Durée (heures) :" 
+               GridPane.rowIndex="4" GridPane.columnIndex="0" />
+        <TextField fx:id="dureeField" 
+                  promptText="Durée en heures"
+                  GridPane.rowIndex="4" GridPane.columnIndex="1" />
+
+        <!-- Instructeur -->
+        <Label text="Instructeur :" 
+               GridPane.rowIndex="5" GridPane.columnIndex="0" />
+        <TextField fx:id="instructeurField" 
+                  promptText="Nom de l'instructeur"
+                  GridPane.rowIndex="5" GridPane.columnIndex="1" />
+
+        <!-- Image -->
+        <Label text="Image :" 
+               GridPane.rowIndex="6" GridPane.columnIndex="0" />
+        <HBox spacing="10" GridPane.rowIndex="6" GridPane.columnIndex="1">
+            <TextField fx:id="imageField" 
+                      promptText="Nom du fichier image"
+                      HBox.hgrow="ALWAYS" />
+            <Button text="Parcourir..." 
+                    onAction="#handleSelectImage"
+                    styleClass="button-secondary" />
+        </HBox>
+        
+        <!-- PDF -->
+        <Label text="PDF :" 
+               GridPane.rowIndex="7" GridPane.columnIndex="0" />
+        <HBox spacing="10" GridPane.rowIndex="7" GridPane.columnIndex="1">
+            <TextField fx:id="pdfField" 
+                      promptText="Nom du fichier PDF"
+                      HBox.hgrow="ALWAYS" />
+            <Button text="Parcourir..." 
+                    onAction="#handleSelectPdf"
+                    styleClass="button-secondary" />
+        </HBox>
+    </GridPane>
+
+    <HBox spacing="15" alignment="CENTER_RIGHT">
+        <Button text="Annuler" 
+                onAction="#handleCancel"
+                styleClass="button-secondary" />
+        <Button text="Enregistrer" 
+                onAction="#handleSave"
+                styleClass="button-primary" />
+    </HBox>
+</VBox> 

@@ -1,0 +1,569 @@
+/* Styles généraux */
+.content-panel {
+    -fx-background-color: #f8f9fa;
+    -fx-padding: 20px;
+}
+
+.view-title {
+    -fx-font-size: 24px;
+    -fx-font-weight: bold;
+    -fx-fill: #2c3e50;
+}
+
+/* Style de la barre de recherche */
+.search-field {
+    -fx-background-color: white;
+    -fx-background-radius: 20px;
+    -fx-border-radius: 20px;
+    -fx-border-color: #e0e0e0;
+    -fx-padding: 8px 15px;
+    -fx-pref-height: 35px;
+}
+
+.search-field:focused {
+    -fx-border-color: #2196F3;
+    -fx-effect: dropshadow(gaussian, rgba(33,150,243,0.1), 10, 0, 0, 0);
+}
+
+/* Style du ComboBox */
+.combo-box {
+    -fx-background-color: white;
+    -fx-background-radius: 5px;
+    -fx-border-radius: 5px;
+    -fx-border-color: #e0e0e0;
+    -fx-pref-height: 35px;
+}
+
+.combo-box:hover {
+    -fx-border-color: #2196F3;
+}
+
+/* Styles des boutons */
+.btn-primary {
+    -fx-background-color: #2196F3;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-background-radius: 5px;
+    -fx-padding: 8px 15px;
+    -fx-cursor: hand;
+    -fx-min-height: 35px;
+}
+
+.btn-primary:hover {
+    -fx-background-color: #1976D2;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.2), 5, 0, 0, 0);
+}
+
+.btn-secondary {
+    -fx-background-color: #757575;
+    -fx-text-fill: white;
+    -fx-background-radius: 5px;
+    -fx-padding: 8px 15px;
+    -fx-cursor: hand;
+    -fx-min-height: 35px;
+}
+
+.btn-secondary:hover {
+    -fx-background-color: #616161;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.2), 5, 0, 0, 0);
+}
+
+.btn-success {
+    -fx-background-color: #4CAF50;
+    -fx-text-fill: white;
+    -fx-background-radius: 5px;
+    -fx-padding: 8px 15px;
+    -fx-cursor: hand;
+    -fx-min-height: 35px;
+}
+
+.btn-success:hover {
+    -fx-background-color: #388E3C;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.2), 5, 0, 0, 0);
+}
+
+/* Style des cartes d'exercices */
+.exercice-card {
+    -fx-background-color: white;
+    -fx-background-radius: 10px;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 10, 0, 0, 0);
+    -fx-min-width: 300px;
+    -fx-max-width: 300px;
+    -fx-padding: 20px;
+    -fx-spacing: 10px;
+}
+
+.exercice-card:hover {
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.2), 15, 0, 0, 0);
+    -fx-translate-y: -2px;
+    -fx-cursor: hand;
+}
+
+.exercice-card .title {
+    -fx-font-size: 18px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #2196F3;
+}
+
+.exercice-card .subtitle {
+    -fx-font-size: 14px;
+    -fx-text-fill: #757575;
+}
+
+.exercice-card .niveau {
+    -fx-font-size: 13px;
+    -fx-text-fill: #9e9e9e;
+    -fx-padding: 4px 8px;
+    -fx-background-radius: 4px;
+    -fx-background-color: #f5f5f5;
+}
+
+.exercice-card .niveau.debutant {
+    -fx-text-fill: #4CAF50;
+    -fx-background-color: #E8F5E9;
+}
+
+.exercice-card .niveau.moyen {
+    -fx-text-fill: #FF9800;
+    -fx-background-color: #FFF3E0;
+}
+
+.exercice-card .niveau.difficile {
+    -fx-text-fill: #F44336;
+    -fx-background-color: #FFEBEE;
+}
+
+.exercice-card .actions {
+    -fx-padding: 10px 0 0 0;
+    -fx-border-color: transparent transparent transparent transparent;
+    -fx-border-width: 1px;
+    -fx-spacing: 10px;
+}
+
+.exercice-card .btn-start {
+    -fx-background-color: #2196F3;
+    -fx-text-fill: white;
+    -fx-background-radius: 5px;
+    -fx-padding: 8px 15px;
+    -fx-cursor: hand;
+    -fx-font-weight: bold;
+    -fx-min-width: 150px;
+}
+
+.exercice-card .btn-start:hover {
+    -fx-background-color: #1976D2;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.2), 5, 0, 0, 0);
+}
+
+/* Style du conteneur de cartes */
+.transparent-scroll-pane {
+    -fx-background-color: transparent;
+    -fx-background: transparent;
+}
+
+.transparent-scroll-pane > .viewport {
+    -fx-background-color: transparent;
+}
+
+/* Empty state styles */
+.empty-state-icon {
+    -fx-fill: #BDBDBD;
+}
+
+.empty-state-text {
+    -fx-font-size: 18px;
+    -fx-text-fill: #757575;
+    -fx-font-weight: bold;
+}
+
+.empty-state-subtext {
+    -fx-font-size: 14px;
+    -fx-text-fill: #9E9E9E;
+}
+
+/* Status label */
+.status-label {
+    -fx-text-fill: #757575;
+    -fx-font-style: italic;
+}
+
+/* Loading state */
+.progress-indicator {
+    -fx-progress-color: #2196F3;
+}
+
+/* Boutons d'action dans les cartes d'exercices */
+.btn-edit {
+    -fx-background-color: #FFC107;
+    -fx-text-fill: #212121;
+    -fx-background-radius: 4px;
+    -fx-cursor: hand;
+    -fx-min-width: 32px;
+    -fx-min-height: 32px;
+}
+
+.btn-edit:hover {
+    -fx-background-color: #FFA000;
+}
+
+.btn-delete {
+    -fx-background-color: #F44336;
+    -fx-text-fill: white;
+    -fx-background-radius: 4px;
+    -fx-cursor: hand;
+    -fx-min-width: 32px;
+    -fx-min-height: 32px;
+}
+
+.btn-delete:hover {
+    -fx-background-color: #D32F2F;
+}
+
+/* Style des cartes d'exercices */
+.card-title {
+    -fx-font-size: 18px;
+    -fx-font-weight: bold;
+}
+
+.card-type {
+    -fx-text-fill: #757575;
+    -fx-font-size: 14px;
+}
+
+/* Style du label de statut */
+.title-label {
+    -fx-font-size: 24px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #2c3e50;
+}
+
+/* Styles de la TableView */
+.table-view {
+    -fx-background-color: white;
+    -fx-background-radius: 8px;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 5, 0, 0, 0);
+}
+
+.table-view .column-header {
+    -fx-background-color: #f8f9fa;
+    -fx-padding: 10px;
+}
+
+.table-view .column-header .label {
+    -fx-text-fill: #2c3e50;
+    -fx-font-weight: bold;
+}
+
+.table-view .table-row-cell {
+    -fx-background-color: white;
+    -fx-border-color: transparent transparent #ecf0f1 transparent;
+}
+
+.table-view .table-row-cell:hover {
+    -fx-background-color: #f8f9fa;
+}
+
+.table-view .table-row-cell:selected {
+    -fx-background-color: #e3f2fd;
+}
+
+.table-view .table-cell {
+    -fx-alignment: CENTER-LEFT;
+    -fx-padding: 8 15 8 15;
+    -fx-text-fill: #2c3e50;
+}
+
+.table-view .placeholder .label {
+    -fx-text-fill: #95a5a6;
+    -fx-font-size: 14px;
+    -fx-font-style: italic;
+}
+
+/* Styles des boutons dans la table */
+.button-live {
+    -fx-background-color: #e74c3c;
+    -fx-text-fill: white;
+    -fx-font-size: 12px;
+    -fx-padding: 5px 10px;
+    -fx-background-radius: 4px;
+    -fx-min-width: 80px;
+    -fx-cursor: hand;
+}
+
+.button-live:hover {
+    -fx-background-color: #c0392b;
+}
+
+.button-modifier {
+    -fx-background-color: #f39c12;
+    -fx-text-fill: white;
+    -fx-font-size: 12px;
+    -fx-padding: 5px 10px;
+    -fx-background-radius: 4px;
+    -fx-min-width: 80px;
+    -fx-cursor: hand;
+}
+
+.button-modifier:hover {
+    -fx-background-color: #d35400;
+}
+
+.button-danger {
+    -fx-background-color: #e74c3c;
+    -fx-text-fill: white;
+    -fx-font-size: 12px;
+    -fx-padding: 5px 10px;
+    -fx-background-radius: 4px;
+    -fx-min-width: 80px;
+    -fx-cursor: hand;
+}
+
+.button-danger:hover {
+    -fx-background-color: #c0392b;
+}
+
+/* Style du conteneur de boutons */
+.button-container {
+    -fx-spacing: 5px;
+    -fx-alignment: center;
+}
+
+/* Styles des cartes */
+.tentative-card {
+    -fx-background-color: white;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 10, 0, 0, 3);
+    -fx-background-radius: 8px;
+    -fx-border-radius: 8px;
+}
+
+.tentative-card:hover {
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.2), 15, 0, 0, 5);
+}
+
+.card-date {
+    -fx-font-size: 14px;
+    -fx-text-fill: #7f8c8d;
+}
+
+.card-note {
+    -fx-font-size: 16px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #2980b9;
+}
+
+.card-status {
+    -fx-padding: 5px 10px;
+    -fx-background-radius: 4px;
+    -fx-font-weight: bold;
+}
+
+.status-soumis {
+    -fx-background-color: #e8f5e9;
+    -fx-text-fill: #27ae60;
+}
+
+.status-en_cours {
+    -fx-background-color: #fff3e0;
+    -fx-text-fill: #f39c12;
+}
+
+.status-abandonné {
+    -fx-background-color: #ffebee;
+    -fx-text-fill: #c0392b;
+}
+
+/* Styles des champs de recherche */
+.text-field {
+    -fx-background-radius: 4px;
+    -fx-border-radius: 4px;
+    -fx-border-color: #dcdde1;
+    -fx-padding: 8px;
+}
+
+.combo-box {
+    -fx-background-radius: 4px;
+    -fx-border-radius: 4px;
+    -fx-border-color: #dcdde1;
+}
+
+/* Style du conteneur de cartes */
+.cards-container {
+    -fx-background-color: transparent;
+    -fx-alignment: center;
+}
+
+/* Style du ScrollPane */
+.edge-to-edge {
+    -fx-background-color: transparent;
+    -fx-padding: 0;
+}
+
+.edge-to-edge > .viewport {
+    -fx-background-color: transparent;
+}
+
+/* Styles pour le bouton de streaming */
+.button-live {
+    -fx-background-color: #e74c3c;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-padding: 8px 15px;
+    -fx-background-radius: 5px;
+    -fx-cursor: hand;
+}
+
+.button-live:hover {
+    -fx-background-color: #c0392b;
+    -fx-effect: dropshadow(gaussian, rgba(231,76,60,0.3), 10, 0, 0, 0);
+}
+
+.button-live .button-icon {
+    -fx-fill: white;
+}
+
+.button-with-icon {
+    -fx-content-display: left;
+    -fx-alignment: center;
+}
+
+/* Styles pour l'interface de streaming */
+.streaming-window {
+    -fx-background-color: #2c3e50;
+}
+
+.streaming-title {
+    -fx-font-size: 24px;
+    -fx-font-weight: bold;
+    -fx-text-fill: white;
+}
+
+.streaming-area {
+    -fx-background-color: black;
+    -fx-min-height: 400px;
+    -fx-min-width: 600px;
+    -fx-alignment: center;
+}
+
+.streaming-label {
+    -fx-text-fill: white;
+    -fx-font-size: 18px;
+}
+
+.viewers-count {
+    -fx-text-fill: #ecf0f1;
+    -fx-font-size: 14px;
+}
+
+.chat-area {
+    -fx-background-color: #34495e;
+    -fx-padding: 10px;
+    -fx-spacing: 10px;
+}
+
+.chat-messages {
+    -fx-text-fill: white;
+    -fx-control-inner-background: #2c3e50;
+    -fx-background-color: #2c3e50;
+}
+
+.chat-input {
+    -fx-background-color: #ecf0f1;
+    -fx-text-fill: #2c3e50;
+    -fx-prompt-text-fill: #95a5a6;
+}
+
+.stream-control-button {
+    -fx-padding: 10px 20px;
+    -fx-font-weight: bold;
+    -fx-min-width: 150px;
+}
+
+/* Style pour la boîte de dialogue de configuration */
+.config-dialog {
+    -fx-background-color: white;
+}
+
+.config-dialog .header {
+    -fx-font-size: 18px;
+    -fx-font-weight: bold;
+    -fx-padding: 10px;
+}
+
+.config-dialog .content {
+    -fx-padding: 15px;
+}
+
+.config-dialog .check-box {
+    -fx-font-size: 14px;
+}
+
+.config-dialog .text-field {
+    -fx-pref-width: 200px;
+}
+
+/* Styles pour les cartes de cours */
+.course-card {
+    -fx-background-color: white;
+    -fx-background-radius: 8px;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 5, 0, 0, 0);
+    -fx-padding: 15px;
+    -fx-spacing: 10px;
+    -fx-min-width: 300px;
+    -fx-max-width: 300px;
+    -fx-border-color: #e0e0e0;
+    -fx-border-radius: 8px;
+    -fx-border-width: 1px;
+}
+
+.course-card:hover {
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.2), 10, 0, 0, 0);
+    -fx-border-color: #3498db;
+}
+
+.card-id {
+    -fx-text-fill: #95a5a6;
+    -fx-font-size: 14px;
+}
+
+.category-tag {
+    -fx-background-color: #3498db;
+    -fx-text-fill: white;
+    -fx-padding: 5px 10px;
+    -fx-background-radius: 4px;
+    -fx-font-size: 12px;
+    -fx-max-width: 150px;
+    -fx-alignment: center;
+}
+
+.card-title {
+    -fx-font-size: 18px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #2c3e50;
+    -fx-wrap-text: true;
+}
+
+.card-info {
+    -fx-spacing: 5px;
+}
+
+.card-info Label {
+    -fx-text-fill: #7f8c8d;
+    -fx-font-size: 14px;
+}
+
+/* Style du conteneur principal */
+.flow-pane {
+    -fx-background-color: transparent;
+    -fx-padding: 20px;
+    -fx-hgap: 20px;
+    -fx-vgap: 20px;
+}
+
+.scroll-pane {
+    -fx-background-color: transparent;
+    -fx-padding: 0;
+}
+
+.scroll-pane > .viewport {
+    -fx-background-color: transparent;
+} 

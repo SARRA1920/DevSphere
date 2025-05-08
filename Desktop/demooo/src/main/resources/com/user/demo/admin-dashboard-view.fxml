@@ -1,0 +1,187 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.Text?>
+<?import de.jensd.fx.glyphs.fontawesome.*?>
+<?import java.net.URL?>
+
+<HBox xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml" 
+      fx:controller="com.user.demo.controller.AdminDashboardController">
+    
+    <stylesheets>
+        <URL value="@styles.css"/>
+        <URL value="@admin-styles.css"/>
+    </stylesheets>
+    
+    <!-- Left Sidebar -->
+    <VBox styleClass="sidebar" spacing="10" prefWidth="250">
+        <padding>
+            <Insets top="20" right="15" bottom="15" left="15" />
+        </padding>
+        
+        <HBox styleClass="logo-container" alignment="CENTER_LEFT">
+            <FontAwesomeIconView glyphName="DASHBOARD" size="24" styleClass="sidebar-icon"/>
+            <Label text="Admin Dashboard" styleClass="logo-text"/>
+        </HBox>
+
+        <Separator styleClass="sidebar-separator"/>
+
+        <Label fx:id="currentUserLabel" styleClass="user-name"/>
+
+        <Button fx:id="btnDashboard" text="Dashboard Overview" onAction="#showDashboard"
+                styleClass="sidebar-button">
+            <graphic>
+                <FontAwesomeIconView glyphName="HOME" size="16" styleClass="sidebar-icon"/>
+            </graphic>
+        </Button>
+
+        <Button fx:id="btnUsers" text="User Management" onAction="#showUserManagement"
+                styleClass="sidebar-button">
+            <graphic>
+                <FontAwesomeIconView glyphName="USERS" size="16" styleClass="sidebar-icon"/>
+            </graphic>
+        </Button>
+
+        <Button fx:id="btnProducts" text="Products" onAction="#showProducts"
+                styleClass="sidebar-button">
+            <graphic>
+                <FontAwesomeIconView glyphName="BOOK" size="16" styleClass="sidebar-icon"/>
+            </graphic>
+        </Button>
+
+        <Button fx:id="btnInscriptions" text="Inscriptions" onAction="#showInscriptions"
+                styleClass="sidebar-button">
+            <graphic>
+                <FontAwesomeIconView glyphName="PENCIL_SQUARE" size="16" styleClass="sidebar-icon"/>
+            </graphic>
+        </Button>
+
+        <Button fx:id="btnCours" text="Cours" onAction="#showCours"
+                styleClass="sidebar-button">
+            <graphic>
+                <FontAwesomeIconView glyphName="GRADUATION_CAP" size="16" styleClass="sidebar-icon"/>
+            </graphic>
+        </Button>
+
+        <Button fx:id="btnExercices" text="Exercices" onAction="#showExercices"
+                styleClass="sidebar-button">
+            <graphic>
+                <FontAwesomeIconView glyphName="TASKS" size="16" styleClass="sidebar-icon"/>
+            </graphic>
+        </Button>
+
+        <Button fx:id="btnEvent" text="Events" onAction="#showEvent"
+                styleClass="sidebar-button">
+            <graphic>
+                <FontAwesomeIconView glyphName="EVENTS" size="16" styleClass="sidebar-icon"/>
+            </graphic>
+        </Button>
+
+        <Button fx:id="btnTentatives" text="Tentatives" onAction="#showTentatives"
+                styleClass="sidebar-button">
+            <graphic>
+                <FontAwesomeIconView glyphName="CHECK_SQUARE" size="16" styleClass="sidebar-icon"/>
+            </graphic>
+        </Button>
+
+        <Button fx:id="btnCategoriesCours" text="Catégories Cours" onAction="#showCategoriesCours"
+                styleClass="sidebar-button">
+            <graphic>
+                <FontAwesomeIconView glyphName="LIST" size="16" styleClass="sidebar-icon"/>
+            </graphic>
+        </Button>
+
+        <Button fx:id="btnReclamations" text="Reclamations" onAction="#showReclamations"
+                styleClass="sidebar-button">
+            <graphic>
+                <FontAwesomeIconView glyphName="EXCLAMATION_CIRCLE" size="16" styleClass="sidebar-icon"/>
+            </graphic>
+        </Button>
+
+        <Button fx:id="btnResponses" text="Response Management" onAction="#showResponses"
+                styleClass="sidebar-button">
+            <graphic>
+                <FontAwesomeIconView glyphName="REPLY" size="16" styleClass="sidebar-icon"/>
+            </graphic>
+        </Button>
+
+        <Region VBox.vgrow="ALWAYS"/>
+
+        <Button fx:id="btnSettings" text="Settings" onAction="#showSettings"
+                styleClass="sidebar-button">
+            <graphic>
+                <FontAwesomeIconView glyphName="COG" size="16" styleClass="sidebar-icon"/>
+            </graphic>
+        </Button>
+
+        <Button fx:id="btnLogout" text="Logout" onAction="#handleLogout"
+                styleClass="sidebar-button, logout-button">
+            <graphic>
+                <FontAwesomeIconView glyphName="SIGN_OUT" size="16" styleClass="sidebar-icon"/>
+            </graphic>
+        </Button>
+    </VBox>
+
+    <!-- Main Content Area -->
+    <StackPane fx:id="contentArea" HBox.hgrow="ALWAYS" styleClass="content-area">
+        <!-- Default Dashboard View -->
+        <VBox spacing="20" styleClass="content-panel">
+            <padding>
+                <Insets top="20" right="20" bottom="20" left="20"/>
+            </padding>
+            <HBox spacing="20">
+                <!-- Statistics Cards -->
+                <VBox styleClass="content-container, stat-card" prefWidth="200" prefHeight="100">
+                    <padding>
+                        <Insets top="15" right="15" bottom="15" left="15"/>
+                    </padding>
+                    <HBox alignment="CENTER_LEFT" spacing="10">
+                        <FontAwesomeIconView glyphName="USERS" size="18" fill="#3498db"/>
+                        <Label text="Total Users" styleClass="stats-title"/>
+                    </HBox>
+                    <Label fx:id="totalUsersLabel" text="0" styleClass="stats-value"/>
+                </VBox>
+
+                <VBox styleClass="content-container, stat-card" prefWidth="200" prefHeight="100">
+                    <padding>
+                        <Insets top="15" right="15" bottom="15" left="15"/>
+                    </padding>
+                    <HBox alignment="CENTER_LEFT" spacing="10">
+                        <FontAwesomeIconView glyphName="EXCLAMATION_CIRCLE" size="18" fill="#f39c12"/>
+                        <Label text="Active Reclamations" styleClass="stats-title"/>
+                    </HBox>
+                    <Label fx:id="activeReclamationsLabel" text="0" styleClass="stats-value"/>
+                </VBox>
+
+                <VBox styleClass="content-container, stat-card" prefWidth="200" prefHeight="100">
+                    <padding>
+                        <Insets top="15" right="15" bottom="15" left="15"/>
+                    </padding>
+                    <HBox alignment="CENTER_LEFT" spacing="10">
+                        <FontAwesomeIconView glyphName="CLOCK" size="18" fill="#e74c3c"/>
+                        <Label text="Pending Responses" styleClass="stats-title"/>
+                    </HBox>
+                    <Label fx:id="pendingResponsesLabel" text="0" styleClass="stats-value"/>
+                </VBox>
+            </HBox>
+
+            <!-- Recent Activity Table -->
+            <VBox spacing="10" VBox.vgrow="ALWAYS">
+                <HBox alignment="CENTER_LEFT" spacing="10">
+                    <FontAwesomeIconView glyphName="HISTORY" size="18" fill="#3498db"/>
+                    <Label text="Recent Activity" styleClass="section-title"/>
+                </HBox>
+                <TableView fx:id="recentActivityTable" VBox.vgrow="ALWAYS" styleClass="modern-table">
+                    <columns>
+                        <TableColumn fx:id="activityDateColumn" text="Date" prefWidth="150"/>
+                        <TableColumn fx:id="activityTypeColumn" text="Type" prefWidth="150"/>
+                        <TableColumn fx:id="activityDescriptionColumn" text="Description" prefWidth="300"/>
+                        <TableColumn fx:id="activityStatusColumn" text="Status" prefWidth="100"/>
+                    </columns>
+                </TableView>
+            </VBox>
+        </VBox>
+    </StackPane>
+</HBox>

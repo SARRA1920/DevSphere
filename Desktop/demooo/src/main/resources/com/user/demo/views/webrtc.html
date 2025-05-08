@@ -1,0 +1,460 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Live Stream</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: #1a1a1a;
+            height: 100vh;
+            width: 100vw;
+        }
+        #meet {
+            height: 100%;
+            width: 100%;
+        }
+        #loadingMessage {
+            color: white;
+            text-align: center;
+            padding: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div id="loadingMessage">Chargement de la conférence...</div>
+    <div id="meet"></div>
+
+    <script>
+        let api = null;
+        let isApiLoaded = false;
+        let roomName = '';
+
+        // Fonction pour charger le script Jitsi
+        function loadJitsiScript() {
+            return new Promise((resolve, reject) => {
+                const script = document.createElement('script');
+                script.src = 'https://meet.jit.si/external_api.js';
+                script.onload = () => {
+                    console.log('Jitsi Meet API script loaded');
+                    isApiLoaded = true;
+                    resolve();
+                };
+                script.onerror = (error) => {
+                    console.error('Failed to load Jitsi Meet API:', error);
+                    reject(new Error('Failed to load Jitsi Meet API'));
+                };
+                document.head.appendChild(script);
+            });
+        }
+
+        // Définir les fonctions requises avant l'initialisation
+        window.toggleAudio = function(enabled) {
+            if (api) {
+                console.log('Toggling audio:', enabled);
+                if (enabled) {
+                    api.executeCommand('unmute');
+                } else {
+                    api.executeCommand('mute');
+                }
+                if (window.javaController) {
+                    window.javaController.onAudioStateChanged(enabled);
+                }
+                return true;
+            }
+            console.error('Jitsi Meet API not initialized');
+            return false;
+        };
+
+        window.toggleVideo = function(enabled) {
+            if (api) {
+                console.log('Toggling video:', enabled);
+                api.executeCommand('toggleVideo');
+                return true;
+            }
+            console.error('Jitsi Meet API not initialized');
+            return false;
+        };
+
+        window.startScreenSharing = function() {
+            if (api) {
+                console.log('Starting screen sharing');
+                api.executeCommand('toggleShareScreen');
+                
+                // On essaie également via l'API Web standard
+                try {
+                    if (navigator.mediaDevices && navigator.mediaDevices.getDisplayMedia) {
+                        navigator.mediaDevices.getDisplayMedia({video: true})
+                        .then(stream => {
+                            console.log('Screen sharing started via Web API');
+                            // Stockez la référence du stream pour pouvoir l'arrêter plus tard
+                            window.screenStream = stream;
+                            
+                            // Notifiez Java que le partage d'écran a commencé
+                            if (window.javaController) {
+                                window.javaController.onScreenSharingStateChanged(true);
+                            }
+                        })
+                        .catch(err => {
+                            console.error('Error starting screen sharing via Web API:', err);
+                            // Continuer avec Jitsi même en cas d'échec
+                        });
+                    }
+                } catch (e) {
+                    console.error('Error trying Web API screen sharing:', e);
+                    // Continuer avec Jitsi même en cas d'erreur
+                }
+                
+                return true;
+            }
+            console.error('Jitsi Meet API not initialized');
+            return false;
+        };
+
+        window.stopScreenSharing = function() {
+            if (api) {
+                console.log('Stopping screen sharing');
+                
+                // Arrêter le partage via Jitsi
+                api.executeCommand('toggleShareScreen');
+                
+                // Arrêter aussi le partage via l'API Web si actif
+                if (window.screenStream) {
+                    try {
+                        window.screenStream.getTracks().forEach(track => track.stop());
+                        window.screenStream = null;
+                        console.log('Screen sharing stopped via Web API');
+                    } catch (e) {
+                        console.error('Error stopping screen sharing via Web API:', e);
+                    }
+                }
+                
+                // Notifiez Java que le partage d'écran est arrêté
+                if (window.javaController) {
+                    window.javaController.onScreenSharingStateChanged(false);
+                }
+                
+                return true;
+            }
+            console.error('Jitsi Meet API not initialized');
+            return false;
+        };
+
+        window.sendChatMessage = function(message) {
+            if (!api) {
+                console.error('Jitsi Meet API not initialized - Cannot send message');
+                // Tenter d'informer Java de l'erreur
+                if (window.javaController) {
+                    window.javaController.onError('Chat non disponible: l\'API Jitsi n\'est pas initialisée');
+                }
+                return false;
+            }
+            
+            try {
+                console.log('Sending chat message:', message);
+                
+                // Extraire les informations du message
+                let sender = "Utilisateur";
+                let content = message;
+                
+                // Si le message est déjà formaté (Admin: xxx ou Participant: xxx)
+                if (message.startsWith("Admin: ")) {
+                    sender = "Admin";
+                    content = message.substring(7); // Enlever "Admin: "
+                } else if (message.startsWith("Participant: ")) {
+                    sender = "Participant";
+                    content = message.substring(13); // Enlever "Participant: "
+                }
+                
+                console.log('Contenu extrait:', content);
+                console.log('Émetteur identifié:', sender);
+                
+                // Envoyer le contenu brut via Jitsi
+                api.executeCommand('sendChatMessage', content);
+                console.log('Message envoyé à Jitsi');
+                
+                // Émuler la réception du message pour l'expéditeur aussi
+                // car Jitsi ne fait pas d'écho des messages à l'expéditeur
+                if (window.javaController) {
+                    console.log('Émulation de la réception pour l\'expéditeur');
+                    setTimeout(function() {
+                        window.javaController.onChatMessageReceived(message);
+                    }, 100); // Petit délai pour éviter les problèmes de synchronisation
+                } else {
+                    console.error('javaController n\'est pas disponible, impossible d\'informer Java');
+                }
+                
+                return true;
+            } catch (e) {
+                console.error('Erreur lors de l\'envoi du message:', e);
+                if (window.javaController) {
+                    window.javaController.onError('Erreur d\'envoi: ' + e.message);
+                }
+                return false;
+            }
+        };
+
+        window.stopStream = function() {
+            if (api) {
+                console.log('Stopping stream');
+                api.executeCommand('hangup');
+                return true;
+            }
+            console.error('Jitsi Meet API not initialized');
+            return false;
+        };
+
+        function checkAudioDevices() {
+            try {
+                console.log('Checking audio devices...');
+                navigator.mediaDevices.getUserMedia({ audio: true })
+                    .then(stream => {
+                        console.log('Microphone access granted');
+                        const audioTracks = stream.getAudioTracks();
+                        
+                        if (audioTracks && audioTracks.length > 0) {
+                            const microphone = audioTracks[0];
+                            console.log('Using microphone:', microphone.label || 'Default microphone');
+                            // Stop the stream since we just wanted to check permissions
+                            stream.getTracks().forEach(track => track.stop());
+                            
+                            // Signal to Java that microphone is available
+                            if (window.javaController) {
+                                window.javaController.onMicrophoneAvailable(true);
+                            }
+                        } else {
+                            console.warn('No audio tracks found');
+                            if (window.javaController) {
+                                window.javaController.onMicrophoneAvailable(false);
+                            }
+                        }
+                    })
+                    .catch(err => {
+                        console.error('Error accessing microphone:', err);
+                        if (window.javaController) {
+                            window.javaController.onError('Microphone access error: ' + err.message);
+                            window.javaController.onMicrophoneAvailable(false);
+                        }
+                    });
+            } catch (e) {
+                console.error('Error checking audio devices:', e);
+                if (window.javaController) {
+                    window.javaController.onError('Error checking audio devices: ' + e.message);
+                    window.javaController.onMicrophoneAvailable(false);
+                }
+            }
+        }
+
+        // Called from Java when the course information is set
+        function setCourseInfo(courseId, courseTitle) {
+            console.log('Setting course info:', courseId, courseTitle);
+            // Generate a consistent room name based on course ID
+            roomName = 'devsphere_course_' + courseId;
+            console.log('Room name set to:', roomName);
+        }
+
+        async function initializeJitsi() {
+            try {
+                console.log('Starting Jitsi Meet initialization...');
+                
+                if (!isApiLoaded) {
+                    console.log('Loading Jitsi Meet API script...');
+                    await loadJitsiScript();
+                }
+
+                const domain = 'meet.jit.si';
+                
+                // Récupérer le mode (participant/présentateur) depuis Java
+                const isParticipant = window.isParticipantMode || false;
+                console.log('Initializing in ' + (isParticipant ? 'participant' : 'presenter') + ' mode');
+                
+                // Si le nom de la salle n'est pas défini, générer un identifiant aléatoire
+                if (!roomName) {
+                    roomName = 'cours_' + Math.random().toString(36).substring(7);
+                    console.log('Using fallback random room name:', roomName);
+                }
+                
+                // Options de configuration différentes selon le mode
+                const options = {
+                    roomName: roomName,
+                    width: '100%',
+                    height: '100%',
+                    parentNode: document.querySelector('#meet'),
+                    configOverwrite: {
+                        startWithAudioMuted: isParticipant, // Les participants commencent avec le micro coupé
+                        startWithVideoMuted: isParticipant, // Les participants commencent avec la caméra coupée
+                        prejoinPageEnabled: false,
+                        disableDeepLinking: true,
+                        disableAudioLevels: false,
+                        enableNoAudioDetection: true,
+                        enableNoisyMicDetection: true
+                    },
+                    interfaceConfigOverwrite: {
+                        // Même ensemble de boutons pour les participants et les présentateurs
+                        TOOLBAR_BUTTONS: ['microphone', 'camera', 'desktop', 'chat', 'raisehand', 'fullscreen', 'hangup', 'settings'],
+                        SHOW_JITSI_WATERMARK: false,
+                        SHOW_WATERMARK_FOR_GUESTS: false,
+                        SHOW_BRAND_WATERMARK: false,
+                        SETTINGS_SECTIONS: ['devices', 'language', 'profile'],
+                        AUDIO_LEVEL_PRIMARY_COLOR: 'rgba(46, 204, 113, 0.6)',
+                        DISABLE_DOMINANT_SPEAKER_INDICATOR: false
+                    }
+                };
+
+                // Create the Jitsi Meet API instance
+                api = new JitsiMeetExternalAPI(domain, options);
+                console.log('Jitsi Meet API instance created');
+
+                // Hide loading message
+                document.getElementById('loadingMessage').style.display = 'none';
+
+                // Event handlers
+                api.addEventListeners({
+                    participantJoined: onParticipantJoined,
+                    participantLeft: onParticipantLeft,
+                    videoConferenceJoined: onVideoConferenceJoined,
+                    videoConferenceLeft: onVideoConferenceLeft,
+                    audioMuteStatusChanged: onAudioMuteStatusChanged,
+                    videoMuteStatusChanged: onVideoMuteStatusChanged,
+                    screenSharingStatusChanged: onScreenSharingStatusChanged,
+                    readyToClose: onReadyToClose,
+                    audioAvailabilityChanged: onAudioAvailabilityChanged,
+                    micError: onMicError,
+                    deviceListChanged: onDeviceListChanged,
+                    incomingMessage: onMessageReceived
+                });
+
+                // Vérifier les appareils audio disponibles
+                checkAudioDevices();
+                
+                // Attendre un court instant pour s'assurer que tout est chargé
+                setTimeout(function() {
+                    console.log('Délai d\'initialisation terminé, notification de Java');
+                    // Notify Java that initialization is complete
+                    if (window.javaController) {
+                        window.javaController.onJitsiInitialized();
+                    } else {
+                        console.error('Java controller not available - initialization cannot be completed');
+                    }
+                }, 1500); // Ajouter un délai de 1.5 secondes pour assurer l'initialisation complète
+
+            } catch (error) {
+                console.error('Error initializing Jitsi Meet:', error);
+                if (window.javaController) {
+                    window.javaController.onError('Failed to initialize Jitsi Meet: ' + error.message);
+                }
+            }
+        }
+
+        function onParticipantJoined(participant) {
+            console.log('Participant joined:', participant);
+            if (window.javaController) {
+                window.javaController.onViewerJoined();
+            }
+        }
+
+        function onParticipantLeft(participant) {
+            console.log('Participant left:', participant);
+            if (window.javaController) {
+                window.javaController.onViewerLeft();
+            }
+        }
+
+        function onVideoConferenceJoined(participant) {
+            console.log('Joined video conference:', participant);
+        }
+
+        function onVideoConferenceLeft(participant) {
+            console.log('Left video conference:', participant);
+        }
+
+        function onAudioMuteStatusChanged(muted) {
+            console.log('Audio mute status changed:', muted);
+        }
+
+        function onVideoMuteStatusChanged(muted) {
+            console.log('Video mute status changed:', muted);
+        }
+
+        function onScreenSharingStatusChanged(sharing) {
+            console.log('Screen sharing status changed:', sharing);
+            
+            // Notifier Java du changement d'état
+            if (window.javaController) {
+                window.javaController.onScreenSharingStateChanged(sharing);
+            }
+            
+            // Si le partage a été arrêté via l'interface Jitsi, nettoyer les ressources locales
+            if (!sharing && window.screenStream) {
+                try {
+                    window.screenStream.getTracks().forEach(track => track.stop());
+                    window.screenStream = null;
+                    console.log('Cleaned up local screen sharing resources');
+                } catch (e) {
+                    console.error('Error cleaning up screen sharing resources:', e);
+                }
+            }
+        }
+
+        function onReadyToClose() {
+            console.log('Ready to close');
+            if (window.javaController) {
+                window.javaController.onStreamEnded();
+            }
+        }
+
+        function onAudioAvailabilityChanged(available) {
+            console.log('Audio availability changed:', available);
+        }
+
+        function onMicError(error) {
+            console.error('Mic error:', error);
+        }
+
+        function onDeviceListChanged(devices) {
+            console.log('Device list changed:', devices);
+        }
+
+        // Ajouter un écouteur pour les messages entrants
+        function onMessageReceived(data) {
+            console.log('Chat message received:', data);
+            
+            try {
+                // Transmettre le message à Java pour affichage
+                if (window.javaController) {
+                    // Vérifier si le message est déjà formaté (Admin: ou Participant:)
+                    const messageText = data.message || "";
+                    console.log('Message texte reçu:', messageText);
+                    
+                    if (messageText.startsWith("Admin:") || messageText.startsWith("Participant:")) {
+                        // Si c'est déjà formaté, transmettre tel quel
+                        console.log('Message déjà formaté, transmission directe');
+                        window.javaController.onChatMessageReceived(messageText);
+                        return;
+                    }
+                    
+                    // Sinon, formater avec le displayName s'il existe
+                    let formattedMessage;
+                    if (data.displayName) {
+                        formattedMessage = data.displayName + ': ' + data.message;
+                        console.log('Message formaté avec displayName:', formattedMessage);
+                    } else {
+                        formattedMessage = 'Utilisateur: ' + data.message;
+                        console.log('Message formaté avec préfixe générique:', formattedMessage);
+                    }
+                    
+                    console.log('Transmission du message à Java');
+                    window.javaController.onChatMessageReceived(formattedMessage);
+                } else {
+                    console.error('javaController n\'est pas disponible, impossible de transmettre le message');
+                }
+            } catch (e) {
+                console.error('Erreur lors du traitement du message reçu:', e);
+            }
+        }
+
+        // Initialize when the page loads
+        window.onload = initializeJitsi;
+    </script>
+</body>
+</html> 

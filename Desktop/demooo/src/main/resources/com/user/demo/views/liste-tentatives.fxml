@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox xmlns="http://javafx.com/javafx"
+      xmlns:fx="http://javafx.com/fxml"
+      fx:controller="com.user.demo.controller.ListeTentativesController"
+      spacing="10"
+      stylesheets="@../styles/styles.css">
+
+    <padding>
+        <Insets top="20" right="20" bottom="20" left="20"/>
+    </padding>
+
+    <!-- En-tête avec titre et boutons -->
+    <HBox spacing="10" alignment="CENTER_LEFT">
+        <Label text="Liste des Tentatives" styleClass="title-label"/>
+        <Region HBox.hgrow="ALWAYS"/>
+        <HBox spacing="10" alignment="CENTER_RIGHT">
+            <Button fx:id="exportButton" text="Exporter Tout" styleClass="button-primary"/>
+            <Button fx:id="exportReponsesButton" text="Exporter Réponses" styleClass="button-secondary"/>
+        </HBox>
+    </HBox>
+
+    <!-- Barre de recherche et filtres -->
+    <HBox spacing="10" alignment="CENTER_LEFT">
+        <TextField fx:id="searchField" promptText="Rechercher..." prefWidth="300"/>
+        <ComboBox fx:id="filterComboBox" prefWidth="150" promptText="Filtrer par statut"/>
+        <Button text="Effacer les filtres" onAction="#handleClearFilters" styleClass="button-outline"/>
+    </HBox>
+
+    <!-- TableView des tentatives -->
+    <TableView fx:id="tentativeTable" VBox.vgrow="ALWAYS">
+        <columns>
+            <TableColumn fx:id="exerciceColumn" text="Exercice" prefWidth="200"/>
+            <TableColumn fx:id="dateColumn" text="Date" prefWidth="150"/>
+            <TableColumn fx:id="noteColumn" text="Note" prefWidth="100"/>
+            <TableColumn fx:id="statutColumn" text="Statut" prefWidth="120"/>
+            <TableColumn fx:id="actionsColumn" text="Actions" prefWidth="220"/>
+        </columns>
+        <placeholder>
+            <Label text="Aucune tentative trouvée"/>
+        </placeholder>
+    </TableView>
+
+    <!-- Barre de statut -->
+    <HBox spacing="10" alignment="CENTER_LEFT">
+        <Label fx:id="statusLabel" text="Total des tentatives : 0"/>
+        <Region HBox.hgrow="ALWAYS"/>
+        <Button text="Actualiser" onAction="#handleRefresh" styleClass="button-primary"/>
+    </HBox>
+
+</VBox> 

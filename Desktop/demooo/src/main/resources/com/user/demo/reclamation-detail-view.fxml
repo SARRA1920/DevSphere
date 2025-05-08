@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.text.Font?>
+<?import de.jensd.fx.glyphs.fontawesome.*?>
+
+<VBox xmlns="http://javafx.com/javafx"
+      xmlns:fx="http://javafx.com/fxml"
+      fx:controller="com.user.demo.controller.ReclamationDetailController"
+      spacing="15" styleClass="content-panel">
+    
+    <padding>
+        <Insets top="20" right="20" bottom="20" left="20" />
+    </padding>
+    
+    <HBox alignment="CENTER_LEFT" spacing="10">
+        <Button fx:id="btnBack" text="Back to List" styleClass="form-button" onAction="#handleBackToList">
+            <graphic>
+                <FontAwesomeIconView glyphName="ARROW_LEFT" size="14" styleClass="button-icon" />
+            </graphic>
+        </Button>
+        
+        <Label text="Reclamation Details" styleClass="view-title">
+            <font>
+                <Font name="System Bold" size="24.0" />
+            </font>
+        </Label>
+    </HBox>
+    
+    <GridPane hgap="15" vgap="15" styleClass="detail-grid">
+        <padding>
+            <Insets top="20" right="20" bottom="20" left="20" />
+        </padding>
+        
+        <Label text="ID:" GridPane.rowIndex="0" GridPane.columnIndex="0" styleClass="detail-label" />
+        <Label fx:id="lblId" text="[ID]" GridPane.rowIndex="0" GridPane.columnIndex="1" styleClass="detail-value" />
+        
+        <Label text="Type:" GridPane.rowIndex="1" GridPane.columnIndex="0" styleClass="detail-label" />
+        <Label fx:id="lblType" text="[Type]" GridPane.rowIndex="1" GridPane.columnIndex="1" styleClass="detail-value" />
+        
+        <Label text="User ID:" GridPane.rowIndex="2" GridPane.columnIndex="0" styleClass="detail-label" />
+        <Label fx:id="lblUserId" text="[User ID]" GridPane.rowIndex="2" GridPane.columnIndex="1" styleClass="detail-value" />
+        
+        <Label text="Status:" GridPane.rowIndex="3" GridPane.columnIndex="0" styleClass="detail-label" />
+        <Label fx:id="lblStatus" text="[Status]" GridPane.rowIndex="3" GridPane.columnIndex="1" styleClass="detail-value" />
+        
+        <Label text="Created:" GridPane.rowIndex="4" GridPane.columnIndex="0" styleClass="detail-label" />
+        <Label fx:id="lblCreationDate" text="[Creation Date]" GridPane.rowIndex="4" GridPane.columnIndex="1" styleClass="detail-value" />
+        
+        <Label text="Description:" GridPane.rowIndex="5" GridPane.columnIndex="0" styleClass="detail-label" GridPane.valignment="TOP" />
+        <TextArea fx:id="txtDescription" editable="false" wrapText="true" prefHeight="100" 
+                 GridPane.rowIndex="5" GridPane.columnIndex="1" styleClass="detail-text-area" />
+    </GridPane>
+    
+    <Separator />
+    
+    <Label text="Reponses" styleClass="section-title">
+        <font>
+            <Font name="System Bold" size="18.0" />
+        </font>
+    </Label>
+    
+    <ListView fx:id="listReponses" VBox.vgrow="ALWAYS" prefHeight="150" />
+    
+    <Separator />
+    
+    <HBox alignment="CENTER_RIGHT" spacing="15">
+        <Button fx:id="btnEdit" text="Edit Reclamation" styleClass="form-button" onAction="#handleEdit">
+            <graphic>
+                <FontAwesomeIconView glyphName="EDIT" size="14" styleClass="button-icon" />
+            </graphic>
+        </Button>
+        
+        <Button fx:id="btnDelete" text="Delete Reclamation" styleClass="form-button, cancel-button" onAction="#handleDelete">
+            <graphic>
+                <FontAwesomeIconView glyphName="TRASH" size="14" styleClass="button-icon" />
+            </graphic>
+        </Button>
+    </HBox>
+</VBox>
